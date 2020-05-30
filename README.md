@@ -1,4 +1,4 @@
 # -ScrabbleAR
 Integrantes del grupo numero 27:
-Migueles Dylan 
+Migueles Dylan -
 Gramblicka Dante
