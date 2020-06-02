@@ -82,298 +82,90 @@ class Atril:
         return len(self.atril)
 
 
-#Las columnas eran una prueba, al final las deje ahi porq si puedo acceder a sus keys, el problema es que entre columnas hay un gran espacio en blanco :c
-columna_1 = [
-    [sg.Button('', button_color=("black","#F8F8F8"), key='0,0', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='0,1', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='0,2', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='0,3', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='0,4', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='0,5', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='0,6', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='0,7', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='0,8', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='0,9', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='0,10', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='0,11', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='0,12', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='0,13', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='0,14', size=(1,1))],
-]
+class Estante:
+    """
+    Clase que crea el estante del jugador. Agrega fichas del atril al estante.
+    """
+    def __init__(self, atril):
+        #Inicializa el estante del jugador.
+        self.estante = []
+        self.atril = atril
+        self.inicializar()
 
-columna_2 = [
-    [sg.Button('', button_color=("black","#F8F8F8"), key='1,0', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='1,1', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='1,2', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='1,3', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='1,4', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='1,5', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='1,6', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='1,7', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='1,8', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='1,9', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='1,10', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='1,11', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='1,12', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='1,13', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='1,14', size=(1,1))],
-]
+    def agregar_estante(self):
+        #Agrega una ficha al estante quitando esa misma del atril
+        self.estante.append(self.atril.quitar_ficha())
 
-columna_3 = [
-    [sg.Button('', button_color=("black","#F8F8F8"), key='2,0', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='2,1', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='2,2', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='2,3', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='2,4', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='2,5', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='2,6', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='2,7', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='2,8', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='2,9', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='2,10', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='2,11', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='2,12', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='2,13', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='2,14', size=(1,1))],
-]
+    def inicializar(self):
+        #Añade las primeras 7 fichas al estante
+        for i in range(7):
+            self.agregar_estante()
 
-columna_4 = [
-    [sg.Button('', button_color=("black","#F8F8F8"), key='3,0', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='3,1', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='3,2', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='3,3', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='3,4', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='3,5', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='3,6', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='3,7', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='3,8', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='3,9', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='3,10', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='3,11', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='3,12', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='3,13', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='3,14', size=(1,1))],
-]
+    def quitar_estante(self, ficha):
+        #Quita una ficha del estante
+        self.estante.remove(ficha)
 
-columna_5 = [
-    [sg.Button('', button_color=("black","#F8F8F8"), key='4,0', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='4,1', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='4,2', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='4,3', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='4,4', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='4,5', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='4,6', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='4,7', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='4,8', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='4,9', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='4,10', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='4,11', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='4,12', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='4,13', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='4,14', size=(1,1))],
-]
+    def cant_estante(self):
+        #Devuelve la cantidad de fichas que hay en el estante
+        return len(self.estante)
 
-columna_6 = [
-    [sg.Button('', button_color=("black","#F8F8F8"), key='5,0', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='5,1', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='5,2', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='5,3', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='5,4', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='5,5', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='5,6', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='5,7', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='5,8', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='5,9', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='5,10', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='5,11', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='5,12', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='5,13', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='5,14', size=(1,1))],
-]
+    def get_estante(self):
+        #Devuelve un arreglo con los elementos del estante, para poder representarlo en pysimplegui
+        return self.estante
 
-columna_7 = [
-    [sg.Button('', button_color=("black","#F8F8F8"), key='6,0', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='6,1', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='6,2', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='6,3', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='6,4', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='6,5', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='6,6', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='6,7', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='6,8', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='6,9', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='6,10', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='6,11', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='6,12', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='6,13', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='6,14', size=(1,1))],
-]
+class Jugador:
+    """
+    Clase que crea una instancia de Jugador. Crea su estante y agrega su nombre.
+    """
+    def __init__(self, atril):
+        #Inicializa un Jugador con su estante.
+        self.nombre = ""
+        self.puntaje = 0
+        self.estante = Estante(atril)
 
-columna_8 = [
-    [sg.Button('', button_color=("black","#F8F8F8"), key='7,0', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='7,1', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='7,2', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='7,3', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='7,4', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='7,5', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='7,6', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='7,7', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='7,8', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='7,9', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='7,10', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='7,11', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='7,12', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='7,13', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='7,14', size=(1,1))],
-]
+    def incrementar_puntaje(self, agregado):
+        #Incrementa el puntaje del jugador
+        self.puntaje += agregado
 
-columna_9 = [
-    [sg.Button('', button_color=("black","#F8F8F8"), key='8,0', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='8,1', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='8,2', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='8,3', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='8,4', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='8,5', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='8,6', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='8,7', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='8,8', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='8,9', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='8,10', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='8,11', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='8,12', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='8,13', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='8,14', size=(1,1))],
-]
+    def get_puntaje(self):
+        #Devuelve el puntaje del jugador
+        return self.puntaje
 
-columna_10 = [
-    [sg.Button('', button_color=("black","#F8F8F8"), key='9,0', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='9,1', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='9,2', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='9,3', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='9,4', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='9,5', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='9,6', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='9,7', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='9,8', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='9,9', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='9,10', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='9,11', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='9,12', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='9,13', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='9,14', size=(1,1))],
-]
+    def set_nombre(self, nombre):
+        #Setea el nombre del jugador
+        self.nombre = nombre
 
-columna_11 = [
-    [sg.Button('', button_color=("black","#F8F8F8"), key='10,0', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='10,1', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='10,2', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='10,3', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='10,4', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='10,5', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='10,6', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='10,7', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='10,8', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='10,9', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='10,10', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='10,11', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='10,12', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='10,13', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='10,14', size=(1,1))],
-]
+    def get_nombre(self):
+        #Devuelve el nombre del jugador
+        return self.nombre
 
-columna_12 = [
-    [sg.Button('', button_color=("black","#F8F8F8"), key='11,0', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='11,1', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='11,2', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='11,3', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='11,4', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='11,5', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='11,6', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='11,7', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='11,8', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='11,9', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='11,10', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='11,11', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='11,12', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='11,13', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='11,14', size=(1,1))]
-]
+    def get_estante(self):
+        #Devuelve un arreglo con los elementos del estante, para poder representarlo en pysimplegui
+        return self.estante.get_estante()
 
-columna_13 = [
-    [sg.Button('', button_color=("black","#F8F8F8"), key='12,0', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='12,1', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='12,2', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='12,3', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='12,4', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='12,5', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='12,6', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='12,7', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='12,8', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='12,9', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='12,10', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='12,11', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='12,12', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='12,13', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='12,14', size=(1,1))]
-]
+def estante_ps(estante):
+    i=0
+    for x in estante:
+        print(estante[i].get_letra())
+        window.FindElement(i).Update(estante[i].get_letra())
+        i=i+1
 
-columna_14 = [
-    [sg.Button('', button_color=("black","#F8F8F8"), key='13,0', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='13,1', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='13,2', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='13,3', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='13,4', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='13,5', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='13,6', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='13,7', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='13,8', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='13,9', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='13,10', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='13,11', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='13,12', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='13,13', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='13,14', size=(1,1))]
-]
+atril = Atril()
+j1 = Jugador(atril)
 
-columna_15 = [
-    [sg.Button('', button_color=("black","#F8F8F8"), key='14,0', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='14,1', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='14,2', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='14,3', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='14,4', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='14,5', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='14,6', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='14,7', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='14,8', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='14,9', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='14,10', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='14,11', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='14,12', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='14,13', size=(1,1))],
-    [sg.Button('', button_color=("black","#F8F8F8"), key='14,14', size=(1,1))]
-]
-
-#No se puede poner los botones como en layout2 de esta manera, hay que usar el append como hice en el layout2, o no se como hacerlo
-
-layout1 = [
-    [sg.Text('ScrabbleAr Grupo 27', justification='left')],
-    [sg.Column(columna_1)],
-    [sg.Button('Jugar'), sg.Button('Salir')]
-]
-#Se me trabo la cabeza con acceder a las keys de los botones
-a = b = 15
-layout2 =  [[sg.Button('a', button_color=("black","#F8F8F8"), key=(int(i),int(j)), size=(1,1), pad=(0,0)) for j in range(a)]  for i in range(b)]
-
+layout2 =  [[sg.Button('', button_color=("black","#F8F8F8"), key=(i,j), size=(1,1), pad=(0,0)) for j in range(15)]  for i in range(15)]
+layout2.append([sg.Text('Estante')])
+layout2.append([sg.Button('', button_color=("black","#F8F8F8"), key=(a), size=(1,1), pad=(0,0)) for a in range(7)])
 layout2.append([sg.Button('Jugar'), sg.Button('Salir')])
-#layout2.append([sg.Column(columna_1)])
 window = sg.Window('ScrabbleAr').Layout(layout2)
-#el print es solo porq estaba probando
-print(window.Element('10,10'))
 
 while True:
     event, values = window.Read()
     if event is None or event == 'Salir':
         break
     if event is 'Jugar':
-        window.Element('12,12').Update('x')
+        #Imprimo el estante en la pantalla
+        window.FindElement((1,1)).Update('x')
+        arregloEstante = j1.get_estante()
+        estante_ps(arregloEstante)
 window.Close()
