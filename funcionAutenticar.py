@@ -1,12 +1,8 @@
 from pattern.es import parse, lexicon, split,spelling
 
-#CONSTANTES PARA TESTEAR
 
 TIPO= {'adj':["AO", "JJ","AQ","DI","DT"],'sus':["NC", "NN", "NCS","NCP", "NNS","NP", "NNP","W"],'verb':[ "VAG", "VBG", "VAI","VAN", "MD", "VAS" , "VMG" , "VMI", "VB", "VMM" ,"VMN" , "VMP", "VBN","VMS","VSG",  "VSI","VSN", "VSP","VSS"  ]}
 
-DIFICULTAD = 'medio'  
-
-condicion_Dificultad = ["adj", "sus"]
 
 #FUNCIONES
         
@@ -35,7 +31,7 @@ def tipo_Palabra(pal, dif, admitidos = ''):     #En la funcion analizo si la pal
 
 
 
-def confirmar_Palabra(pal):
+def confirmar_Palabra(pal, DIFICULTAD, condicion_Dificultad):
 	pal = pal.lower() 								 #----NOTA---- Si (pal='') tira error, siempre debe tener algo.
 	p=parse(pal).split()
 	if es_Palabra(p):                                                                     
