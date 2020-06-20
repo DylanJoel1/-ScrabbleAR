@@ -33,3 +33,5 @@ while True:
 		sg.popup('Instrucciones')
 	elif event == '-top10-':
 		sg.popup('top10')
+
+window.close

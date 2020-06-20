@@ -153,11 +153,12 @@ def estante_ps(estante):
 atril = Atril()
 j1 = Jugador(atril)
 
-layout2 =  [[sg.Button('', button_color=("black","#F8F8F8"), key=(i,j), size=(1,1), pad=(0,0)) for j in range(15)]  for i in range(15)]
-layout2.append([sg.Text('Estante')])
-layout2.append([sg.Button('', button_color=("black","#F8F8F8"), key=(a), size=(1,1), pad=(0,0)) for a in range(7)])
-layout2.append([sg.Button('Jugar'), sg.Button('Salir')])
-window = sg.Window('ScrabbleAr').Layout(layout2)
+layout2 =  [[sg.Button('', button_color=("black","#F8F8F8"), key=(i,j), size=(4,2), pad=(2,2)) for j in range(15)]  for i in range(15)]
+layout2.append([sg.Text('Estante',	font=('arial',15)) ])
+layout2.append([sg.Button('', button_color=("black","#F8F8F8"), key=(a), size=(4,2), pad=(2,2)) for a in range(7)])
+layout2.append([sg.Button('Jugar',size=(8,2)), sg.Button('Salir',size=(8,2))])
+
+window = sg.Window('ScrabbleAr', size=(850,800),element_justification='c').Layout(layout2)
 
 while True:
     event, values = window.Read()

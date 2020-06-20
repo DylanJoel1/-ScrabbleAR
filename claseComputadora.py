@@ -42,9 +42,9 @@ class Computadora:
 
 
 		
-computadora = Computadora()
+#computadora = Computadora()
 
-print(computadora.crearPalabra())
+#print(computadora.crearPalabra())
 
 ''' Por ahora este objeto solo posee la funcion de generar una palabra, la cual dependiendo las letras que posee la computadora genera un conjunto de las combinaciones
 	posibles. En la misma funcion se llama a una funcion de un archivo que importo para devolver la palabra de las combinaciones que cumple con las condiciones del juego

@@ -4,9 +4,9 @@ from pattern.es import parse, lexicon, split,spelling
 TIPO= {'adj':["AO", "JJ","AQ","DI","DT"],'sus':["NC", "NN", "NCS","NCP", "NNS","NP", "NNP","W"],'verb':[ "VAG", "VBG", "VAI","VAN", "MD", "VAS" , "VMG" , "VMI", "VB", "VMM" ,"VMN" , "VMP", "VBN","VMS","VSG",  "VSI","VSN", "VSP","VSS"  ]}
 
 
-#FUNCIONES
+
         
-def es_Palabra(p):       
+def es_Palabra(p):      #Funcion que pregunta si la palabra se encuentra en los diccionarios de pattern 
 	if(p[0][0][0] in lexicon.keys() and p[0][0][0] in spelling.keys()):
 		return True
 	else:
@@ -14,7 +14,7 @@ def es_Palabra(p):
 
 
 
-def tipo_Palabra(pal, dif, admitidos = ''):     #En la funcion analizo si la palabra existe en el diccionario, al cual accedo dependiendo la clave que le corresponde a la dificultad
+def tipo_Palabra(pal, dif, admitidos = ''):     #la funcion pregunta si el tipo de palabra se encuentra en mi diccionario "TIPO", para asegurarse dependiendo de la dificultad que sea una palabra correcta
 	if(dif == 'facil'):
 		return True
 	elif(dif == 'medio'):                       #En caso de ser la dificultad "medio", pregunto por solo 2 tipo de palabras en el diccionario
