@@ -208,26 +208,27 @@ layout2.append([sg.Button('Jugar',size=(8,2)), sg.Button('Salir',size=(8,2))])
 window = sg.Window('ScrabbleAr', size=(850,800),element_justification='c').Layout(layout2)
 
 
-
-while True:
-    event, values = window.Read()
-    if event is None or event == 'Salir':
-        break
-    if event is 'Jugar':
-        arregloEstante = j1.get_estante()
-        estante_ps(arregloEstante)
-        juega= True
-    elif event in range(7) and juega:
-	    ficha_clickeada = event	
-	    estante= j1.get_estante()
-	    ficha=str(estante[event])
-	    ficha=ficha.split(",")
-	    Estante.modificar_Estante(Estante,ficha_clickeada)
-	    sigue=1
-    elif (sigue==1):
-        tablero.agregar_elemento(ficha[0],event[0],event[1])
-        Estante.desbloquear_Estante()
-        sigue=0
+def main():
+    
+    while True:
+        event, values = window.Read()
+        if event is None or event == 'Salir':
+            break
+        if event is 'Jugar':
+            arregloEstante = j1.get_estante()
+            estante_ps(arregloEstante)
+            juega= True
+        elif event in range(7) and juega:
+                ficha_clickeada = event	
+                estante= j1.get_estante()
+                ficha=str(estante[event])
+                ficha=ficha.split(",")
+                Estante.modificar_Estante(Estante,ficha_clickeada)
+                sigue=1
+        elif (sigue==1):
+            tablero.agregar_elemento(ficha[0],event[0],event[1])
+            Estante.desbloquear_Estante()
+            sigue=0
 	    
 	    
-window.Close()
+    window.Close()

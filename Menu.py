@@ -1,4 +1,6 @@
 import PySimpleGUI as sg
+import ScrabbleAr
+
 
 WIDTH  = 20
 HEIGHT = 3
@@ -26,7 +28,7 @@ while True:
 	if (event is None or event == '-salir-'):
 		break
 	if event == '-comenzar-':
-		sg.popup('comenzar')
+		ScrabbleAr.main()
 	elif event == '-config-':
 		sg.popup('configuracion')
 	elif event == '-instrucc-':
