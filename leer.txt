@@ -1,0 +1,6 @@
+Integrantes del grupo numero 27:
+Migueles Dylan -
+Gramblicka Dante
+
+Para ejecutar el juego:
+Abrir el archivo ScrabblePy. Se abrira un menu que permitira configurar el juego y a su vez jugarlo, dandole al boton "Jugar"
