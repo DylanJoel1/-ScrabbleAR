@@ -2,6 +2,7 @@
 import PySimpleGUI as sg
 from random import shuffle
 
+#constante que representa el atril del jugador
 ATRIL_JUGADOR=[[""] for i in range(7)]
 
 #Variable global con los valores - temporal
@@ -60,7 +61,7 @@ class Atril:
         self.agregar(Ficha("J" ), 2)
         self.agregar(Ficha("K" ), 1)
         self.agregar(Ficha("L" ), 4)
-        self.agregar(Ficha("LL" ), 1)
+        self.agregar(Ficha("LL"), 1)
         self.agregar(Ficha("M" ), 3)
         self.agregar(Ficha("N" ), 5)
         self.agregar(Ficha("Ñ" ), 1)
@@ -91,7 +92,7 @@ class Atril:
 
 class Estante:
     """
-    Clase que crea el estante del jugador. Agrega fichas del atril al estante.
+		Clase que crea el estante del jugador. Agrega fichas del atril al estante.
     """
     def __init__(self, atril):
         #Inicializa el estante del jugador.
@@ -134,7 +135,7 @@ class Estante:
 
 class Jugador:
     """
-    Clase que crea una instancia de Jugador. Crea su estante y agrega su nombre.
+		Clase que crea una instancia de Jugador. Crea su estante y agrega su nombre.
     """
     def __init__(self, atril):
         #Inicializa un Jugador con su estante.
@@ -148,7 +149,6 @@ class Jugador:
 
     def get_puntaje(self):
         #Devuelve el puntaje del jugador
-        print('aaaaaaaaaaaaaaaaaaaa')
         return self.puntaje
 
     def set_nombre(self, nombre):
@@ -188,6 +188,16 @@ class Tablero:
 	def agregar_elemento( self,element,*pos):
 		self.tablero[pos[0]][pos[1]]= True
 		window.FindElement((pos[0],pos[1])).Update(text=element)
+	
+	def bloquear_tablero(self):
+		for m in range(15):
+			for n in range(15):
+				window.findElement((m,n)).Update(disabled=True)
+				
+	def desbloquear_tablero(self):
+		for m in range(15):
+			for n in range(15):
+				window.findElement((m,n)).Update(disabled=False)
 
 
 

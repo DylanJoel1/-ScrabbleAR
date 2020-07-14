@@ -13,6 +13,8 @@ condicion_Dificultad = ["verb", "verb"]
 
 class Computadora:
 	
+	
+	
 	def __init__(self, letras='ekigañv'):
 		self.let = letras
 		
