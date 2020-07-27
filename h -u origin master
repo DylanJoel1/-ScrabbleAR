@@ -1,0 +1,113 @@
+[33mcommit 7326cd06123e7e010939a97cd84cac7d64d14961[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: Dylan Migueles <dylanjoel01@msn.com>
+Date:   Tue Jul 14 16:42:42 2020 -0300
+
+    Agregue unas funciones a la clase Tablero
+
+[33mcommit aae75d839ab310876c73c1c5bbf835694c4cd975[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Dante Gramblicka <danteg8@gmail.com>
+Date:   Tue Jun 30 17:03:33 2020 -0300
+
+    leer.txt
+
+[33mcommit 2f161ef4bf11ef95635c2e6938ae1f403cf59f9f[m
+Author: Dante Gramblicka <danteg8@gmail.com>
+Date:   Tue Jun 30 16:59:53 2020 -0300
+
+    ScrabbleAr
+
+[33mcommit 6e537ccb472bbd7c367f64f03b211bfc2e77509f[m
+Author: Dante Gramblicka <danteg8@gmail.com>
+Date:   Tue Jun 30 16:42:40 2020 -0300
+
+    Cambie el nombre de menu por Scrabble y el de Scrabble por juego
+
+[33mcommit d1709a686b7acfa1ee137d56add397c98d938e2f[m
+Author: Dante Gramblicka <danteg8@gmail.com>
+Date:   Tue Jun 30 16:33:51 2020 -0300
+
+    Cambiado nombre main, funciona boton jugar
+
+[33mcommit 97937a80107d46b38bedfad0de83cbe9f5578924[m
+Author: Dylan Migueles <dylanjoel@msn.com>
+Date:   Sat Jun 27 15:47:37 2020 -0300
+
+    Ahora se puede clickear una letra y colocarla en el tablero
+
+[33mcommit ac6e158b2c7af9688e4d96ee5e316375a421e8a8[m
+Author: Dylan Migueles <dylanjoel@msn.com>
+Date:   Fri Jun 19 21:13:02 2020 -0300
+
+    borré un archivo que se habia dulpicado
+
+[33mcommit 2161016e4de49275611931ca6bd805878886800c[m
+Author: Dylan Migueles <dylanjoel@msn.com>
+Date:   Fri Jun 19 21:07:26 2020 -0300
+
+    Algunos cambios visuales al menu y a el tablero
+
+[33mcommit e1aae59fbf56ebc773b9cfa8dfbcd2cad89de357[m
+Author: Dylan Migueles <dylanjoel@msn.com>
+Date:   Tue Jun 16 00:35:39 2020 -0300
+
+    Testeo de un menu principal
+
+[33mcommit 0b75105f29bf073ce3b8dc0799aeb37dc732ad79[m
+Author: Dylan Migueles <dylanjoel@msn.com>
+Date:   Fri Jun 12 19:36:23 2020 -0300
+
+    ahora el objeto computadora ya genera correctamente una palabra válida y la de mayor letras posibles, asi se asegura de tener la mayor cantidad de puntos
+
+[33mcommit 459e69dc46b0b5f4fb325254b61886b3ff2bed76[m
+Author: Dylan Migueles <dylanjoel@msn.com>
+Date:   Sat Jun 6 21:55:55 2020 -0300
+
+    Cree el objeto Computadora, por ahora solo con la función para crear una palabra random
+
+[33mcommit 92771235fee8cbac3e469ba539b1b679b5503504[m
+Merge: c6ffe1c 43763be
+Author: Dante Gramblicka <danteg8@gmail.com>
+Date:   Tue Jun 2 19:03:35 2020 -0300
+
+    Merge branch 'master' of https://github.com/DylanJoel1/-ScrabbleAR
+
+[33mcommit c6ffe1cb8985a2096dc5a9cc0ab932e470c4153a[m
+Author: Dante Gramblicka <danteg8@gmail.com>
+Date:   Tue Jun 2 19:03:30 2020 -0300
+
+    agregado clase estante, clase jugador, corregido interfaz
+    
+    agregado clase estante, clase jugador, corregido interfaz.
+    Falta implementar esto de los lugares especiales que duplican puntos etc para las dificiltades
+
+[33mcommit 43763be3e29d965844f7b0312598fc71ea597c35[m
+Author: Dylan Migueles <dylanjoel@msn.com>
+Date:   Sat May 30 17:46:38 2020 -0300
+
+    Ahora la función para autenticar se asegura que la palabra exista y que cumpla con la dificultad que se le asignó
+
+[33mcommit 42f12ab6e21de480cc990a5c06fa58f883a2631b[m
+Author: DylanJoel1 <62036049+DylanJoel1@users.noreply.github.com>
+Date:   Sat May 30 15:11:53 2020 -0300
+
+    Update README.md
+
+[33mcommit a39288d803e1a3b29444385c68be6b11efbf7830[m
+Author: DylanJoel1 <62036049+DylanJoel1@users.noreply.github.com>
+Date:   Fri May 29 18:18:27 2020 -0300
+
+    Create README.md
+
+[33mcommit 50839c5d58622726ea8133861b2a22b097bc7630[m
+Author: Dylan Migueles <dylanjoel@msn.com>
+Date:   Fri May 29 18:16:38 2020 -0300
+
+    Función para saber si es una palabra valida
+
+[33mcommit bc3f140d693f845b19c5015a766d74b3081cc7ed[m
+Author: Dante Gramblicka <danteg8@gmail.com>
+Date:   Thu May 28 20:02:53 2020 -0300
+
+    main - por ahora solo main
+    
+    clase ficha - clase atril y un poco de la interzas de pysimplegui

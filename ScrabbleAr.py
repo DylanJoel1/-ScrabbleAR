@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
 import Juego
-
+import comoJugar
 
 WIDTH  = 20
 HEIGHT = 3
@@ -32,7 +32,7 @@ while True:
 	elif event == '-config-':
 		sg.popup('configuracion')
 	elif event == '-instrucc-':
-		sg.popup('Instrucciones')
+		comoJugar.Reglas()
 	elif event == '-top10-':
 		sg.popup('top10')
 

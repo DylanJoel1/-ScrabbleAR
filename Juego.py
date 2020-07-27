@@ -203,7 +203,7 @@ class Tablero:
 
 
 atril = Atril()
-j1 = Jugador(atril)
+jugador_estante = Jugador(atril)
 tablero= Tablero()
 
 
@@ -225,12 +225,12 @@ def main():
         if event is None or event == 'Salir':
             break
         if event is 'Jugar':
-            arregloEstante = j1.get_estante()
+            arregloEstante = jugador_estante.get_estante()
             estante_ps(arregloEstante)
             juega= True
         elif event in range(7) and juega:
             ficha_clickeada = event	
-            estante= j1.get_estante()
+            estante= jugador_estante.get_estante()
             ficha=str(estante[event])
             ficha=ficha.split(",")
             Estante.modificar_Estante(Estante,ficha_clickeada)
