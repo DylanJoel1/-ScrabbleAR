@@ -1,10 +1,17 @@
 import PySimpleGUI as sg
+import json
+
+
+def guardar (datos):
+    with open('datos.json', 'w') as jsonFile:
+        json.dump(datos,jsonFile)
+
 
 FUENTE= "arial"
 
 columnaf1 = [
     [sg.T("       P      C", justification="left", size=(9,1))],
-    [sg.T("A", justification="left", size=(2,1)), sg.Input(size=(2,1), key="fpuntosa"), sg.Input(size=(2,1), key="fcantidada")],
+    [sg.T("A", justification="left", size=(2,1)), sg.Input(size=(2,1), key="fpuntosa", default_text="12"), sg.Input(size=(2,1), key="fcantidada")],
     [sg.T("B", justification="left", size=(2,1)), sg.Input(size=(2,1), key="fpuntosb"), sg.Input(size=(2,1), key="fcantidadb")],
     [sg.T("C", justification="left", size=(2,1)), sg.Input(size=(2,1), key="fpuntosc"), sg.Input(size=(2,1), key="fcantidadc")],
     [sg.T("D", justification="left", size=(2,1)), sg.Input(size=(2,1), key="fpuntosd"), sg.Input(size=(2,1), key="fcantidadd")],
@@ -131,12 +138,63 @@ dificil_layout = [
 layout_Config = [	
 			[sg.T("Configuración", justification="center", font=(FUENTE,20), size=(55,1),background_color="#00FFFF",text_color="#000080" )],
 			[sg.TabGroup([[sg.Tab('Facil', facil_layout), sg.Tab('Medio', medio_layout), sg.Tab('Dificil', dificil_layout)]])],
-			[sg.B("Volver", size=(8,2), key="-volver-", button_color=("black","#FA8072"))]
+			[sg.B("Guardar", size=(8,2), key="-guardar-", button_color=("black","#FA8072")), sg.B("Volver", size=(8,2), key="-volver-", button_color=("black","#FA8072"))]
 			
 			]
 
 window= sg.Window("Configuracion",layout_Config)
 
 def Config():
-	event, value = window.read()
-	window.close()
+    while True:
+        event, values = window.read()
+        if (event is None or event == '-salir-'):
+            break
+        if event == '-guardar-':
+            datos = {
+                'dpuntosa' : values['dpuntosa'], 'dpuntosb' : values['dpuntosb'], 'dpuntosc' : values['dpuntosc'], 'dpuntosd' : values['dpuntosd'],
+                'dpuntose' : values['dpuntose'], 'dpuntosf' : values['dpuntosf'], 'dpuntosg' : values['dpuntosg'], 'dpuntosh' : values['dpuntosh'], 'dpuntosi' : values['dpuntosi'], 
+                'dpuntosj' : values['dpuntosj'], 'dpuntosk' : values['dpuntosk'], 'dpuntosl' : values['dpuntosl'], 'dpuntosll' : values['dpuntosll'], 'dpuntosm' : values['dpuntosm'], 
+                'dpuntosn' : values['dpuntosn'], 'dpuntosñ' : values['dpuntosñ'], 'dpuntoso' : values['dpuntoso'], 'dpuntosp' : values['dpuntosp'], 'dpuntosq' : values['dpuntosq'], 
+                'dpuntosr' : values['dpuntosr'], 'dpuntoss' : values['dpuntoss'], 'dpuntost' : values['dpuntost'], 'dpuntosu' : values['dpuntosu'], 'dpuntosv' : values['dpuntosv'], 
+                'dpuntosw' : values['dpuntosw'], 'dpuntosx' : values['dpuntosx'], 'dpuntosy' : values['dpuntosy'], 'dpuntosz' : values['dpuntosz'], 
+
+                'dcantidada' : values['dcantidada'], 'dcantidadb' : values['dcantidadb'], 'dcantidadc' : values['dcantidadc'], 'dcantidadd' : values['dcantidadd'], 
+                'dcantidade' : values['dcantidade'], 'dcantidadf' : values['dcantidadf'], 'dcantidadg' : values['dcantidadg'], 'dcantidadh' : values['dcantidadh'], 'dcantidadi' : values['dcantidadi'], 
+                'dcantidadj' : values['dcantidadj'], 'dcantidadk' : values['dcantidadk'], 'dcantidadl' : values['dcantidadl'], 'dcantidadll' : values['dcantidadll'], 'dcantidadm' : values['dcantidadm'], 
+                'dcantidadn' : values['dcantidadn'], 'dcantidadñ' : values['dcantidadñ'], 'dcantidado' : values['dcantidado'], 'dcantidadp' : values['dcantidadp'], 'dcantidadq' : values['dcantidadq'], 
+                'dcantidadr' : values['dcantidadr'], 'dcantidads' : values['dcantidads'], 'dcantidadt' : values['dcantidadt'], 'dcantidadu' : values['dcantidadu'], 'dcantidadv' : values['dcantidadv'], 
+                'dcantidadw' : values['dcantidadw'], 'dcantidadx' : values['dcantidadx'], 'dcantidady' : values['dcantidady'], 'dcantidadz' : values['dcantidadz'],
+
+
+                'fpuntosa' : values['fpuntosa'], 'fpuntosb' : values['fpuntosb'], 'fpuntosc' : values['fpuntosc'], 'fpuntosd' : values['fpuntosd'], 
+                'fpuntose' : values['fpuntose'], 'fpuntosf' : values['fpuntosf'], 'fpuntosg' : values['fpuntosg'], 'fpuntosh' : values['fpuntosh'], 'fpuntosi' : values['fpuntosi'], 
+                'fpuntosj' : values['fpuntosj'], 'fpuntosk' : values['fpuntosk'], 'fpuntosl' : values['fpuntosl'], 'fpuntosll' : values['fpuntosll'], 'fpuntosm' : values['fpuntosm'], 
+                'fpuntosn' : values['fpuntosn'], 'fpuntosñ' : values['fpuntosñ'], 'fpuntoso' : values['fpuntoso'], 'fpuntosp' : values['fpuntosp'], 'fpuntosq' : values['fpuntosq'], 
+                'fpuntosr' : values['fpuntosr'], 'fpuntoss' : values['fpuntoss'], 'fpuntost' : values['fpuntost'], 'fpuntosu' : values['fpuntosu'], 'fpuntosv' : values['fpuntosv'], 
+                'fpuntosw' : values['fpuntosw'], 'fpuntosx' : values['fpuntosx'], 'fpuntosy' : values['fpuntosy'], 'fpuntosz' : values['fpuntosz'], 
+
+                'fcantidada' : values['fcantidada'], 'fcantidadb' : values['fcantidadb'], 'fcantidadc' : values['fcantidadc'], 'fcantidadd' : values['fcantidadd'], 
+                'fcantidade' : values['fcantidade'], 'fcantidadf' : values['fcantidadf'], 'fcantidadg' : values['fcantidadg'], 'fcantidadh' : values['fcantidadh'], 'fcantidadi' : values['fcantidadi'], 
+                'fcantidadj' : values['fcantidadj'], 'fcantidadk' : values['fcantidadk'], 'fcantidadl' : values['fcantidadl'], 'fcantidadll' : values['fcantidadll'], 'fcantidadm' : values['fcantidadm'], 
+                'fcantidadn' : values['fcantidadn'], 'fcantidadñ' : values['fcantidadñ'], 'fcantidado' : values['fcantidado'], 'fcantidadp' : values['fcantidadp'], 'fcantidadq' : values['fcantidadq'], 
+                'fcantidadr' : values['fcantidadr'], 'fcantidads' : values['fcantidads'], 'fcantidadt' : values['fcantidadt'], 'fcantidadu' : values['fcantidadu'], 'fcantidadv' : values['fcantidadv'], 
+                'fcantidadw' : values['fcantidadw'], 'fcantidadx' : values['fcantidadx'], 'fcantidady' : values['fcantidady'], 'fcantidadz' : values['fcantidadz'],
+
+
+                'mpuntosa' : values['mpuntosa'], 'mpuntosb' : values['mpuntosb'], 'mpuntosc' : values['mpuntosc'], 'mpuntosd' : values['mpuntosd'], 
+                'mpuntose' : values['mpuntose'], 'mpuntosf' : values['mpuntosf'], 'mpuntosg' : values['mpuntosg'], 'mpuntosh' : values['mpuntosh'], 'mpuntosi' : values['mpuntosi'], 
+                'mpuntosj' : values['mpuntosj'], 'mpuntosk' : values['mpuntosk'], 'mpuntosl' : values['mpuntosl'], 'mpuntosll' : values['mpuntosll'], 'mpuntosm' : values['mpuntosm'], 
+                'mpuntosn' : values['mpuntosn'], 'mpuntosñ' : values['mpuntosñ'], 'mpuntoso' : values['mpuntoso'], 'mpuntosp' : values['mpuntosp'], 'mpuntosq' : values['mpuntosq'], 
+                'mpuntosr' : values['mpuntosr'], 'mpuntoss' : values['mpuntoss'], 'mpuntost' : values['mpuntost'], 'mpuntosu' : values['mpuntosu'], 'mpuntosv' : values['mpuntosv'], 
+                'mpuntosw' : values['mpuntosw'], 'mpuntosx' : values['mpuntosx'], 'mpuntosy' : values['mpuntosy'], 'mpuntosz' : values['mpuntosz'], 
+
+                'mcantidada' : values['mcantidada'], 'mcantidadb' : values['mcantidadb'], 'mcantidadc' : values['mcantidadc'], 'mcantidadd' : values['mcantidadd'], 
+                'mcantidade' : values['mcantidade'], 'mcantidadf' : values['mcantidadf'], 'mcantidadg' : values['mcantidadg'], 'mcantidadh' : values['mcantidadh'], 'mcantidadi' : values['mcantidadi'], 
+                'mcantidadj' : values['mcantidadj'], 'mcantidadk' : values['mcantidadk'], 'mcantidadl' : values['mcantidadl'], 'mcantidadll' : values['mcantidadll'], 'mcantidadm' : values['mcantidadm'], 
+                'mcantidadn' : values['mcantidadn'], 'mcantidadñ' : values['mcantidadñ'], 'mcantidado' : values['mcantidado'], 'mcantidadp' : values['mcantidadp'], 'mcantidadq' : values['mcantidadq'], 
+                'mcantidadr' : values['mcantidadr'], 'mcantidads' : values['mcantidads'], 'mcantidadt' : values['mcantidadt'], 'mcantidadu' : values['mcantidadu'], 'mcantidadv' : values['mcantidadv'], 
+                'mcantidadw' : values['mcantidadw'], 'mcantidadx' : values['mcantidadx'], 'mcantidady' : values['mcantidady'], 'mcantidadz' : values['mcantidadz']
+
+            }
+            guardar(datos)
+    window.close

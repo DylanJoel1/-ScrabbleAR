@@ -192,12 +192,12 @@ class Tablero:
 	def bloquear_tablero(self):
 		for m in range(15):
 			for n in range(15):
-				window.findElement((m,n)).Update(disabled=True)
+				window.FindElement((m,n)).Update(disabled=True)
 				
 	def desbloquear_tablero(self):
 		for m in range(15):
 			for n in range(15):
-				window.findElement((m,n)).Update(disabled=False)
+				window.FindElement((m,n)).Update(disabled=False)
 
 
 
