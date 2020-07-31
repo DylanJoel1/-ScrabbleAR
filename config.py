@@ -36,6 +36,8 @@ def val_pc(values, pc):
         window.FindElement(pc).Update(values[pc][:-1])
     if len(values[pc]) > 1 and int(values[pc]) > 99:
         window.FindElement(pc).Update(99)
+    if len(values[pc]) > 1 and int(values[pc]) < 1:
+        window.FindElement(pc).Update(1)
 
 
 def guardar (datos):
@@ -45,8 +47,13 @@ def guardar (datos):
     print("Se guardo correctamente")
 
 
-def cargar (e, v):
-    pass
+def cargar ():
+    try:
+        with open('datos.json', 'r') as jsonFile:
+            datos = json.load(jsonFile)
+        window.FindElement("fpuntosa").Update(datos["fpuntosa"])
+    except FileNotFoundError:
+        pass
 
 
 FUENTE= "arial"
@@ -55,6 +62,16 @@ FUENTE= "arial"
 columnahf = [
     [sg.T("Duración de la partida:", justification="left", size=(17,1)), sg.Input(size=(2,1), key="fhora", enable_events=True, default_text='0') ,sg.T("horas", justification="left", size=(4,1)), sg.Input(size=(2,1), key="fmin", enable_events=True, default_text='30'), sg.T("minutos", justification="left", size=(6,1))],
     [sg.T("Tipos de palabras permitidas:", justification="left", size=(21,1)), sg.T("Sustantivos:", justification="left", size=(9,1)), sg.CB("", key="fsustantivos", default=True, disabled=True), sg.T("Adjetivos:", justification="left", size=(7,1)), sg.CB("", key="fadjetivos", default=True, disabled=True), sg.T("Verbos:", justification="left", size=(6,1)), sg.CB("", key="fverbos", default=True, disabled=True)]
+]
+
+columnahm = [
+    [sg.T("Duración de la partida:", justification="left", size=(17,1)), sg.Input(size=(2,1), key="mhora", enable_events=True, default_text='0') ,sg.T("horas", justification="left", size=(4,1)), sg.Input(size=(2,1), key="mmin", enable_events=True, default_text='30'), sg.T("minutos", justification="left", size=(6,1))],
+    [sg.T("Tipos de palabras permitidas:", justification="left", size=(21,1)), sg.T("Sustantivos:", justification="left", size=(9,1)), sg.CB("", key="msustantivos", default=True, disabled=True), sg.T("Adjetivos:", justification="left", size=(7,1)), sg.CB("", key="madjetivos", default=True, disabled=True), sg.T("Verbos:", justification="left", size=(6,1)), sg.CB("", key="mverbos", default=True, disabled=True)]
+]
+
+columnahd = [
+    [sg.T("Duración de la partida:", justification="left", size=(17,1)), sg.Input(size=(2,1), key="dhora", enable_events=True, default_text='0') ,sg.T("horas", justification="left", size=(4,1)), sg.Input(size=(2,1), key="dmin", enable_events=True, default_text='30'), sg.T("minutos", justification="left", size=(6,1))],
+    [sg.T("Tipos de palabras permitidas:", justification="left", size=(21,1)), sg.T("Sustantivos:", justification="left", size=(9,1)), sg.CB("", key="dsustantivos", default=True, disabled=True), sg.T("Adjetivos:", justification="left", size=(7,1)), sg.CB("", key="dadjetivos", default=True, disabled=True), sg.T("Verbos:", justification="left", size=(6,1)), sg.CB("", key="dverbos", default=True, disabled=True)]
 ]
 
 columnaf1 = [
@@ -192,12 +209,12 @@ facil_layout = [
 
 medio_layout = [
     [sg.T("Medio", justification="center", font=(FUENTE,20), size=(55,1),background_color="#00FFFF",text_color="#000080" )],
-    [sg.Column(columnam1), sg.Column(columnam2), sg.Column(columnam3)]
+    [sg.Column(columnam1), sg.Column(columnam2), sg.Column(columnam3), sg.Column(columnahm)]
 ]
 
 dificil_layout = [
     [sg.T("Dificil", justification="center", font=(FUENTE,20), size=(55,1),background_color="#00FFFF",text_color="#000080" )],
-    [sg.Column(columnad1), sg.Column(columnad2), sg.Column(columnad3)]
+    [sg.Column(columnad1), sg.Column(columnad2), sg.Column(columnad3), sg.Column(columnahd)]
 ]
 
 layout_Config = [	
@@ -210,11 +227,12 @@ layout_Config = [
 window= sg.Window("Configuracion",layout_Config)
 
 def Config():
-    primero = 0
+    primero = 0    
     while True:
         event, values = window.read()
         if primero == 0:
-            cargar(event, values)
+            print("primero")
+            cargar()
             primero = 1
         if (event is None or event == '-volver-'):
             break
