@@ -224,7 +224,7 @@ def main():
         event, values = window.Read()
         if event is None or event == 'Salir':
             break
-        if event is 'Jugar':
+        if event == 'Jugar':
             arregloEstante = jugador_estante.get_estante()
             estante_ps(arregloEstante)
             juega= True
@@ -239,6 +239,6 @@ def main():
             tablero.agregar_elemento(ficha[0],event[0],event[1])
             Estante.desbloquear_Estante()
             sigue=0
-	    
-	    
+
+
     window.Close()
