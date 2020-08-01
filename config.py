@@ -1,5 +1,10 @@
 import PySimpleGUI as sg
 import json
+from os import path
+
+
+archivo_config = path.join(path.dirname(__file__), r'datos.json')
+default_config = path.join(path.dirname(__file__), r'datos_default.json')
 
 
 def val_hora(values, nhora, window):
@@ -46,16 +51,16 @@ def val_pc(values, pc, window):
         window.FindElement(pc).Update(1)
 
 
-def guardar (datos):
+def guardar (a, datos):
     ''' Funcion que guarda los datos en el archivo datos.json '''
-    with open('datos.json', 'w') as jsonFile:
+    with open(a, 'w') as jsonFile:
         json.dump(datos,jsonFile)
     sg.popup("Se guardo correctamente")
 
 
-def cargar (window, keys):
+def cargar (window, keys, a, ad):
     try:
-        with open('datos.json', 'r') as jsonFile:
+        with open(a, 'r') as jsonFile:
             datos = json.load(jsonFile)
         for key in keys:
             try:
@@ -64,16 +69,17 @@ def cargar (window, keys):
                 print(f'Problema actualizando la ventana. Key = {key}')
     except FileNotFoundError:
         sg.popup("No se encontró el archivo de configuracion, se procedera a crear uno...")
-        with open('datos_default.json', 'r') as jsonFile:
+        with open(ad, 'r') as jsonFile:
             datos = json.load(jsonFile)
+        guardar(a, datos)
         for key in keys:
             try:
                 window.FindElement(key).Update(value=datos[key])
             except Exception:
                 print(f'Problema actualizando la ventana. Key = {key}')
 
-def cargar_default(window, keys):
-    with open('datos_default.json', 'r') as jsonFile:
+def cargar_default(window, keys, ad):
+    with open(ad, 'r') as jsonFile:
         datos = json.load(jsonFile)
         for key in keys:
             try:
@@ -258,7 +264,7 @@ def Config():
     while True:
         if primera == 1:
             window.Finalize()
-            cargar(window, keys)
+            cargar(window, keys, archivo_config, default_config)
             primera = 0
         event, values = window.read()        
         if (event is None or event == '-volver-'):
@@ -321,9 +327,9 @@ def Config():
                 "fhora": values["fhora"], "fmin": values["fmin"], "mhora": values["mhora"], "mmin": values["mmin"], "dhora": values["dhora"], "dmin": values["dmin"],
 
             }
-            guardar(datos)
+            guardar(datos, archivo_config)
         if event == "-default-":
-            cargar_default(window,keys)
+            cargar_default(window,keys, default_config)
             sg.popup("Configuracion por defecto cargada con exito")
     window.close()
         
