@@ -121,16 +121,16 @@ class Estante:
         #Devuelve un arreglo con los elementos del estante, para poder representarlo en pysimplegui
         return self.estante
         
-    def bloquear_Estante():
+    def bloquear_Estante(self, window):
         for i in range(7):
             window.FindElement(i).Update(disabled=True)	
-    def desbloquear_Estante():
+    def desbloquear_Estante(self, window):
         for i in range(7):
             window.FindElement(i).Update(disabled=False)
        
-    def modificar_Estante(self,bot):
+    def modificar_Estante(self, bot, window):
         ATRIL_JUGADOR[bot]=window.FindElement(bot).get_text()
-        self.bloquear_Estante()
+        self.bloquear_Estante(self, window)
         window.FindElement(bot).Update(text="",button_color=("black", "orange"), visible=False)
 
 class Jugador:
@@ -163,7 +163,7 @@ class Jugador:
         #Devuelve un arreglo con los elementos del estante, para poder representarlo en pysimplegui
         return self.estante.get_estante()
 
-def estante_ps(estante):
+def estante_ps(estante, window):
     i=0
     for x in estante:
         print(estante[i].get_letra())
@@ -185,40 +185,36 @@ class Tablero:
 			aux+='\n'
 		print(aux)
 		
-	def agregar_elemento( self,element,*pos):
+	def agregar_elemento( self,element, window, *pos):
 		self.tablero[pos[0]][pos[1]]= True
 		window.FindElement((pos[0],pos[1])).Update(text=element)
 	
-	def bloquear_tablero(self):
+	def bloquear_tablero(self, window):
 		for m in range(15):
 			for n in range(15):
 				window.FindElement((m,n)).Update(disabled=True)
 				
-	def desbloquear_tablero(self):
+	def desbloquear_tablero(self, window):
 		for m in range(15):
 			for n in range(15):
 				window.FindElement((m,n)).Update(disabled=False)
 
 
-
-
-atril = Atril()
-jugador_estante = Jugador(atril)
-tablero= Tablero()
-
-
-sigue=0
-juega= False
-ficha_clickeada=-1
-
-layout2 =  [[sg.Button('', button_color=("black","#F8F8F8"), key=(i,j), size=(4,2), pad=(2,2)) for j in range(15)]  for i in range(15)]
-layout2.append([sg.Text('Estante',	font=('arial',15)) ])
-layout2.append([sg.Button('', button_color=("black","#F8F8F8"), key=(a), size=(4,2), pad=(2,2)) for a in range(7)])
-layout2.append([sg.Button('Jugar',size=(8,2)), sg.Button('Salir',size=(8,2))])
-window = sg.Window('ScrabbleAr', size=(850,800),element_justification='c').Layout(layout2)
-
-
 def main():
+    atril = Atril()
+    jugador_estante = Jugador(atril)
+    tablero= Tablero()
+    
+    sigue=0
+    juega= False
+    ficha_clickeada=-1
+    
+    layout2 =  [[sg.Button('', button_color=("black","#F8F8F8"), key=(i,j), size=(4,2), pad=(2,2)) for j in range(15)]  for i in range(15)]
+    layout2.append([sg.Text('Estante',	font=('arial',15)) ])
+    layout2.append([sg.Button('', button_color=("black","#F8F8F8"), key=(a), size=(4,2), pad=(2,2)) for a in range(7)])
+    layout2.append([sg.Button('Jugar',size=(8,2)), sg.Button('Salir',size=(8,2))])
+    
+    window = sg.Window('ScrabbleAr', size=(850,800),element_justification='c').Layout(layout2)
     
     while True:
         event, values = window.Read()
@@ -226,18 +222,18 @@ def main():
             break
         if event == 'Jugar':
             arregloEstante = jugador_estante.get_estante()
-            estante_ps(arregloEstante)
+            estante_ps(arregloEstante, window)
             juega= True
         elif event in range(7) and juega:
             ficha_clickeada = event	
             estante= jugador_estante.get_estante()
             ficha=str(estante[event])
             ficha=ficha.split(",")
-            Estante.modificar_Estante(Estante,ficha_clickeada)
+            Estante.modificar_Estante(Estante,ficha_clickeada, window)
             sigue=1
         elif (sigue==1):
-            tablero.agregar_elemento(ficha[0],event[0],event[1])
-            Estante.desbloquear_Estante()
+            tablero.agregar_elemento(ficha[0],window,event[0], event[1])
+            Estante.desbloquear_Estante(Estante, window)
             sigue=0
 
 
