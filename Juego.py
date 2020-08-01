@@ -136,14 +136,14 @@ class Estante:
         
     def bloquear_Estante(self, window):
         for i in range(7):
-            window.FindElement(i).Update(disabled=True)	
+            window.FindElement(i).Update(disabled=True)
     def desbloquear_Estante(self, window):
         for i in range(7):
             window.FindElement(i).Update(disabled=False)
        
     def modificar_Estante(self, bot, window):
         ATRIL_JUGADOR[bot]=window.FindElement(bot).get_text()
-        self.bloquear_Estante(window)
+        self.bloquear_Estante(self, window)
         window.FindElement(bot).Update(text="",button_color=("black", "orange"), visible=False)
 
 class Jugador:

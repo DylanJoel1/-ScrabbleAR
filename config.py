@@ -15,8 +15,11 @@ def val_hora(values, nhora, window):
         pass
     if len(values[nhora][:-1]) >= 1:
         window.FindElement(nhora).Update(values[nhora][:-1])
-    if len(values[nhora]) > 1 and int(values[nhora]) > 9:
-        window.FindElement(nhora).Update(9)
+    try:
+        if len(values[nhora]) > 1 and int(values[nhora]) > 9:
+            window.FindElement(nhora).Update(9)
+    except ValueError:
+        window.FindElement(nhora).Update(0)
 
 
 def val_min(values, nmin, window):
@@ -27,8 +30,11 @@ def val_min(values, nmin, window):
         pass
     if len(values[nmin][:-1]) >= 2:
         window.FindElement(nmin).Update(values[nmin][:-1])
-    if len(values[nmin]) > 1 and int(values[nmin]) > 59:
-        window.FindElement(nmin).Update(59)
+    try:
+        if len(values[nmin]) > 1 and int(values[nmin]) > 59:
+            window.FindElement(nmin).Update(59)
+    except ValueError:
+        window.FindElement(nmin).Update(1)
 
 
 def val_pc(values, pc, window):
@@ -279,6 +285,16 @@ def Config():
             print('event pc')
             val_pc(values, event, window)
         if event == '-guardar-':
+            if (values["fhora"] == "0") and (values["fmin"] == "0"):
+                print("doble 0")
+                window.FindElement("fmin").Update(1)
+                values["fmin"] = "1"
+            if (values["mhora"] == "0") and (values["mmin"] == "0"):
+                window.FindElement("mmin").Update(1)
+                values["mmin"] = "1"
+            if (values["dhora"] == "0") and (values["dmin"] == "0"):
+                window.FindElement("dmin").Update(1)
+                values["dmin"] = "1"
             datos = {
                 'dpuntosa' : values['dpuntosa'], 'dpuntosb' : values['dpuntosb'], 'dpuntosc' : values['dpuntosc'], 'dpuntosd' : values['dpuntosd'],
                 'dpuntose' : values['dpuntose'], 'dpuntosf' : values['dpuntosf'], 'dpuntosg' : values['dpuntosg'], 'dpuntosh' : values['dpuntosh'], 'dpuntosi' : values['dpuntosi'], 
@@ -327,7 +343,7 @@ def Config():
                 "fhora": values["fhora"], "fmin": values["fmin"], "mhora": values["mhora"], "mmin": values["mmin"], "dhora": values["dhora"], "dmin": values["dmin"],
 
             }
-            guardar(datos, archivo_config)
+            guardar(archivo_config, datos)
         if event == "-default-":
             cargar_default(window,keys, default_config)
             sg.popup("Configuracion por defecto cargada con exito")
