@@ -34,9 +34,15 @@ def val_pc(values, pc, window):
         pass
     if len(values[pc][:-1]) >= 2:
         window.FindElement(pc).Update(values[pc][:-1])
-    if len(values[pc]) > 1 and int(values[pc]) > 99:
-        window.FindElement(pc).Update(99)
-    if len(values[pc]) > 1 and int(values[pc]) < 1:
+    try:
+        if len(values[pc]) > 1 and int(values[pc]) > 99:
+            window.FindElement(pc).Update(99)
+    except ValueError:
+        window.FindElement(pc).Update(0)
+    try:
+        if len(values[pc]) >= 1 and int(values[pc]) < 1:
+            window.FindElement(pc).Update(1)
+    except ValueError:
         window.FindElement(pc).Update(1)
 
 
