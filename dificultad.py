@@ -7,7 +7,7 @@ def main():
     BUTTON_BORDER = 4
     FUENTE = 'arial'
 
-    botones = [			
+    botones = [
                 [sg.B('Fácil',button_color=('black','green'),size=(WIDTH, HEIGHT), border_width=BUTTON_BORDER, focus= True, font=FUENTE , key = '-facil-')],
                 [sg.B('Medio',button_color=('black','green'), size=(WIDTH, HEIGHT),border_width=BUTTON_BORDER,font=FUENTE     , key = '-medio-')],
                 [sg.B('Difícil',button_color=('black','green') ,size=(WIDTH, HEIGHT),border_width=BUTTON_BORDER,font=FUENTE          , key = '-dificil-')],

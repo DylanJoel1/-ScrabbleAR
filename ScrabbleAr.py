@@ -3,6 +3,7 @@ import Juego
 import comoJugar
 import config
 import dificultad
+import top10
 
 WIDTH  = 20
 HEIGHT = 3
@@ -36,6 +37,6 @@ while True:
 	elif event == '-instrucc-':
 		comoJugar.Reglas()
 	elif event == '-top10-':
-		sg.popup('top10')
+		top10.main()
 
 window.close()
