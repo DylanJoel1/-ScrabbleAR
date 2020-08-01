@@ -2,6 +2,7 @@ import PySimpleGUI as sg
 import Juego
 import comoJugar
 import config
+import dificultad
 
 WIDTH  = 20
 HEIGHT = 3
@@ -18,18 +19,18 @@ botones = [
 ]
 
 layout = [	
-			[sg.T('Scrabble', font=('Helvetica', 30), text_color=('black'), border_width=30)],
+			[sg.T('ScrabbleAR', font=('Helvetica', 30), text_color=('black'), border_width=30)],
 			[sg.Column(botones,justification='c' )]
 			] 
 
-window = sg.Window('Scrabble', layout, size=(400,500), element_justification='c')
+window = sg.Window('ScrabbleAR', layout, size=(400,500), element_justification='c')
 
 while True:
-	event, value = window.read()
+	event, values = window.read()
 	if (event is None or event == '-salir-'):
 		break
 	if event == '-comenzar-':
-		Juego.main()
+		dificultad.main()
 	elif event == '-config-':
 		config.Config()
 	elif event == '-instrucc-':

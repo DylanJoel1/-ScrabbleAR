@@ -44,7 +44,7 @@ def guardar (datos):
     ''' Funcion que guarda los datos en el archivo datos.json '''
     with open('datos.json', 'w') as jsonFile:
         json.dump(datos,jsonFile)
-    print("Se guardo correctamente")
+    sg.popup("Se guardo correctamente")
 
 
 def cargar (window, keys):
@@ -66,12 +66,21 @@ def cargar (window, keys):
             except Exception:
                 print(f'Problema actualizando la ventana. Key = {key}')
 
+def cargar_default(window, keys):
+    with open('datos_default.json', 'r') as jsonFile:
+        datos = json.load(jsonFile)
+        for key in keys:
+            try:
+                window.FindElement(key).Update(value=datos[key])
+            except Exception:
+                print(f'Problema actualizando la ventana. Key = {key}')
+
 
 def Config():
 
     FUENTE= "arial"
     primera = 1
-    keys = {"dpuntosa": "", "dpuntosb": "", "dpuntosc": "", "dpuntosd": "", "dpuntose": "", "dpuntosf": "", "dpuntosg": "", "dpuntosh": "", "dpuntosi": "", "dpuntosj": "", "dpuntosk": "", "dpuntosl": "", "dpuntosll": "", "dpuntosm": "", "dpuntosn": "", "dpuntos\u00f1": "", "dpuntoso": "", "dpuntosp": "", "dpuntosq": "", "dpuntosr": "", "dpuntoss": "", "dpuntost": "", "dpuntosu": "", "dpuntosv": "", "dpuntosw": "", "dpuntosx": "", "dpuntosy": "", "dpuntosz": "", "dpuntosrr": "", "dcantidada": "", "dcantidadb": "", "dcantidadc": "", "dcantidadd": "", "dcantidade": "", "dcantidadf": "", "dcantidadg": "", "dcantidadh": "", "dcantidadi": "", "dcantidadj": "", "dcantidadk": "", "dcantidadl": "", "dcantidadll": "", "dcantidadm": "", "dcantidadn": "", "dcantidad\u00f1": "", "dcantidado": "", "dcantidadp": "", "dcantidadq": "", "dcantidadr": "", "dcantidads": "", "dcantidadt": "", "dcantidadu": "", "dcantidadv": "", "dcantidadw": "", "dcantidadx": "", "dcantidady": "", "dcantidadz": "", "dcantidadrr": "", "fpuntosa": "15", "fpuntosb": "", "fpuntosc": "", "fpuntosd": "", "fpuntose": "", "fpuntosf": "", "fpuntosg": "", "fpuntosh": "", "fpuntosi": "", "fpuntosj": "", "fpuntosk": "", "fpuntosl": "", "fpuntosll": "", "fpuntosm": "", "fpuntosn": "", "fpuntos\u00f1": "", "fpuntoso": "", "fpuntosp": "", "fpuntosq": "", "fpuntosr": "", "fpuntoss": "", "fpuntost": "", "fpuntosu": "", "fpuntosv": "", "fpuntosw": "", "fpuntosx": "", "fpuntosy": "", "fpuntosz": "", "fpuntosrr": "", "fcantidada": "", "fcantidadb": "", "fcantidadc": "", "fcantidadd": "", "fcantidade": "", "fcantidadf": "", "fcantidadg": "", "fcantidadh": "", "fcantidadi": "", "fcantidadj": "", "fcantidadk": "", "fcantidadl": "", "fcantidadll": "", "fcantidadm": "", "fcantidadn": "", "fcantidad\u00f1": "", "fcantidado": "", "fcantidadp": "", "fcantidadq": "", "fcantidadr": "", "fcantidads": "", "fcantidadt": "", "fcantidadu": "", "fcantidadv": "", "fcantidadw": "", "fcantidadx": "", "fcantidady": "", "fcantidadz": "", "fcantidadrr": "", "mpuntosa": "", "mpuntosb": "", "mpuntosc": "", "mpuntosd": "", "mpuntose": "", "mpuntosf": "", "mpuntosg": "", "mpuntosh": "", "mpuntosi": "", "mpuntosj": "", "mpuntosk": "", "mpuntosl": "", "mpuntosll": "", "mpuntosm": "", "mpuntosn": "", "mpuntos\u00f1": "", "mpuntoso": "", "mpuntosp": "", "mpuntosq": "", "mpuntosr": "", "mpuntoss": "", "mpuntost": "", "mpuntosu": "", "mpuntosv": "", "mpuntosw": "", "mpuntosx": "", "mpuntosy": "", "mpuntosz": "", "mpuntosrr": "", "mcantidada": "", "mcantidadb": "", "mcantidadc": "", "mcantidadd": "", "mcantidade": "", "mcantidadf": "", "mcantidadg": "", "mcantidadh": "", "mcantidadi": "", "mcantidadj": "", "mcantidadk": "", "mcantidadl": "", "mcantidadll": "", "mcantidadm": "", "mcantidadn": "", "mcantidad\u00f1": "", "mcantidado": "", "mcantidadp": "", "mcantidadq": "", "mcantidadr": "", "mcantidads": "", "mcantidadt": "", "mcantidadu": "", "mcantidadv": "", "mcantidadw": "", "mcantidadx": "", "mcantidady": "", "mcantidadz": "", "mcantidadrr": "", "fhora": "", "fmin": "", "mhora": "", "mmin": "", "dhora": "", "dmin": ""}
+    keys = {"dpuntosa": "", "dpuntosb": "", "dpuntosc": "", "dpuntosd": "", "dpuntose": "", "dpuntosf": "", "dpuntosg": "", "dpuntosh": "", "dpuntosi": "", "dpuntosj": "", "dpuntosk": "", "dpuntosl": "", "dpuntosll": "", "dpuntosm": "", "dpuntosn": "", "dpuntos\u00f1": "", "dpuntoso": "", "dpuntosp": "", "dpuntosq": "", "dpuntosr": "", "dpuntoss": "", "dpuntost": "", "dpuntosu": "", "dpuntosv": "", "dpuntosw": "", "dpuntosx": "", "dpuntosy": "", "dpuntosz": "", "dpuntosrr": "", "dcantidada": "", "dcantidadb": "", "dcantidadc": "", "dcantidadd": "", "dcantidade": "", "dcantidadf": "", "dcantidadg": "", "dcantidadh": "", "dcantidadi": "", "dcantidadj": "", "dcantidadk": "", "dcantidadl": "", "dcantidadll": "", "dcantidadm": "", "dcantidadn": "", "dcantidad\u00f1": "", "dcantidado": "", "dcantidadp": "", "dcantidadq": "", "dcantidadr": "", "dcantidads": "", "dcantidadt": "", "dcantidadu": "", "dcantidadv": "", "dcantidadw": "", "dcantidadx": "", "dcantidady": "", "dcantidadz": "", "dcantidadrr": "", "fpuntosa": "", "fpuntosb": "", "fpuntosc": "", "fpuntosd": "", "fpuntose": "", "fpuntosf": "", "fpuntosg": "", "fpuntosh": "", "fpuntosi": "", "fpuntosj": "", "fpuntosk": "", "fpuntosl": "", "fpuntosll": "", "fpuntosm": "", "fpuntosn": "", "fpuntos\u00f1": "", "fpuntoso": "", "fpuntosp": "", "fpuntosq": "", "fpuntosr": "", "fpuntoss": "", "fpuntost": "", "fpuntosu": "", "fpuntosv": "", "fpuntosw": "", "fpuntosx": "", "fpuntosy": "", "fpuntosz": "", "fpuntosrr": "", "fcantidada": "", "fcantidadb": "", "fcantidadc": "", "fcantidadd": "", "fcantidade": "", "fcantidadf": "", "fcantidadg": "", "fcantidadh": "", "fcantidadi": "", "fcantidadj": "", "fcantidadk": "", "fcantidadl": "", "fcantidadll": "", "fcantidadm": "", "fcantidadn": "", "fcantidad\u00f1": "", "fcantidado": "", "fcantidadp": "", "fcantidadq": "", "fcantidadr": "", "fcantidads": "", "fcantidadt": "", "fcantidadu": "", "fcantidadv": "", "fcantidadw": "", "fcantidadx": "", "fcantidady": "", "fcantidadz": "", "fcantidadrr": "", "mpuntosa": "", "mpuntosb": "", "mpuntosc": "", "mpuntosd": "", "mpuntose": "", "mpuntosf": "", "mpuntosg": "", "mpuntosh": "", "mpuntosi": "", "mpuntosj": "", "mpuntosk": "", "mpuntosl": "", "mpuntosll": "", "mpuntosm": "", "mpuntosn": "", "mpuntos\u00f1": "", "mpuntoso": "", "mpuntosp": "", "mpuntosq": "", "mpuntosr": "", "mpuntoss": "", "mpuntost": "", "mpuntosu": "", "mpuntosv": "", "mpuntosw": "", "mpuntosx": "", "mpuntosy": "", "mpuntosz": "", "mpuntosrr": "", "mcantidada": "", "mcantidadb": "", "mcantidadc": "", "mcantidadd": "", "mcantidade": "", "mcantidadf": "", "mcantidadg": "", "mcantidadh": "", "mcantidadi": "", "mcantidadj": "", "mcantidadk": "", "mcantidadl": "", "mcantidadll": "", "mcantidadm": "", "mcantidadn": "", "mcantidad\u00f1": "", "mcantidado": "", "mcantidadp": "", "mcantidadq": "", "mcantidadr": "", "mcantidads": "", "mcantidadt": "", "mcantidadu": "", "mcantidadv": "", "mcantidadw": "", "mcantidadx": "", "mcantidady": "", "mcantidadz": "", "mcantidadrr": "", "fhora": "", "fmin": "", "mhora": "", "mmin": "", "dhora": "", "dmin": ""}
 
     columnahf = [
         [sg.T("Duración de la partida:", justification="left", size=(17,1)), sg.Input(size=(2,1), key="fhora", enable_events=True, default_text='0') ,sg.T("horas", justification="left", size=(4,1)), sg.Input(size=(2,1), key="fmin", enable_events=True, default_text='30'), sg.T("minutos", justification="left", size=(6,1))],
@@ -234,7 +243,7 @@ def Config():
     layout_Config = [	
                 [sg.T("Configuración", justification="center", font=(FUENTE,20), size=(55,1),background_color="#00FFFF",text_color="#000080" )],
                 [sg.TabGroup([[sg.Tab('Facil', facil_layout), sg.Tab('Medio', medio_layout), sg.Tab('Dificil', dificil_layout)]])],
-                [sg.B("Guardar", size=(8,2), key="-guardar-", button_color=("black","#FA8072")), sg.B("Volver", size=(8,2), key="-volver-", button_color=("black","#FA8072"))]
+                [sg.B("Guardar", size=(8,2), key="-guardar-", button_color=("black","#FA8072")), sg.B("Restaurar a por defecto", size=(20,2), key="-default-", button_color=("black","#FA8072")), sg.B("Volver", size=(8,2), key="-volver-", button_color=("black","#FA8072"))]
                 
                 ]
 
@@ -307,5 +316,8 @@ def Config():
 
             }
             guardar(datos)
+        if event == "-default-":
+            cargar_default(window,keys)
+            sg.popup("Configuracion por defecto cargada con exito")
     window.close()
         

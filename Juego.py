@@ -1,6 +1,7 @@
 '''Trabajo Final'''
 import PySimpleGUI as sg
 from random import shuffle
+import json
 
 #constante que representa el atril del jugador
 ATRIL_JUGADOR=[[""] for i in range(7)]
@@ -10,6 +11,18 @@ valores = {"A": 1,"B": 3,"C": 2,"D": 2,"E": 1,"F": 4,"G": 2,"H": 4,
             "I": 1,"J": 6,"K": 8,"L": 1,"LL": 8,"M": 3,"N": 1,"Ñ": 8,
             "O": 1,"P": 3,"Q": 8,"R": 1,"RR": 8,"S": 1,"T": 1,"U": 1,
             "V": 4,"W": 8,"X": 8,"Y": 4,"Z": 10}
+
+
+def cargar():
+    try:
+        with open('datos.json', 'r') as jsonFile:
+            datos = json.load(jsonFile)
+        return datos
+    except FileNotFoundError:
+        sg.popup("No se encontró el archivo de configuracion, se procedera a crear uno...")
+        with open('datos_default.json', 'r') as jsonFile:
+            datos = json.load(jsonFile)
+        return datos
 
 class Ficha:
     """
@@ -38,16 +51,16 @@ class Atril:
     """
     Clase que crea el atril con 100 fichas por defecto
     """
-    def __init__(self):
+    def __init__(self, fichas_cant):
         #Crea el atril y lo inicializa con 100 fichas por defecto
         self.atril = []
-        self.inicializa_atril()
+        self.inicializa_atril(fichas_cant)
 
     def agregar(self, letra, cantidad):
         #agrega una letra, la cantidad de veces que se indique, al atril
         for a in range(cantidad):
             self.atril.append(letra)
-    def inicializa_atril(self):
+    def inicializa_atril(self, fichas_cant):
         #agrega las 100 fichas al atril y las mezcla (shuffle)
         self.agregar(Ficha("A"), 11)
         self.agregar(Ficha("B"), 3)
@@ -163,12 +176,6 @@ class Jugador:
         #Devuelve un arreglo con los elementos del estante, para poder representarlo en pysimplegui
         return self.estante.get_estante()
 
-def estante_ps(estante, window):
-    i=0
-    for x in estante:
-        print(estante[i].get_letra())
-        window.FindElement(i).Update(estante[i].get_letra())
-        i=i+1
 
 class Tablero:
 	'''
@@ -200,8 +207,45 @@ class Tablero:
 				window.FindElement((m,n)).Update(disabled=False)
 
 
-def main():
-    atril = Atril()
+def estante_ps(estante, window):
+    i=0
+    for x in estante:
+        print(estante[i].get_letra())
+        window.FindElement(i).Update(estante[i].get_letra())
+        i=i+1
+
+
+def datos(dificultad):
+    if dificultad == "-facil-":
+        valores = cargar()
+        keys = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "LL", "M", "N", "Ñ", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "RR",]
+        keysp = ["fpuntosa", "fpuntosb", "fpuntosc", "fpuntosd", "fpuntose", "fpuntosf", "fpuntosg", "fpuntosh", "fpuntosi", "fpuntosj", "fpuntosk", "fpuntosl", "fpuntosll", "fpuntosm", "fpuntosn", "fpuntos\u00f1", "fpuntoso", "fpuntosp", "fpuntosq", "fpuntosr", "fpuntoss", "fpuntost", "fpuntosu", "fpuntosv", "fpuntosw", "fpuntosx", "fpuntosy", "fpuntosz", "fpuntosrr"]
+        keysc = ["fcantidada", "fcantidadb", "fcantidadc", "fcantidadd", "fcantidade", "fcantidadf", "fcantidadg", "fcantidadh", "fcantidadi", "fcantidadj", "fcantidadk", "fcantidadl", "fcantidadll", "fcantidadm", "fcantidadn", "fcantidad\u00f1", "fcantidado", "fcantidadp", "fcantidadq", "fcantidadr", "fcantidads", "fcantidadt", "fcantidadu", "fcantidadv", "fcantidadw", "fcantidadx", "fcantidady", "fcantidadz", "fcantidadrr"]
+        fichas_cant = {y:valores[x] for x,y in zip(keysc, keys)}
+        fichas_punt = {y:valores[x] for x,y in zip(keysp, keys)}
+        return fichas_cant, fichas_punt
+    elif dificultad == "-medio-":
+        valores = cargar()
+        keys = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "LL", "M", "N", "Ñ", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "RR",]
+        keysp = ["mpuntosa", "mpuntosb", "mpuntosc", "mpuntosd", "mpuntose", "mpuntosf", "mpuntosg", "mpuntosh", "mpuntosi", "mpuntosj", "mpuntosk", "mpuntosl", "mpuntosll", "mpuntosm", "mpuntosn", "mpuntos\u00f1", "mpuntoso", "mpuntosp", "mpuntosq", "mpuntosr", "mpuntoss", "mpuntost", "mpuntosu", "mpuntosv", "mpuntosw", "mpuntosx", "mpuntosy", "mpuntosz", "mpuntosrr"]
+        keysc = ["mcantidada", "mcantidadb", "mcantidadc", "mcantidadd", "mcantidade", "mcantidadf", "mcantidadg", "mcantidadh", "mcantidadi", "mcantidadj", "mcantidadk", "mcantidadl", "mcantidadll", "mcantidadm", "mcantidadn", "mcantidad\u00f1", "mcantidado", "mcantidadp", "mcantidadq", "mcantidadr", "mcantidads", "mcantidadt", "mcantidadu", "mcantidadv", "mcantidadw", "mcantidadx", "mcantidady", "mcantidadz", "mcantidadrr"]
+        fichas_cant = {y:valores[x] for x,y in zip(keysc, keys)}
+        fichas_punt = {y:valores[x] for x,y in zip(keysp, keys)}
+        return fichas_cant, fichas_punt
+    elif dificultad == "-dificil-":
+        valores = cargar()
+        keys = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "LL", "M", "N", "Ñ", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "RR",]
+        keysp = ["dpuntosa", "dpuntosb", "dpuntosc", "dpuntosd", "dpuntose", "dpuntosf", "dpuntosg", "dpuntosh", "dpuntosi", "dpuntosj", "dpuntosk", "dpuntosl", "dpuntosll", "dpuntosm", "dpuntosn", "dpuntos\u00f1", "dpuntoso", "dpuntosp", "dpuntosq", "dpuntosr", "dpuntoss", "dpuntost", "dpuntosu", "dpuntosv", "dpuntosw", "dpuntosx", "dpuntosy", "dpuntosz", "dpuntosrr"]
+        keysc = ["dcantidada", "dcantidadb", "dcantidadc", "dcantidadd", "dcantidade", "dcantidadf", "dcantidadg", "dcantidadh", "dcantidadi", "dcantidadj", "dcantidadk", "dcantidadl", "dcantidadll", "dcantidadm", "dcantidadn", "dcantidad\u00f1", "dcantidado", "dcantidadp", "dcantidadq", "dcantidadr", "dcantidads", "dcantidadt", "dcantidadu", "dcantidadv", "dcantidadw", "dcantidadx", "dcantidady", "dcantidadz", "dcantidadrr"]
+        fichas_cant = {y:valores[x] for x,y in zip(keysc, keys)}
+        fichas_punt = {y:valores[x] for x,y in zip(keysp, keys)}
+        return fichas_cant, fichas_punt
+
+
+def main(dificultad):
+
+    fichas_cant, fichas_punt = datos(dificultad)
+    atril = Atril(fichas_cant)
     jugador_estante = Jugador(atril)
     tablero= Tablero()
     
