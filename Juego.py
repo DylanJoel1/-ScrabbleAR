@@ -2,6 +2,7 @@
 import PySimpleGUI as sg
 from random import shuffle
 import json
+import os
 
 #constante que representa el atril del jugador
 ATRIL_JUGADOR=[[""] for i in range(7)]
@@ -242,8 +243,21 @@ def datos(dificultad):
         return fichas_cant, fichas_punt
 
 
-def main(dificultad):
+def so():
+	a = os.name
+	if os.name == "nt":
+		WIDTH  = 4
+		HEIGHT = 2
+		return WIDTH, HEIGHT
+	elif os.name == "posix":
+		WIDTH  = 3
+		HEIGHT = 1
+		return WIDTH, HEIGHT
 
+
+def main(dificultad):
+    
+    w,h = so()
     fichas_cant, fichas_punt = datos(dificultad)
     atril = Atril(fichas_cant)
     jugador_estante = Jugador(atril)
@@ -253,10 +267,10 @@ def main(dificultad):
     juega= False
     ficha_clickeada=-1
     
-    layout2 =  [[sg.Button('', button_color=("black","#F8F8F8"), key=(i,j), size=(4,2), pad=(2,2)) for j in range(15)]  for i in range(15)]
+    layout2 =  [[sg.Button('', button_color=("black","#F8F8F8"), key=(i,j), size=(w,h), pad=(2,2)) for j in range(15)]  for i in range(15)]
     layout2.append([sg.Text('Estante',	font=('arial',15)) ])
-    layout2.append([sg.Button('', button_color=("black","#F8F8F8"), key=(a), size=(4,2), pad=(2,2)) for a in range(7)])
-    layout2.append([sg.Button('Jugar',size=(8,2)), sg.Button('Salir',size=(8,2))])
+    layout2.append([sg.Button('', button_color=("black","#F8F8F8"), key=(a), size=(w,h), pad=(2,2)) for a in range(7)])
+    layout2.append([sg.Button('Jugar',size=(8,2)), sg.Button('Salir',size=(8,h))])
     
     window = sg.Window('ScrabbleAr', size=(850,800),element_justification='c').Layout(layout2)
     
