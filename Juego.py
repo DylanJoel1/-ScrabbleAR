@@ -244,20 +244,24 @@ def datos(dificultad):
 
 
 def so():
-	a = os.name
-	if os.name == "nt":
-		WIDTH  = 4
-		HEIGHT = 2
-		return WIDTH, HEIGHT
-	elif os.name == "posix":
-		WIDTH  = 3
-		HEIGHT = 1
-		return WIDTH, HEIGHT
+    a = os.name
+    if os.name == "nt":
+        WIDTH  = 4
+        HEIGHT = 2
+        SW = 850
+        SH = 800
+        return WIDTH, HEIGHT, SW, SH
+    elif os.name == "posix":
+        WIDTH  = 1
+        HEIGHT = 1
+        SW = 650
+        SH = 600
+        return WIDTH, HEIGHT, SW, SH
 
 
 def main(dificultad):
     
-    w,h = so()
+    w,h,sw,sh = so()
     fichas_cant, fichas_punt = datos(dificultad)
     atril = Atril(fichas_cant)
     jugador_estante = Jugador(atril)
@@ -272,7 +276,7 @@ def main(dificultad):
     layout2.append([sg.Button('', button_color=("black","#F8F8F8"), key=(a), size=(w,h), pad=(2,2)) for a in range(7)])
     layout2.append([sg.Button('Jugar',size=(8,2)), sg.Button('Salir',size=(8,h))])
     
-    window = sg.Window('ScrabbleAr', size=(850,800),element_justification='c').Layout(layout2)
+    window = sg.Window('ScrabbleAr', size=(sw,sh),element_justification='c').Layout(layout2)
     
     while True:
         event, values = window.Read()
