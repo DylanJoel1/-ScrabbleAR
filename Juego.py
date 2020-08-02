@@ -2,12 +2,9 @@
 import PySimpleGUI as sg
 from random import shuffle
 import json
-<<<<<<< HEAD
 import random
 import datetime, time
-=======
 import os
->>>>>>> d868297ed46bcfc602abf7f3ac633ae8f4c05967
 
 #constante que representa el atril del jugador
 ATRIL_JUGADOR=[[""] for i in range(7)]
@@ -151,11 +148,7 @@ class Estante:
        
     def quitar_Ficha_De_Estante(self, bot, window):
         ATRIL_JUGADOR[bot]=window.FindElement(bot).get_text()
-<<<<<<< HEAD
-        self.bloquear_Estante(self,window)
-=======
         self.bloquear_Estante(self, window)
->>>>>>> d868297ed46bcfc602abf7f3ac633ae8f4c05967
         window.FindElement(bot).Update(text="",button_color=("black", "orange"), visible=False)
     def retornar_Ficha_Al_Estante(self,pos,ficha,window):
         window.FindElement(pos).Update(text=ficha,button_color=("black","white"), visible=True)
