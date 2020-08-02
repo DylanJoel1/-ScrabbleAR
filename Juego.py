@@ -2,9 +2,13 @@
 import PySimpleGUI as sg
 from random import shuffle
 import json
+import random
+import datetime, time
 
 #constante que representa el atril del jugador
 ATRIL_JUGADOR=[[""] for i in range(7)]
+
+TIEMPO_LIMITE_PARTIDA = datetime.datetime.now() + datetime.timedelta(seconds=60)
 
 #Variable global con los valores - temporal
 valores = {"A": 1,"B": 3,"C": 2,"D": 2,"E": 1,"F": 4,"G": 2,"H": 4,
@@ -141,10 +145,12 @@ class Estante:
         for i in range(7):
             window.FindElement(i).Update(disabled=False)
        
-    def modificar_Estante(self, bot, window):
+    def quitar_Ficha_De_Estante(self, bot, window):
         ATRIL_JUGADOR[bot]=window.FindElement(bot).get_text()
-        self.bloquear_Estante(window)
+        self.bloquear_Estante(self,window)
         window.FindElement(bot).Update(text="",button_color=("black", "orange"), visible=False)
+    def retornar_Ficha_Al_Estante(self,pos,ficha,window):
+        window.FindElement(pos).Update(text=ficha,button_color=("black","white"), visible=True)
 
 class Jugador:
     """
@@ -178,39 +184,44 @@ class Jugador:
 
 
 class Tablero:
-	'''
-		Clase que representa al tablero para poder modificarlo
-	'''
-	def __init__(self):
-		self.tablero= [[False for j in range(15)]for i in range(15)]
-	
-	def mostrar_estado(self):
-		aux=''
-		for m in range(15):
-			for n in range(15):
-				aux+="|" + (str(self.tablero[m][n])) + "|"
-			aux+='\n'
-		print(aux)
-		
-	def agregar_elemento( self,element, window, *pos):
-		self.tablero[pos[0]][pos[1]]= True
-		window.FindElement((pos[0],pos[1])).Update(text=element)
-	
-	def bloquear_tablero(self, window):
-		for m in range(15):
-			for n in range(15):
-				window.FindElement((m,n)).Update(disabled=True)
-				
-	def desbloquear_tablero(self, window):
-		for m in range(15):
-			for n in range(15):
-				window.FindElement((m,n)).Update(disabled=False)
+    '''
+    Clase que representa al tablero para poder modificarlo
+    '''
+    def __init__(self):
+        self.tablero= [[False for j in range(15)]for i in range(15)]
+    
+    def mostrar_estado(self):
+        aux=''
+        for m in range(15):
+            for n in range(15):
+                aux+="|" + (str(self.tablero[m][n])) + "|"
+            aux+='\n'
+        print(aux)
+   
+    def agregar_elemento( self,element, window, *pos):
+        self.tablero[pos[0]][pos[1]]= True
+        window.FindElement((pos[0],pos[1])).Update(text=element)
+        
+    def bloquear_tablero(self, window):
+        for m in range(15):
+            for n in range(15):
+                window.FindElement((m,n)).Update(disabled=True, button_color=("black","white"))
+    def desbloquear_tablero(self, window):
+        for m in range(15):
+            for n in range(15):
+                window.FindElement((m,n)).Update(disabled=False, button_color=("black","green"))
+
+    def desbloquear_Pos(self,window,x,y):
+        window.FindElement((x,y)).Update(disabled=False, button_color=("black","green"))
+
+    def bloquear_Pos(self,window,x,y):
+        window.FindElement((x,y)).Update(disabled= True,button_color=("black","white"))
 
 
 def estante_ps(estante, window):
     i=0
     for x in estante:
-        print(estante[i].get_letra())
+       # print(estante[i].get_letra())
         window.FindElement(i).Update(estante[i].get_letra())
         i=i+1
 
@@ -241,6 +252,56 @@ def datos(dificultad):
         fichas_punt = {y:valores[x] for x,y in zip(keysp, keys)}
         return fichas_cant, fichas_punt
 
+def salir_juego(evento):
+    if evento is None or evento == 'Salir':
+        return True
+
+def hay_espacio(window,lista_pos, direc="disponibles"): #Funcion que retorna si es válido o no colocar una ficha en la posición de la direccion asignada. En caso de no dar una direccion retorna una lista con todas las posiciones válidas que rodeen a la ultima ficha colocada.
+    if direc== "disponibles":
+        aux=[]
+        if lista_pos[0] != 0:
+            if window.FindElement((lista_pos[0]-1,lista_pos[1])).GetText() == "":
+                aux.append([lista_pos[0]-1,lista_pos[1]])
+        if lista_pos[0] != 15:    
+            if window.FindElement((lista_pos[0]+1,lista_pos[1])).GetText() == "":
+                aux.append([lista_pos[0]+1,lista_pos[1]])
+        if lista_pos[1] != 0:
+            if window.FindElement((lista_pos[0],lista_pos[1]-1)).GetText() == "":
+                aux.append([lista_pos[0], lista_pos[1]-1])
+        if lista_pos[1] != 15:
+            if window.FindElement((lista_pos[0],lista_pos[1]+1)).GetText() == "":
+                aux.append([lista_pos[0],lista_pos[1]+1])
+        return aux
+    elif direc== "derecha":
+        if lista_pos[1] != 15:
+            if window.FindElement((lista_pos[0],lista_pos[1]+1)).GetText() != "":
+                return False
+            return True
+        else:
+            return False
+    elif direc=="izquierda":
+        if lista_pos[1] !=0:
+            if (window.FindElement((lista_pos[0],lista_pos[1]-1)).GetText() != ""):
+                return False
+            return True
+        else:
+            return False
+    elif direc=="arriba":
+        if lista_pos[0] !=0:
+            if (window.FindElement((lista_pos[0]-1,lista_pos[1])).GetText() !=""):
+                return False
+            return True
+        else:
+            return False
+    elif direc=="abajo":
+        if lista_pos[0] !=15:
+            if(window.FindElement((lista_pos[0]+1,lista_pos[1])).GetText() !=""):
+                return False
+            return True
+        else:
+            return False
+            
+            
 
 def main(dificultad):
 
@@ -251,7 +312,20 @@ def main(dificultad):
     
     sigue=0
     juega= False
-    ficha_clickeada=-1
+    
+    turno_opciones=["jugador","maquina"]
+ #  turno_Act= random.choice(turno_opciones) #Genero de forma aleatoria quien inicia a jugar
+    turno_Act="jugador"
+    tomo_ficha= False
+    puede_colocar= False
+    no_termina_turno= True
+    pos_ficha_anterior=[]
+    fichas_colocadas= 0
+    
+    
+    
+    
+    
     
     layout2 =  [[sg.Button('', button_color=("black","#F8F8F8"), key=(i,j), size=(4,2), pad=(2,2)) for j in range(15)]  for i in range(15)]
     layout2.append([sg.Text('Estante',	font=('arial',15)) ])
@@ -262,23 +336,79 @@ def main(dificultad):
     
     while True:
         event, values = window.Read()
-        if event is None or event == 'Salir':
+        if(salir_juego(event)): #si toco salir o clikeo la x finaliza el while True
             break
-        if event == 'Jugar':
+        if event == 'Jugar':                                  #Si toca jugar carga el estante del jugador con las fichas aleatorias, bloquea el tablero y guarda en una variable que ya inicio el juego
             arregloEstante = jugador_estante.get_estante()
             estante_ps(arregloEstante, window)
+            tablero.bloquear_tablero(window)
             juega= True
-        elif event in range(7) and juega:
-            ficha_clickeada = event	
-            estante= jugador_estante.get_estante()
-            ficha=str(estante[event])
-            ficha=ficha.split(",")
-            Estante.modificar_Estante(Estante,ficha_clickeada, window)
-            sigue=1
-        elif (sigue==1):
-            tablero.agregar_elemento(ficha[0],window,event[0], event[1])
-            Estante.desbloquear_Estante(Estante, window)
-            sigue=0
+        elif juega:											#Si ya se tocó el boton de jugar inicia a preguntar por los turnos y preparar el tablero para las jugadas
+            palabras_en_tablero = 0
+
+            if (palabras_en_tablero==0):  #si no hay palabras en el tablero solo desbloqueo el centro para que se inicie a jugar
+               tablero.desbloquear_Pos(window,7,7)
+
+           #TURNO JUGADOR
+           
+            if (no_termina_turno== False):
+                fichas_colocadas= 0
+           
+
+
+            if (turno_Act == "jugador") and (no_termina_turno):   #si es el turno del jugador y su turno aun no finaliza...
+                
+                
+                
+            #CLIKEA EL ATRIL
+                
+                if event in range(7):
+                    evento_ficha=event
+                    estante= jugador_estante.get_estante()
+                    ficha= str(estante[event])
+                    ficha= ficha.split(",") #Tengo la ficha separada como (letra,valor)
+                    Estante.quitar_Ficha_De_Estante(Estante,evento_ficha, window)
+                    sigue = 1
+                    puede_colocar= True
+           
+           #COLOCA EN TABLERO
+           
+                if (sigue==1):
+                    if fichas_colocadas == 1 : #Si ya coloqué una ficha y no habian palabras en el tablero desbloqueo hacia los 4 lados, dado que hay espacio
+                        pos_disponibles= hay_espacio(window,pos_ficha_anterior[0])
+                        for pos in pos_disponibles:
+                            tablero.desbloquear_Pos(window,pos[0],pos[1])
+                    
+                    if fichas_colocadas > 1:
+                        
+                        if pos_ficha_anterior[0][0] == pos_ficha_anterior[1][0]:#si en la lista de posiciones, no cambió el primer valor es porque la palabra se está formando de forma horizontal
+                            if(pos_ficha_anterior[0][1] < pos_ficha_anterior[1][1] and hay_espacio(window,pos_ficha_anterior[1],"derecha")): #si el valor de la columna de la primera letra es menor al de la segunda, la palabra va hacia la derecha
+                                tablero.desbloquear_Pos(window,pos_ficha_anterior[0][0],pos_ficha_anterior[1][1]+1)
+                            elif pos_ficha_anterior[0][1] > pos_ficha_anterior[1][1] and hay_espacio(window,pos_ficha_anterior[0],"izquierda"):
+                                tablero.desbloquear_Pos(window, pos_ficha_anterior[0][0],pos_ficha_anterior[0][1]-1)
+                            else: #Si entra al else es porque no habia espacio para la izq o la derecha, por lo tanto tiene que tocar el boton de confirmar palabra
+                                sigue=0
+                                puede_colocar=False
+                                Estante.retornar_Ficha_Al_Estante(Estante,evento_ficha,ficha[0],window)
+                        elif pos_ficha_anterior[0][1] == pos_ficha_anterior[1][1]:
+                            if pos_ficha_anterior[0][0] < pos_ficha_anterior[1][0] and hay_espacio(window,pos_ficha_anterior[1],"abajo"):          
+                                tablero.desbloquear_Pos(window, pos_ficha_anterior[1][0]+1,pos_ficha_anterior[1][1])            
+                            elif pos_ficha_anterior[0][0] > pos_ficha_anterior[1][0] and hay_espacio(window,pos_ficha_anterior[0],"arriba"):            
+                                tablero.desbloquear_Pos(window,pos_ficha_anterior[0][0]-1,pos_ficha_anterior[0][1])        
+                            else:           
+                                sigue=0
+                                puede_colocar=False
+                                Estante.retornar_Ficha_Al_Estante(Estante, evento_ficha, ficha[0], window)
+                   
+                   
+                    if puede_colocar and not( event in range(7)): 
+                        window.FindElement(event).Update(text=ficha[0])
+                        tablero.bloquear_tablero(window)
+                        fichas_colocadas=fichas_colocadas + 1
+                        pos_ficha_anterior.append(event)
+                        print(pos_ficha_anterior)
+                        Estante.desbloquear_Estante(Estante,window)  
+                        sigue=0  
 
 
     window.Close()
