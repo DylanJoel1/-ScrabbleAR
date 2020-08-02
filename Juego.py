@@ -2,8 +2,12 @@
 import PySimpleGUI as sg
 from random import shuffle
 import json
+<<<<<<< HEAD
 import random
 import datetime, time
+=======
+import os
+>>>>>>> d868297ed46bcfc602abf7f3ac633ae8f4c05967
 
 #constante que representa el atril del jugador
 ATRIL_JUGADOR=[[""] for i in range(7)]
@@ -140,14 +144,18 @@ class Estante:
         
     def bloquear_Estante(self, window):
         for i in range(7):
-            window.FindElement(i).Update(disabled=True)	
+            window.FindElement(i).Update(disabled=True)
     def desbloquear_Estante(self, window):
         for i in range(7):
             window.FindElement(i).Update(disabled=False)
        
     def quitar_Ficha_De_Estante(self, bot, window):
         ATRIL_JUGADOR[bot]=window.FindElement(bot).get_text()
+<<<<<<< HEAD
         self.bloquear_Estante(self,window)
+=======
+        self.bloquear_Estante(self, window)
+>>>>>>> d868297ed46bcfc602abf7f3ac633ae8f4c05967
         window.FindElement(bot).Update(text="",button_color=("black", "orange"), visible=False)
     def retornar_Ficha_Al_Estante(self,pos,ficha,window):
         window.FindElement(pos).Update(text=ficha,button_color=("black","white"), visible=True)
@@ -303,8 +311,25 @@ def hay_espacio(window,lista_pos, direc="disponibles"): #Funcion que retorna si 
             
             
 
-def main(dificultad):
+def so():
+    a = os.name
+    if os.name == "nt":
+        WIDTH  = 4
+        HEIGHT = 2
+        SW = 850
+        SH = 800
+        return WIDTH, HEIGHT, SW, SH
+    elif os.name == "posix":
+        WIDTH  = 1
+        HEIGHT = 1
+        SW = 650
+        SH = 600
+        return WIDTH, HEIGHT, SW, SH
 
+
+def main(dificultad):
+    
+    w,h,sw,sh = so()
     fichas_cant, fichas_punt = datos(dificultad)
     atril = Atril(fichas_cant)
     jugador_estante = Jugador(atril)
@@ -327,12 +352,12 @@ def main(dificultad):
     
     
     
-    layout2 =  [[sg.Button('', button_color=("black","#F8F8F8"), key=(i,j), size=(4,2), pad=(2,2)) for j in range(15)]  for i in range(15)]
+    layout2 =  [[sg.Button('', button_color=("black","#F8F8F8"), key=(i,j), size=(w,h), pad=(2,2)) for j in range(15)]  for i in range(15)]
     layout2.append([sg.Text('Estante',	font=('arial',15)) ])
-    layout2.append([sg.Button('', button_color=("black","#F8F8F8"), key=(a), size=(4,2), pad=(2,2)) for a in range(7)])
-    layout2.append([sg.Button('Jugar',size=(8,2)), sg.Button('Salir',size=(8,2))])
+    layout2.append([sg.Button('', button_color=("black","#F8F8F8"), key=(a), size=(w,h), pad=(2,2)) for a in range(7)])
+    layout2.append([sg.Button('Jugar',size=(8,2)), sg.Button('Salir',size=(8,h))])
     
-    window = sg.Window('ScrabbleAr', size=(850,800),element_justification='c').Layout(layout2)
+    window = sg.Window('ScrabbleAr', size=(sw,sh),element_justification='c').Layout(layout2)
     
     while True:
         event, values = window.Read()

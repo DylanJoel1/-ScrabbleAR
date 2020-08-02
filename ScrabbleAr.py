@@ -3,10 +3,25 @@ import Juego
 import comoJugar
 import config
 import dificultad
+import top10
+import os
 
-WIDTH  = 20
-HEIGHT = 3
-BUTTON_BORDER = 4
+
+def so():
+	a = os.name
+	if os.name == "nt":
+		WIDTH  = 20
+		HEIGHT = 3
+		BUTTON_BORDER = 4
+		return WIDTH, HEIGHT, BUTTON_BORDER
+	elif os.name == "posix":
+		WIDTH  = 20
+		HEIGHT = 2
+		BUTTON_BORDER = 4
+		return WIDTH, HEIGHT, BUTTON_BORDER
+
+
+WIDTH, HEIGHT, BUTTON_BORDER = so()
 FUENTE = 'arial'
 
 botones = [
@@ -36,6 +51,6 @@ while True:
 	elif event == '-instrucc-':
 		comoJugar.Reglas()
 	elif event == '-top10-':
-		sg.popup('top10')
+		top10.main()
 
 window.close()
