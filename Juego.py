@@ -364,7 +364,7 @@ def main(dificultad):
         elif juega:											#Si ya se tocó el boton de jugar inicia a preguntar por los turnos y preparar el tablero para las jugadas
             palabras_en_tablero = 0
 
-            if (palabras_en_tablero==0):  #si no hay palabras en el tablero solo desbloqueo el centro para que se inicie a jugar
+            if (palabras_en_tablero==0 and fichas_colocadas==0 ):  #si no hay palabras en el tablero solo desbloqueo el centro para que se inicie a jugar
                tablero.desbloquear_Pos(window,7,7)
 
            #TURNO JUGADOR
@@ -378,7 +378,7 @@ def main(dificultad):
                 
                 
                 
-            #CLIKEA EL ATRIL
+            #CLIKEA UNA FICHA
                 
                 if event in range(7):
                     evento_ficha=event
@@ -389,42 +389,57 @@ def main(dificultad):
                     sigue = 1
                     puede_colocar= True
            
-           #COLOCA EN TABLERO
+           #COLOCA LA FICHA EN EL TABLERO
            
                 if (sigue==1):
-                    if fichas_colocadas == 1 : #Si ya coloqué una ficha y no habian palabras en el tablero desbloqueo hacia los 4 lados, dado que hay espacio
+                   
+                   
+                    if fichas_colocadas == 1 :  
                         pos_disponibles= hay_espacio(window,pos_ficha_anterior[0])
                         for pos in pos_disponibles:
                             tablero.desbloquear_Pos(window,pos[0],pos[1])
                     
                     if fichas_colocadas > 1:
                         
-                        if pos_ficha_anterior[0][0] == pos_ficha_anterior[1][0]:#si en la lista de posiciones, no cambió el primer valor es porque la palabra se está formando de forma horizontal
-                            if(pos_ficha_anterior[0][1] < pos_ficha_anterior[1][1] and hay_espacio(window,pos_ficha_anterior[1],"derecha")): #si el valor de la columna de la primera letra es menor al de la segunda, la palabra va hacia la derecha
-                                tablero.desbloquear_Pos(window,pos_ficha_anterior[0][0],pos_ficha_anterior[1][1]+1)
-                            elif pos_ficha_anterior[0][1] > pos_ficha_anterior[1][1] and hay_espacio(window,pos_ficha_anterior[0],"izquierda"):
+                        if pos_ficha_anterior[0][0] == pos_ficha_anterior[len(pos_ficha_anterior)-1][0]:   
+                            #si en la lista de posiciones no cambió el primer valor (el valor de las filas) es porque la palabra se está formando de forma horizontal
+                            if(pos_ficha_anterior[0][1] < pos_ficha_anterior[len(pos_ficha_anterior)-1][1] and hay_espacio(window,pos_ficha_anterior[len(pos_ficha_anterior)-1],"derecha")): 
+                                #si el valor de la columna de la primera letra colocada es menor al de la ultima letra colocada, la palabra se está formando hacia la derecha
+                                tablero.desbloquear_Pos(window,pos_ficha_anterior[len(pos_ficha_anterior)-1][0],pos_ficha_anterior[len(pos_ficha_anterior)-1][1]+1)
+                            elif pos_ficha_anterior[0][1] > pos_ficha_anterior[len(pos_ficha_anterior)-1][1] and hay_espacio(window,pos_ficha_anterior[0],"izquierda"):
+                                #Si la columna de la ultima ficha colocada tiene un valor menor a la primera ficha colocada entonces la palabra se está formando hacia la izquierda
                                 tablero.desbloquear_Pos(window, pos_ficha_anterior[0][0],pos_ficha_anterior[0][1]-1)
-                            else: #Si entra al else es porque no habia espacio para la izq o la derecha, por lo tanto tiene que tocar el boton de confirmar palabra
+                            else: 
+                                #Si no tenia espacio a la izquierda o a la derecha entra a el else
                                 sigue=0
                                 puede_colocar=False
                                 Estante.retornar_Ficha_Al_Estante(Estante,evento_ficha,ficha[0],window)
-                        elif pos_ficha_anterior[0][1] == pos_ficha_anterior[1][1]:
-                            if pos_ficha_anterior[0][0] < pos_ficha_anterior[1][0] and hay_espacio(window,pos_ficha_anterior[1],"abajo"):          
-                                tablero.desbloquear_Pos(window, pos_ficha_anterior[1][0]+1,pos_ficha_anterior[1][1])            
-                            elif pos_ficha_anterior[0][0] > pos_ficha_anterior[1][0] and hay_espacio(window,pos_ficha_anterior[0],"arriba"):            
+                       
+                       
+                       
+                        #elif pos_ficha_anterior[0][1] == pos_ficha_anterior[len(pos_ficha_anterior)-1][1]:
+                        else:
+                            #Si entra en este else es porque el valor de la columna de la primera ficha colocada y la ultima no cambió, por lo tanto la palabra se forma de manera vertical
+                            if pos_ficha_anterior[0][0] < pos_ficha_anterior[len(pos_ficha_anterior)-1][0] and hay_espacio(window,pos_ficha_anterior[len(pos_ficha_anterior)-1],"abajo"): 
+                                #pregunto si se forma hacia abajo y si se puede formar        
+                                tablero.desbloquear_Pos(window, pos_ficha_anterior[len(pos_ficha_anterior)-1][0]+1,pos_ficha_anterior[len(pos_ficha_anterior)-1][1])            
+                            elif pos_ficha_anterior[0][0] > pos_ficha_anterior[len(pos_ficha_anterior)-1][0] and hay_espacio(window,pos_ficha_anterior[0],"arriba"):  
+                                #pregunto si se forma hacia arriba y si se puede formar          
                                 tablero.desbloquear_Pos(window,pos_ficha_anterior[0][0]-1,pos_ficha_anterior[0][1])        
-                            else:           
+                            else: 
+                                #qué pasa si no se puede formar más la palabra          
                                 sigue=0
                                 puede_colocar=False
                                 Estante.retornar_Ficha_Al_Estante(Estante, evento_ficha, ficha[0], window)
                    
                    
                     if puede_colocar and not( event in range(7)): 
+                        #si la variable puede colocar está en true y el evento no es el atril, coloco la ficha
                         window.FindElement(event).Update(text=ficha[0])
                         tablero.bloquear_tablero(window)
                         fichas_colocadas=fichas_colocadas + 1
                         pos_ficha_anterior.append(event)
-                        print(pos_ficha_anterior)
+                        #vuelvo a desbloquear el atril para que puedan seguir tomando fichas
                         Estante.desbloquear_Estante(Estante,window)  
                         sigue=0  
 
