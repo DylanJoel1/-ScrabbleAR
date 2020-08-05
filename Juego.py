@@ -28,10 +28,10 @@ class Ficha:
     """
     Clase que crea una ficha. La inicializa con la letra y su valor
     """
-    def __init__(self, letra):
+    def __init__(self, letra, fichas_punt):
         #Inicializa una ficha, con la letra (string) y el diccionario con los valores
         self.letra = letra.upper()
-        self.valor = valores[self.letra]
+        self.valor = fichas_punt
 
     def get_valor(self):
         #Devuelve el valor de la ficha
@@ -51,46 +51,46 @@ class Atril:
     """
     Clase que crea el atril con 100 fichas por defecto
     """
-    def __init__(self, fichas_cant):
+    def __init__(self, fichas_cant, fichas_punt):
         #Crea el atril y lo inicializa con 100 fichas por defecto
         self.atril = []
-        self.inicializa_atril(fichas_cant)
+        self.inicializa_atril(fichas_cant, fichas_punt)
 
     def agregar(self, letra, cantidad):
         #agrega una letra, la cantidad de veces que se indique, al atril
-        for a in range(cantidad):
+        for a in range(int(cantidad)):
             self.atril.append(letra)
-    def inicializa_atril(self, fichas_cant):
+    def inicializa_atril(self, fichas_cant, fichas_punt):
         #agrega las 100 fichas al atril y las mezcla (shuffle)
-        self.agregar(Ficha("A"), fichas_cant["A"])
-        self.agregar(Ficha("B"), fichas_cant["B"])
-        self.agregar(Ficha("C"), fichas_cant["C"])
-        self.agregar(Ficha("D"), fichas_cant["D"])
-        self.agregar(Ficha("E"), fichas_cant["E"])
-        self.agregar(Ficha("F"), fichas_cant["F"])
-        self.agregar(Ficha("G"), fichas_cant["G"])
-        self.agregar(Ficha("H" ), fichas_cant["H"])
-        self.agregar(Ficha("I" ), fichas_cant["I"])
-        self.agregar(Ficha("J" ), fichas_cant["J"])
-        self.agregar(Ficha("K" ), fichas_cant["K"])
-        self.agregar(Ficha("L" ), fichas_cant["L"])
-        self.agregar(Ficha("LL"), fichas_cant["LL"])
-        self.agregar(Ficha("M" ), fichas_cant["M"])
-        self.agregar(Ficha("N" ), fichas_cant["N"])
-        self.agregar(Ficha("Ñ" ), fichas_cant["Ñ"])
-        self.agregar(Ficha("O" ), fichas_cant["O"])
-        self.agregar(Ficha("P" ), fichas_cant["P"])
-        self.agregar(Ficha("Q" ), fichas_cant["Q"])
-        self.agregar(Ficha("R" ), fichas_cant["R"])
-        self.agregar(Ficha("RR" ), fichas_cant["RR"])
-        self.agregar(Ficha("S" ), fichas_cant["S"])
-        self.agregar(Ficha("T" ), fichas_cant["T"])
-        self.agregar(Ficha("U" ), fichas_cant["U"])
-        self.agregar(Ficha("V" ), fichas_cant["V"])
-        self.agregar(Ficha("W" ), fichas_cant["W"])
-        self.agregar(Ficha("X" ), fichas_cant["X"])
-        self.agregar(Ficha("Y" ), fichas_cant["Y"])
-        self.agregar(Ficha("Z" ), fichas_cant["Z"])
+        self.agregar(Ficha("A", fichas_punt["A"]), fichas_cant["A"])
+        self.agregar(Ficha("B", fichas_punt["B"]), fichas_cant["B"])
+        self.agregar(Ficha("C", fichas_punt["C"]), fichas_cant["C"])
+        self.agregar(Ficha("D", fichas_punt["D"]), fichas_cant["D"])
+        self.agregar(Ficha("E", fichas_punt["E"]), fichas_cant["E"])
+        self.agregar(Ficha("F", fichas_punt["F"]), fichas_cant["F"])
+        self.agregar(Ficha("G", fichas_punt["G"]), fichas_cant["G"])
+        self.agregar(Ficha("H", fichas_punt["H"]), fichas_cant["H"])
+        self.agregar(Ficha("I", fichas_punt["I"]), fichas_cant["I"])
+        self.agregar(Ficha("J", fichas_punt["J"]), fichas_cant["J"])
+        self.agregar(Ficha("K", fichas_punt["K"]), fichas_cant["K"])
+        self.agregar(Ficha("L", fichas_punt["L"]), fichas_cant["L"])
+        self.agregar(Ficha("LL", fichas_punt["LL"]), fichas_cant["LL"])
+        self.agregar(Ficha("M", fichas_punt["M"]), fichas_cant["M"])
+        self.agregar(Ficha("N", fichas_punt["N"]), fichas_cant["N"])
+        self.agregar(Ficha("Ñ", fichas_punt["Ñ"]), fichas_cant["Ñ"])
+        self.agregar(Ficha("O", fichas_punt["O"]), fichas_cant["O"])
+        self.agregar(Ficha("P", fichas_punt["P"]), fichas_cant["P"])
+        self.agregar(Ficha("Q", fichas_punt["Q"]), fichas_cant["Q"])
+        self.agregar(Ficha("R", fichas_punt["R"]), fichas_cant["R"])
+        self.agregar(Ficha("RR", fichas_punt["RR"]), fichas_cant["RR"])
+        self.agregar(Ficha("S", fichas_punt["S"]), fichas_cant["S"])
+        self.agregar(Ficha("T", fichas_punt["T"]), fichas_cant["T"])
+        self.agregar(Ficha("U", fichas_punt["U"]), fichas_cant["U"])
+        self.agregar(Ficha("V", fichas_punt["V"]), fichas_cant["V"])
+        self.agregar(Ficha("W", fichas_punt["W"]), fichas_cant["W"])
+        self.agregar(Ficha("X", fichas_punt["X"]), fichas_cant["X"])
+        self.agregar(Ficha("Y", fichas_punt["Y"]), fichas_cant["Y"])
+        self.agregar(Ficha("Z", fichas_punt["Z"]), fichas_cant["Z"])
         shuffle(self.atril)
 
     def quitar_ficha(self):
@@ -330,7 +330,7 @@ def main(dificultad):
     
     w,h,sw,sh = so()
     fichas_cant, fichas_punt = datos(dificultad)
-    atril = Atril(fichas_cant)
+    atril = Atril(fichas_cant,fichas_punt)
     jugador_estante = Jugador(atril)
     tablero= Tablero()
     
