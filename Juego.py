@@ -5,6 +5,7 @@ import json
 import random
 import datetime, time
 import os
+from funcionAutenticar import confirmar_Palabra
 
 #constante que representa el atril del jugador
 ATRIL_JUGADOR=[[""] for i in range(7)]
@@ -192,6 +193,7 @@ class Tablero:
         self.tablero= [[False for j in range(15)]for i in range(15)]
     
     def mostrar_estado(self):
+        #Imprime lo que contiene la variable que representa el tablero
         aux=''
         for m in range(15):
             for n in range(15):
@@ -200,23 +202,28 @@ class Tablero:
         print(aux)
    
     def agregar_elemento( self,element, window, *pos):
+        #Actualiza un boton del tablero con el texto que se le envíe 
         self.tablero[pos[0]][pos[1]]= True
         window.FindElement((pos[0],pos[1])).Update(text=element)
         
     def bloquear_tablero(self, window):
+        #Bloquea todas las pos del tablero
         for m in range(15):
             for n in range(15):
-                window.FindElement((m,n)).Update(disabled=True, button_color=("black","white"))
+                window.FindElement((m,n)).Update(disabled=True,button_color=("black","white") ,disabled_button_color=("black","white"))
     def desbloquear_tablero(self, window):
+        #Desbloquea todas las pos del tablero
         for m in range(15):
             for n in range(15):
                 window.FindElement((m,n)).Update(disabled=False, button_color=("black","green"))
 
     def desbloquear_Pos(self,window,x,y):
+        #Desbloquea una pos en particular del tablero
         window.FindElement((x,y)).Update(disabled=False, button_color=("black","green"))
 
     def bloquear_Pos(self,window,x,y):
-        window.FindElement((x,y)).Update(disabled= True,button_color=("black","white"))
+        #Bloquea una pos en particular del tablero
+        window.FindElement((x,y)).Update(disabled= True,button_color=("black","white"),disabled_button_color=("black","white"))
 
 
 def estante_ps(estante, window):
@@ -310,7 +317,7 @@ def so():
         WIDTH  = 4
         HEIGHT = 2
         SW = 850
-        SH = 800
+        SH = 850
         return WIDTH, HEIGHT, SW, SH
     elif os.name == "posix":
         WIDTH  = 1
@@ -339,40 +346,43 @@ def main(dificultad):
     no_termina_turno= True
     pos_ficha_anterior=[]
     fichas_colocadas= 0
+    palabra_formada=''
     
     
     
     
     
-    
-    layout2 =  [[sg.Button('', button_color=("black","#F8F8F8"), key=(i,j), size=(w,h), pad=(2,2)) for j in range(15)]  for i in range(15)]
-    layout2.append([sg.Text('Estante',	font=('arial',15)) ])
-    layout2.append([sg.Button('', button_color=("black","#F8F8F8"), key=(a), size=(w,h), pad=(2,2)) for a in range(7)])
-    layout2.append([sg.Button('Jugar',size=(8,2)), sg.Button('Salir',size=(8,h))])
+    layout2 =  [[sg.B   ('', button_color=("black","#F8F8F8"), key=(i,j), size=(w,h), pad=(2,2)) for j in range(15)]  for i in range(15)]
+    layout2.append([sg.T('Estante',	font=('arial',15)) ])
+    layout2.append([sg.B('', button_color=("black","#F8F8F8"), key=(a), size=(w,h), pad=(2,2)) for a in range(7)])
+    layout2.append([sg.B('Confirmar Palabra', visible=False,size=(14,2),button_color=("black","green"))])
+    layout2.append([sg.B('Jugar',size=(8,2)), sg.Button('Salir',size=(8,h))])
     
     window = sg.Window('ScrabbleAr', size=(sw,sh),element_justification='c').Layout(layout2)
     
     while True:
         event, values = window.Read()
-        if(salir_juego(event)): #si toco salir o clikeo la x finaliza el while True
+        if(salir_juego(event)):
             break
-        if event == 'Jugar':                                  #Si toca jugar carga el estante del jugador con las fichas aleatorias, bloquea el tablero y guarda en una variable que ya inicio el juego
+        if event == 'Jugar':                                  
+            #Si toca jugar carga el estante del jugador con las fichas aleatorias, bloquea el tablero y guarda en una variable que ya inicio el juego
             arregloEstante = jugador_estante.get_estante()
             estante_ps(arregloEstante, window)
             tablero.bloquear_tablero(window)
+            window.FindElement('Jugar').Update(visible=False)
             juega= True
-        elif juega:											#Si ya se tocó el boton de jugar inicia a preguntar por los turnos y preparar el tablero para las jugadas
+        elif juega:
+            #Si ya se tocó el boton de jugar inicia a preguntar por los turnos y preparar el tablero para las jugadas
+            
             palabras_en_tablero = 0
 
-            if (palabras_en_tablero==0 and fichas_colocadas==0 ):  #si no hay palabras en el tablero solo desbloqueo el centro para que se inicie a jugar
+            if (palabras_en_tablero==0 and fichas_colocadas==0 ):  
+               #si no hay palabras en el tablero y tampoco hay fichas colocadas solo desbloqueo el centro del tablero
                tablero.desbloquear_Pos(window,7,7)
-
-           #TURNO JUGADOR
-           
             if (no_termina_turno== False):
                 fichas_colocadas= 0
+           #TURNO JUGADOR
            
-
 
             if (turno_Act == "jugador") and (no_termina_turno):   #si es el turno del jugador y su turno aun no finaliza...
                 
@@ -392,7 +402,10 @@ def main(dificultad):
            #COLOCA LA FICHA EN EL TABLERO
            
                 if (sigue==1):
-                   
+                    
+                    if fichas_colocadas==0 and palabras_en_tablero > 0:
+                        pass
+                        
                    
                     if fichas_colocadas == 1 :  
                         pos_disponibles= hay_espacio(window,pos_ficha_anterior[0])
@@ -433,15 +446,44 @@ def main(dificultad):
                                 Estante.retornar_Ficha_Al_Estante(Estante, evento_ficha, ficha[0], window)
                    
                    
-                    if puede_colocar and not( event in range(7)): 
-                        #si la variable puede colocar está en true y el evento no es el atril, coloco la ficha
+                    if puede_colocar and not( event in range(7)) and isinstance(event, tuple): 
+                        #si la variable puede colocar está en true, el evento no es el atril y el evento es una tupla, coloco la ficha
+                        
                         window.FindElement(event).Update(text=ficha[0])
                         tablero.bloquear_tablero(window)
-                        fichas_colocadas=fichas_colocadas + 1
-                        pos_ficha_anterior.append(event)
+                        
                         #vuelvo a desbloquear el atril para que puedan seguir tomando fichas
+                        
                         Estante.desbloquear_Estante(Estante,window)  
+                        pos_ficha_anterior.append(event)
+                        fichas_colocadas=fichas_colocadas + 1
                         sigue=0  
+                        palabra_formada+= ficha[0]
+                
+                if fichas_colocadas == 2:
+                    #Si ya colocó 2 fichas aparece el boton para confirmar palabra
+                    window.FindElement('Confirmar Palabra').Update(visible=True)
+                if event == 'Confirmar Palabra':
+
+                    #Si toca el boton de confirmar palabra:
+                    if (confirmar_Palabra(palabra_formada, "facil")):
+                        for pos in pos_ficha_anterior:
+                            tablero.tablero[pos[0]][pos[1]]=True
+                        tablero.mostrar_estado()
+                        sigue=0
+                        turno_Act="Maquina"
+                        palabras_en_tablero+=1
+                        fichas_colocadas=0
+                        puede_colocar=False
+                        no_termina_truno=False
+                        window.FindElement('Confirmar Palabra').Update(visible=False)
+                    else:
+                        sg.Popup("No era una palabra aaa")
+            
+            elif (turno_Act=="maquina"):
+                sg.Popup("Ahora le toca a la maquina")
+                
+                    
 
 
     window.Close()

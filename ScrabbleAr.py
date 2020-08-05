@@ -26,11 +26,11 @@ FUENTE = 'arial'
 
 botones = [
 			
-			[sg.B('JUGAR',button_color=('black','green'),size=(WIDTH, HEIGHT), border_width=BUTTON_BORDER, focus= True, font=FUENTE , key = '-comenzar-')],
-			[sg.B('Configuraciones',button_color=('black','green'), size=(WIDTH, HEIGHT),border_width=BUTTON_BORDER,font=FUENTE     , key = '-config-')],
-			[sg.B('Cómo jugar',button_color=('black','green') ,size=(WIDTH, HEIGHT),border_width=BUTTON_BORDER,font=FUENTE          , key = '-instrucc-')],
-			[sg.B('Top 10', button_color=('black','green'),size=(WIDTH, HEIGHT),border_width=BUTTON_BORDER,font=FUENTE              , key = '-top10-')],
-			[sg.B('SALIR', button_color=('black','#ff4d4d'), size=(WIDTH, HEIGHT),border_width=BUTTON_BORDER,font=FUENTE,             key = '-salir-')]
+			[sg.B('JUGAR',          button_color=('black','green'),size=(WIDTH, HEIGHT),     border_width=BUTTON_BORDER, focus= True, font=FUENTE , key = '-comenzar-')],
+			[sg.B('Configuraciones',button_color=('black','green'), size=(WIDTH, HEIGHT),    border_width=BUTTON_BORDER,font=FUENTE               , key = '-config-')],
+			[sg.B('Cómo jugar',     button_color=('black','green') ,size=(WIDTH, HEIGHT),    border_width=BUTTON_BORDER,font=FUENTE               , key = '-instrucc-')],
+			[sg.B('Top 10',         button_color=('black','green'),size=(WIDTH, HEIGHT),     border_width=BUTTON_BORDER,font=FUENTE               , key = '-top10-')],
+			[sg.B('SALIR',          button_color=('black','#ff4d4d'), size=(WIDTH, HEIGHT),  border_width=BUTTON_BORDER,font=FUENTE               , key = '-salir-')]
 ]
 
 layout = [	
