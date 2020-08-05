@@ -158,9 +158,10 @@ class Jugador:
         self.estante = Estante(atril)
         self.puntaje = 0
 
-    def incrementar_puntaje(self, agregado):
+    def incrementar_puntaje(self, agregado, window):
         #Incrementa el puntaje del jugador
-        self.puntaje = self.puntaje + agregado
+        self.puntaje += agregado
+        window["-puntaje-"].update(self.puntaje)
 
     def get_puntaje(self):
         #Devuelve el puntaje del jugador
@@ -352,6 +353,7 @@ def main(dificultad):
     
     
     layout2 =  [[sg.B   ('', button_color=("black","#F8F8F8"), key=(i,j), size=(w,h), pad=(2,2)) for j in range(15)]  for i in range(15)]
+    layout2.append([sg.T("  Puntaje: ", font=('arial',15)), sg.T("0", font=("arial",15), key="-puntaje-")])
     layout2.append([sg.T('Estante',	font=('arial',15)) ])
     layout2.append([sg.B('', button_color=("black","#F8F8F8"), key=(a), size=(w,h), pad=(2,2)) for a in range(7)])
     layout2.append([sg.B('Confirmar Palabra', visible=False,size=(14,2),button_color=("black","green"))])
@@ -468,7 +470,7 @@ def main(dificultad):
                     if (confirmar_Palabra(palabra_formada, "facil")):
                         for pos in pos_ficha_anterior:
                             tablero.tablero[pos[0]][pos[1]]=True
-                        jugador_estante.incrementar_puntaje(puntos.puntaje_palabra(fichas_punt,palabra_formada)) #Dante: agregue el puntaje, falta representarlo en el tablero
+                        jugador_estante.incrementar_puntaje(puntos.puntaje_palabra(fichas_punt,palabra_formada),window) #Dante: agregue el puntaje
                         tablero.mostrar_estado()
                         sigue=0
                         turno_Act="Maquina"
