@@ -4,8 +4,7 @@ def split(palabra):
 
 def puntaje_palabra (datos,palabra):
     pal = split(palabra)
+    punt = 0
     for x in pal:
-        punt = punt + datos[x]
+        punt = punt + int(datos[x])
     return punt
-
-puntaje_palabra

@@ -155,12 +155,12 @@ class Jugador:
     def __init__(self, atril):
         #Inicializa un Jugador con su estante.
         self.nombre = ""
-        self.puntaje = 0
         self.estante = Estante(atril)
+        self.puntaje = 0
 
     def incrementar_puntaje(self, agregado):
         #Incrementa el puntaje del jugador
-        self.puntaje += agregado
+        self.puntaje = self.puntaje + agregado
 
     def get_puntaje(self):
         #Devuelve el puntaje del jugador
@@ -468,7 +468,7 @@ def main(dificultad):
                     if (confirmar_Palabra(palabra_formada, "facil")):
                         for pos in pos_ficha_anterior:
                             tablero.tablero[pos[0]][pos[1]]=True
-                        puntaje_jugador= puntaje_jugador + puntos.puntaje_palabra(fichas_punt,palabra_formada) #Dante: agregue el puntaje, falta representarlo en el tablero
+                        jugador_estante.incrementar_puntaje(puntos.puntaje_palabra(fichas_punt,palabra_formada)) #Dante: agregue el puntaje, falta representarlo en el tablero
                         tablero.mostrar_estado()
                         sigue=0
                         turno_Act="Maquina"
