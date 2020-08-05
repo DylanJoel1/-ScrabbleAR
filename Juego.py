@@ -312,20 +312,25 @@ def hay_espacio(window,lista_pos, direc="disponibles"): #Funcion que retorna si 
             
 
 def so():
-    a = os.name
-    if os.name == "nt":
+    try:
+        if os.name == "nt":
+            WIDTH  = 4
+            HEIGHT = 2
+            SW = 850
+            SH = 850
+            return WIDTH, HEIGHT, SW, SH
+        elif os.name == "posix":
+            WIDTH  = 1
+            HEIGHT = 1
+            SW = 650
+            SH = 600
+            return WIDTH, HEIGHT, SW, SH
+    except Exception:
         WIDTH  = 4
         HEIGHT = 2
         SW = 850
         SH = 850
         return WIDTH, HEIGHT, SW, SH
-    elif os.name == "posix":
-        WIDTH  = 1
-        HEIGHT = 1
-        SW = 650
-        SH = 600
-        return WIDTH, HEIGHT, SW, SH
-
 
 def main(dificultad):
     
@@ -475,7 +480,7 @@ def main(dificultad):
                         palabras_en_tablero+=1
                         fichas_colocadas=0
                         puede_colocar=False
-                        no_termina_truno=False
+                        no_termina_turno=False
                         window.FindElement('Confirmar Palabra').Update(visible=False)
                     else:
                         sg.Popup("No era una palabra aaa")

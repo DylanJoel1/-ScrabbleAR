@@ -8,15 +8,20 @@ import os
 
 
 def so():
-	a = os.name
-	if os.name == "nt":
+	try:
+		if os.name == "nt":
+			WIDTH  = 20
+			HEIGHT = 3
+			BUTTON_BORDER = 4
+			return WIDTH, HEIGHT, BUTTON_BORDER
+		elif os.name == "posix":
+			WIDTH  = 20
+			HEIGHT = 1
+			BUTTON_BORDER = 2
+			return WIDTH, HEIGHT, BUTTON_BORDER
+	except Exception:
 		WIDTH  = 20
 		HEIGHT = 3
-		BUTTON_BORDER = 4
-		return WIDTH, HEIGHT, BUTTON_BORDER
-	elif os.name == "posix":
-		WIDTH  = 20
-		HEIGHT = 2
 		BUTTON_BORDER = 4
 		return WIDTH, HEIGHT, BUTTON_BORDER
 
