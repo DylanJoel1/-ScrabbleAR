@@ -6,6 +6,7 @@ import random
 import datetime, time
 import os
 import puntos
+import guardar
 from funcionAutenticar import confirmar_Palabra
 
 #constante que representa el atril del jugador
@@ -23,6 +24,15 @@ def cargar():
         with open('datos_default.json', 'r') as jsonFile:
             datos = json.load(jsonFile)
         return datos
+
+def guardar_partida(w,h,sw,sh,fichas_cant,fichas_punt,atril,jugador_estante,tablero,sigue,juega,turno_opciones,turno_Act,tomo_ficha,puede_colocar,no_termina_turno,pos_ficha_anterior,fichas_colocadas,palabra_formada):
+    datos = {
+        "w":w, "h":h, "sw":sw, "sh":sh, "fichas_cant":fichas_cant, "fichas_punt":fichas_punt, "atril":atril.atril, "jugador_estante":{"nombre":jugador_estante.nombre, "estante":jugador_estante.estante.estante, "puntaje":jugador_estante.puntaje,}, 
+        "tablero": tablero.tablero, "sigue":sigue, "juega":juega, "turno_opciones":turno_opciones, "turno_Act":turno_Act, "tomo_ficha":tomo_ficha, "puede_colocar":puede_colocar, 
+        "no_termina_turno":no_termina_turno, "pos_ficha_anterior":pos_ficha_anterior, "fichas_colocadas":fichas_colocadas, "palabra_formada":palabra_formada
+    }
+    print(datos)
+    return datos
 
 class Ficha:
     """
@@ -353,11 +363,11 @@ def main(dificultad):
     
     
     layout2 =  [[sg.B   ('', button_color=("black","#F8F8F8"), key=(i,j), size=(w,h), pad=(2,2)) for j in range(15)]  for i in range(15)]
-    layout2.append([sg.T("  Puntaje: ", font=('arial',15)), sg.T("0", font=("arial",15), key="-puntaje-")])
+    layout2.append([sg.T("Puntaje:", font=('arial',15)), sg.T("0", font=("arial",15, ), size=(5,1), key="-puntaje-")])
     layout2.append([sg.T('Estante',	font=('arial',15)) ])
     layout2.append([sg.B('', button_color=("black","#F8F8F8"), key=(a), size=(w,h), pad=(2,2)) for a in range(7)])
     layout2.append([sg.B('Confirmar Palabra', visible=False,size=(14,2),button_color=("black","green"))])
-    layout2.append([sg.B('Jugar',size=(8,2)), sg.Button('Salir',size=(8,h))])
+    layout2.append([sg.B('Jugar',size=(8,2)), sg.B('Guardar',size=(8,2)), sg.Button('Salir',size=(8,h))])
     
     window = sg.Window('ScrabbleAr', size=(sw,sh),element_justification='c').Layout(layout2)
     
@@ -481,7 +491,11 @@ def main(dificultad):
                         window.FindElement('Confirmar Palabra').Update(visible=False)
                     else:
                         sg.Popup("No era una palabra aaa")
-            
+
+                if event == "Guardar":
+                    datosg = guardar_partida(w,h,sw,sh,fichas_cant,fichas_punt,atril,jugador_estante,tablero,sigue,juega,turno_opciones,turno_Act,tomo_ficha,puede_colocar,no_termina_turno,pos_ficha_anterior,fichas_colocadas,palabra_formada)
+                    guardar.main(datosg)
+
             elif (turno_Act=="maquina"):
                 sg.Popup("Ahora le toca a la maquina")
                 
