@@ -5,19 +5,13 @@ import json
 import random
 import datetime, time
 import os
+import puntos
 from funcionAutenticar import confirmar_Palabra
 
 #constante que representa el atril del jugador
 ATRIL_JUGADOR=[[""] for i in range(7)]
 
 TIEMPO_LIMITE_PARTIDA = datetime.datetime.now() + datetime.timedelta(seconds=60)
-
-#Variable global con los valores - temporal
-valores = {"A": 1,"B": 3,"C": 2,"D": 2,"E": 1,"F": 4,"G": 2,"H": 4,
-            "I": 1,"J": 6,"K": 8,"L": 1,"LL": 8,"M": 3,"N": 1,"Ñ": 8,
-            "O": 1,"P": 3,"Q": 8,"R": 1,"RR": 8,"S": 1,"T": 1,"U": 1,
-            "V": 4,"W": 8,"X": 8,"Y": 4,"Z": 10}
-
 
 def cargar():
     try:
@@ -68,35 +62,35 @@ class Atril:
             self.atril.append(letra)
     def inicializa_atril(self, fichas_cant):
         #agrega las 100 fichas al atril y las mezcla (shuffle)
-        self.agregar(Ficha("A"), 11)
-        self.agregar(Ficha("B"), 3)
-        self.agregar(Ficha("C"), 4)
-        self.agregar(Ficha("D"), 4)
-        self.agregar(Ficha("E"), 11)
-        self.agregar(Ficha("F"), 2)
-        self.agregar(Ficha("G"), 2)
-        self.agregar(Ficha("H" ), 2)
-        self.agregar(Ficha("I" ), 6)
-        self.agregar(Ficha("J" ), 2)
-        self.agregar(Ficha("K" ), 1)
-        self.agregar(Ficha("L" ), 4)
-        self.agregar(Ficha("LL"), 1)
-        self.agregar(Ficha("M" ), 3)
-        self.agregar(Ficha("N" ), 5)
-        self.agregar(Ficha("Ñ" ), 1)
-        self.agregar(Ficha("O" ), 8)
-        self.agregar(Ficha("P" ), 2)
-        self.agregar(Ficha("Q" ), 1)
-        self.agregar(Ficha("R" ), 4)
-        self.agregar(Ficha("RR" ), 1)
-        self.agregar(Ficha("S" ), 7)
-        self.agregar(Ficha("T" ), 4)
-        self.agregar(Ficha("U" ), 6)
-        self.agregar(Ficha("V" ), 2)
-        self.agregar(Ficha("W" ), 1)
-        self.agregar(Ficha("X" ), 1)
-        self.agregar(Ficha("Y" ), 1)
-        self.agregar(Ficha("Z" ), 1)
+        self.agregar(Ficha("A"), fichas_cant["A"])
+        self.agregar(Ficha("B"), fichas_cant["B"])
+        self.agregar(Ficha("C"), fichas_cant["C"])
+        self.agregar(Ficha("D"), fichas_cant["D"])
+        self.agregar(Ficha("E"), fichas_cant["E"])
+        self.agregar(Ficha("F"), fichas_cant["F"])
+        self.agregar(Ficha("G"), fichas_cant["G"])
+        self.agregar(Ficha("H" ), fichas_cant["H"])
+        self.agregar(Ficha("I" ), fichas_cant["I"])
+        self.agregar(Ficha("J" ), fichas_cant["J"])
+        self.agregar(Ficha("K" ), fichas_cant["K"])
+        self.agregar(Ficha("L" ), fichas_cant["L"])
+        self.agregar(Ficha("LL"), fichas_cant["LL"])
+        self.agregar(Ficha("M" ), fichas_cant["M"])
+        self.agregar(Ficha("N" ), fichas_cant["N"])
+        self.agregar(Ficha("Ñ" ), fichas_cant["Ñ"])
+        self.agregar(Ficha("O" ), fichas_cant["O"])
+        self.agregar(Ficha("P" ), fichas_cant["P"])
+        self.agregar(Ficha("Q" ), fichas_cant["Q"])
+        self.agregar(Ficha("R" ), fichas_cant["R"])
+        self.agregar(Ficha("RR" ), fichas_cant["RR"])
+        self.agregar(Ficha("S" ), fichas_cant["S"])
+        self.agregar(Ficha("T" ), fichas_cant["T"])
+        self.agregar(Ficha("U" ), fichas_cant["U"])
+        self.agregar(Ficha("V" ), fichas_cant["V"])
+        self.agregar(Ficha("W" ), fichas_cant["W"])
+        self.agregar(Ficha("X" ), fichas_cant["X"])
+        self.agregar(Ficha("Y" ), fichas_cant["Y"])
+        self.agregar(Ficha("Z" ), fichas_cant["Z"])
         shuffle(self.atril)
 
     def quitar_ficha(self):
@@ -474,6 +468,7 @@ def main(dificultad):
                     if (confirmar_Palabra(palabra_formada, "facil")):
                         for pos in pos_ficha_anterior:
                             tablero.tablero[pos[0]][pos[1]]=True
+                        puntaje_jugador= puntaje_jugador + puntos.puntaje_palabra(fichas_punt,palabra_formada) #Dante: agregue el puntaje, falta representarlo en el tablero
                         tablero.mostrar_estado()
                         sigue=0
                         turno_Act="Maquina"
