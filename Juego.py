@@ -37,7 +37,7 @@ POS_ESPECIALES={"facil":{"x2":[(0,0),(1,1),(2,2),(4,4),(6,6),(13,13),(12,12),(10
                 }
 
 #constante que representa el atril del jugador
-ATRIL_JUGADOR=[False for i in range(7)]
+ATRIL_JUGADOR=["" for i in range(7)]
 
 TIEMPO_LIMITE_PARTIDA = datetime.datetime.now() + datetime.timedelta(seconds=60)
 
@@ -205,14 +205,22 @@ class Estante:
     def desbloquear_Estante(self, window):
         for i in range(7):
             window.FindElement(i).Update(disabled=False)
+            
+    def desbloquear_pos_Estante(self, window):
+        for i in range(7):
+            if ATRIL_JUGADOR[i]=="":
+                window.FindElement(i).Update(disabled=False)
        
     def quitar_Ficha_De_Estante(self, bot, window):
         ATRIL_JUGADOR[bot]=window.FindElement(bot).get_text()
         self.bloquear_Estante(window)
-        window.FindElement(bot).Update(text="",button_color=("black", "orange"), visible=False)
+        window.FindElement(bot).Update(text="",image_size=(36,38) ,image_filename=(""),disabled=True)
     
-    def retornar_Ficha_Al_Estante(self,pos,window):
-        window.FindElement(pos).Update(image_filename=(("imagenes/"+ATRIL_JUGADOR[pos].upper()+".png")),visible=True)
+    def retornar_Ficha_Al_Estante(self,window,pos_estante):
+        if ATRIL_JUGADOR[pos_estante]=="":
+            window.FindElement(pos_estante).Update(image_filename=(""),visible=True,image_size=(36,38))
+        else:
+            window.FindElement(pos_estante).Update(image_filename=(("imagenes/"+ATRIL_JUGADOR[pos_estante].upper()+".png")),visible=True)
         self.desbloquear_Estante(window)
 
 class Jugador:
@@ -598,7 +606,7 @@ def main(dificultad,datosC):
                 elif event == "-devolver_ficha-":
                     puede_colocar=False
                     sigue=0
-                    jugador_estante.estante.retornar_Ficha_Al_Estante( evento_ficha, window)
+                    jugador_estante.estante.retornar_Ficha_Al_Estante( window,evento_ficha)
                     window.FindElement(pos_ficha_anterior[len(pos_ficha_anterior)-1]).Update(text="", image_filename=(""),image_size=(36,38))
                     fichas_colocadas-=1
                     window.finalize()
@@ -639,7 +647,8 @@ def main(dificultad,datosC):
                                 #Si no tenia espacio a la izquierda o a la derecha entra a el else
                                 sigue=0
                                 puede_colocar=False
-                                jugador_estante.estante.retornar_Ficha_Al_Estante(evento_ficha,window)
+                                sg.Popup("No hay más espacio en el tablero")
+                                jugador_estante.estante.retornar_Ficha_Al_Estante(window,evento_ficha)
 
                         else:
                             #Si entra en este else es porque el valor de la columna de la primera ficha colocada y la ultima no cambió, por lo tanto la palabra se forma de manera vertical
@@ -655,7 +664,8 @@ def main(dificultad,datosC):
                                 #qué pasa si no se puede formar más la palabra          
                                 sigue=0
                                 puede_colocar=False
-                                jugador_estante.estante.retornar_Ficha_Al_Estante( evento_ficha, window)
+                                sg.Popup("No hay más espacio en el tablero")
+                                jugador_estante.estante.retornar_Ficha_Al_Estante(window,evento_ficha)
                    
                    
                     if puede_colocar and not( event in range(7)) and isinstance(event, tuple): 
@@ -664,8 +674,7 @@ def main(dificultad,datosC):
                         tablero.bloquear_tablero(window)
                         ATRIL_JUGADOR[evento_ficha]=ficha[0]
                         #vuelvo a desbloquear el atril para que puedan seguir tomando fichas
-                        
-                        jugador_estante.estante.desbloquear_Estante(window) 
+                        jugador_estante.estante.desbloquear_pos_Estante(window) 
                         #Me guardo las posiciones en las cuales colocó una ficha 
                         pos_ficha_anterior.append(event)
                         #agrego la ficha junto a su posicion para luego ver si hay un multiplicador
@@ -707,12 +716,12 @@ def main(dificultad,datosC):
                         poder_guardar=True
                         window.FindElement('Confirmar Palabra').Update(visible=False)
                         sigue=0
+                        
                         for pos in pos_fichas_estante:
-                            jugador_estante.estante.retornar_Ficha_Al_Estante(pos,window)
+                            jugador_estante.estante.retornar_Ficha_Al_Estante(window,pos)
                             ATRIL_JUGADOR[pos]=""                        
-                        fichas_estante=[]
-                        print(pos_ficha_anterior)
                         for pos in pos_ficha_anterior:
+                            #Si la pos de las fichas utilizadas eran una casilla especial, vuelvo a colocar la imagen de la ficha especial en su lugar
                             if pos in POS_ESPECIALES[dificultad.replace("-", "")]["x2"]:
                                 tablero.quitar_elemento(window,pos,"x2")
                             elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["x2letra"]:
@@ -726,10 +735,10 @@ def main(dificultad,datosC):
                             elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["-3"]:
                                 tablero.quitar_elemento(window,pos,"menos3")
                             else:
-                                print("ENTRA") 
                                 tablero.quitar_elemento(window,pos)
                             tablero.tablero[pos[0]][pos[1]]=False
                         pos_ficha_anterior=[]
+                        pos_fichas_estante=[]
                         fichas_colocadas=0
                         
 
