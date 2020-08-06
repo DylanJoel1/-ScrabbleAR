@@ -299,7 +299,7 @@ def estante_ps(estante, window):
     i=0
     for x in estante:
        # print(estante[i].get_letra())
-        window.FindElement(i).Update(estante[i].get_letra())
+        window.FindElement(i).Update(text=estante[i].get_letra(), image_filename=("imagenes/"+estante[i].get_letra()+".png"))
         i=i+1
 
 
@@ -655,15 +655,19 @@ def main(dificultad,datosC):
         primera = 0
         poder_guardar = True
     
-    
-    layout2 =  [[sg.B   ('', button_color=("black","#F8F8F8"), key=(i,j), size=(w,h), pad=(2,2)) for j in range(15)]  for i in range(15)]    
+    #Por culpa de como esta escrito esto se bugean las imagenes
+    layout2 =  [[sg.B   ('', button_color=("black","white"), key=(i,j), size=(w,h), pad=(2,2)) for j in range(15)]  for i in range(15)]    
     layout2.append([sg.T('Estante Jugador',	font=('arial',15)) ])
-    layout2.append([sg.B('', button_color=("black","#F8F8F8"), key=(a), size=(w,h), pad=(2,2)) for a in range(7)]) #Desde que puse el layout3 y el layout aca se duplican keys???
+    layout2.append([sg.B('', button_color=("black","white"), key=(a), size=(w,h), pad=(2,2)) for a in range(7)]) #Desde que puse el layout3 y el layout aca se duplican keys???
     layout2.append([sg.B('Jugar',size=(8,2)), sg.B('Guardar',size=(8,2),visible=False), sg.B('Confirmar Palabra', visible=False,size=(14,2),button_color=("black","green")), sg.B('Salir',size=(8,h))])
     
     layout3 = [
+        [sg.T("Dificultad:", font=('arial',15)), sg.T(text=dificultad, font=("arial",15, ), size=(5,1))],
         [sg.T("Puntaje Jugador:", font=('arial',15)), sg.T("0", font=("arial",15, ), size=(5,1), key="-puntaje-")],
         [sg.Multiline(size=(30,20), disabled=True, autoscroll=False, key="-out-")],
+        [sg.T("Casillas con premio o descuento:", font=('arial',15))],
+        [sg.T("Palabras x2:"), sg.B("", image_filename="imagenes/x2.png"), sg.T("Palabras x3:"), sg.B("", image_filename="imagenes/x3.png"), sg.T("Letras x2:"), sg.B("", image_filename="imagenes/x2let.png"), sg.T("Letras x3:"), sg.B("", image_filename="imagenes/x3let.png")],
+        [sg.T("Descuento -1:"), sg.B("", image_filename="imagenes/menos1.png"), sg.T("Descuento -2:"), sg.B("", image_filename="imagenes/menos2.png"), sg.T("Descuento -3:"), sg.B("", image_filename="imagenes/menos3.png"),]
     ]
     layout = [
         [sg.TabGroup([[sg.Tab('Tablero', layout2, key="elemt"), sg.Tab('Datos', layout3, key="elemd")]])]

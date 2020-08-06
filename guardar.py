@@ -2,24 +2,26 @@ import PySimpleGUI as sg
 import json
 from config import guardar
 import os
+import sys
+sys.path.insert(1, '/guardado')
 
 def comprobar(window):
     try:
-        with open("partida1.json", 'r'):
+        with open("guardado/partida1.json", 'r'):
             window.FindElement('-g1-').Update(button_color=('black','grey'))
             window.FindElement('-bg1-').Update(visible=True)
     except FileNotFoundError:
         window.FindElement('-g1-').Update(button_color=('black','green'))
         window.FindElement('-bg1-').Update(visible=False)
     try:
-        with open("partida2.json", 'r'):
+        with open("guardado/partida2.json", 'r'):
             window.FindElement('-g2-').Update(button_color=('black','grey'))
             window.FindElement('-bg2-').Update(visible=True)
     except FileNotFoundError:
         window.FindElement('-g2-').Update(button_color=('black','green'))
         window.FindElement('-bg2-').Update(visible=False)
     try:
-        with open("partida3.json", 'r'):
+        with open("guardado/partida3.json", 'r'):
             window.FindElement('-g3-').Update(button_color=('black','grey'))
             window.FindElement('-bg3-').Update(visible=True)
     except FileNotFoundError:
@@ -61,22 +63,22 @@ def main(datos):
         if (event is None or event == '-volver-'):
             break
         if event == '-g1-':
-            guardar("partida1.json",datos)
+            guardar("guardado/partida1.json",datos)
             comprobar(window)
         if event == '-g2-':
-            guardar("partida2.json",datos)
+            guardar("guardado/partida2.json",datos)
             comprobar(window)
         if event == '-g3-':
-            guardar("partida3.json",datos)
+            guardar("guardado/partida3.json",datos)
             comprobar(window)
         if event == '-bg1-':
-            borrar("partida1.json")
+            borrar("guardado/partida1.json")
             comprobar(window)
         if event == '-bg2-':
-            borrar("partida2.json")
+            borrar("guardado/partida2.json")
             comprobar(window)
         if event == '-bg3-':
-            borrar("partida3.json")
+            borrar("guardado/partida3.json")
             comprobar(window)
 
     window.close()
