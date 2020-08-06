@@ -36,7 +36,7 @@ POS_ESPECIALES={"facil":{"x2":[(0,0),(1,1),(2,2),(4,4),(6,6),(13,13),(12,12),(10
                         "-3":[(3,3),(11,11),(3,11),(11,3),(7,3),(3,7),(7,11),(11,7)]}
                 }
 
-ATRIL_JUGADOR=[False for i in range(7)]
+ATRIL_JUGADOR=["" for i in range(7)]
 
 TIEMPO_LIMITE_PARTIDA = datetime.datetime.now() + datetime.timedelta(seconds=60)
 
@@ -207,12 +207,12 @@ class Estante:
        
     def quitar_Ficha_De_Estante(self, bot, window):
         ATRIL_JUGADOR[bot]=window.FindElement(bot).get_text()
-        self.bloquear_Estante(self, window)
+        self.bloquear_Estante(window)
         window.FindElement(bot).Update(text="",button_color=("black", "orange"), visible=False)
     
     def retornar_Ficha_Al_Estante(self,pos,window):
-        window.FindElement(pos).Update( visible=True)#text=ficha,button_color=("black","white"),
-        self.desbloquear_Estante(self,window)
+        window.FindElement(pos).Update(image_filename=(("imagenes/"+ATRIL_JUGADOR[pos]+".png")),visible=True)
+        self.desbloquear_Estante(window)
 
 class Jugador:
     """
@@ -271,10 +271,16 @@ class Tablero:
             aux+='\n'
         print(aux)
    
-    def agregar_elemento( self,element, window, *pos):
+    def agregar_elemento( self,element, window,img="", *pos):
         #Actualiza un boton del tablero con el texto que se le envíe 
         self.tablero[pos[0]][pos[1]]= True
         window.FindElement((pos[0],pos[1])).Update(text=element)
+    
+    def quitar_elemento(self, window,pos ,img=""):
+        if img != "":
+            window.FindElement(pos).Update(text="",image_filename=("imagenes/"+img+".png"))
+        else:
+            window.FindElement(pos).Update(text="",image_filename=(""),image_size=(36,38))
         
     def bloquear_tablero(self, window):
         #Bloquea todas las pos del tablero
@@ -482,6 +488,7 @@ def main(dificultad,datosC):
         ficha_pos={}
         fichas_colocadas= 0
         palabra_formada=''
+        pos_fichas_estante=[]
         
         primera = 0
         poder_guardar = True
@@ -490,8 +497,8 @@ def main(dificultad,datosC):
     layout2.append([sg.T("",font=('arial',15),key="-Turno-",size=(25,1),justification="r")])
     layout2.append([sg.T('Estante Jugador',	font=('arial',15)) ])
     layout2.append([sg.B('', button_color=("black","white"), key=(a), size=(w,h), pad=(2,2)) for a in range(7)]) #Desde que puse el layout3 y el layout aca se duplican keys???
-    layout2.append([sg.B('Jugar',size=(8,2)), sg.B('Guardar',size=(8,2),visible=False), sg.B('Confirmar Palabra', visible=False,size=(14,2),button_color=("black","green")), sg.B("retornar ficha", size=(14,2),visible=False,button_color=("black","#FFA500"), key="-devolver_ficha-") ])
-    layout2.append([sg.B('Salir',size=(8,h))])
+    layout2.append([sg.B('Jugar',size=(8,2)), sg.B('Confirmar Palabra', visible=False,size=(14,2),button_color=("black","green")), sg.B("retornar ficha", size=(14,2),visible=False,button_color=("black","#FFA500"), key="-devolver_ficha-") ])
+    layout2.append([sg.B('Salir',size=(8,h),button_color=("black","#ff4d4d")),sg.B('Guardar',size=(8,2),visible=False)])
     
     layout3 = [
         [sg.T("Dificultad:", font=('arial',15)), sg.T(text=dificultad, font=("arial",15, ), size=(5,1))],
@@ -525,18 +532,25 @@ def main(dificultad,datosC):
             arregloEstante = jugador_estante.get_estante()
             estante_ps(arregloEstante, window)
             tablero.bloquear_tablero(window)
+            
             window.FindElement('Jugar').Update(visible=False)
             window.FindElement('Guardar').Update(visible=True)
+            #Preparo el tablero con sus casillas especiales
             if dificultad == "-facil-":
                 tablero_especial(window,"facil")
             elif dificultad == "-medio-":
                 tablero_especial(window,"medio")
             else:
                 tablero_especial(window,"dificil")
-            juega= True
-            palabras_en_tablero = 0
-            turno_Act= random.choice(range(1,3)) #Genero de forma aleatoria quien inicia a jugar
             
+            juega= True
+            
+            palabras_en_tablero = 0
+            
+            #Genero de forma aleatoria quien inicia a jugar
+            turno_Act= random.choice(range(1,3)) 
+            
+            #Muestro en pantalla el turno actual
             if turno_Act==1:
                 window.FindElement('-Turno-').Update(value="Turno de el jugador")
             else:
@@ -548,35 +562,43 @@ def main(dificultad,datosC):
             if (palabras_en_tablero==0 and fichas_colocadas==0 ):  
                #si no hay palabras en el tablero y tampoco hay fichas colocadas solo desbloqueo el centro del tablero
                tablero.desbloquear_Pos(window,7,7)
+            
             if (no_termina_turno== False):
+            #Si el turno del jugador terminó reseteo el contador de fichas colocadas
                 fichas_colocadas= 0
-           #TURNO JUGADOR
+            #--------------------------------------------TURNO JUGADOR---------------------------------------------
            
 
-            if (turno_Act == 1) and (no_termina_turno):   #si es el turno del jugador y su turno aun no finaliza...
+            if (turno_Act == 1) and (no_termina_turno):   
+                #si es el turno del jugador y su turno aun no finaliza:
                 if poder_guardar:
                     window.FindElement('Guardar').Update(visible=True)
                     poder_guardar = False
 
                 
-            #CLIKEA UNA FICHA
                 if fichas_colocadas > -1:
+                    #Si ya colocó una ficha aparece el boton para recuperarla
                     window.FindElement("-devolver_ficha-").Update(visible=True)
+                    
+                    jugador_estante
                 if event in range(7):
+                    #CLIKEA UNA FICHA:
                     window.FindElement("-devolver_ficha-").Update(visible=False)
                     window.FindElement('Guardar').Update(visible=False)
                     evento_ficha=event
                     estante= jugador_estante.get_estante()
                     ficha= str(estante[event])
                     ficha= ficha.split(",") #Tengo la ficha separada como (letra,valor)
-                    Estante.quitar_Ficha_De_Estante(Estante,evento_ficha, window)
+                    jugador_estante.estante.quitar_Ficha_De_Estante(evento_ficha, window)
                     sigue = 1
                     puede_colocar= True
                 elif event == "-devolver_ficha-":
                     puede_colocar=False
                     sigue=0
-                    Estante.retornar_Ficha_Al_Estante(Estante, evento_ficha, window)
-                    window.FindElement(pos_ficha_anterior[len(pos_ficha_anterior)-1]).Update(text="", image_filename=(("imagenes/"+ficha[0]+".png")))
+                    jugador_estante.estante.retornar_Ficha_Al_Estante( evento_ficha, window)
+                    window.FindElement(pos_ficha_anterior[len(pos_ficha_anterior)-1]).Update(text="", image_filename=(""),image_size=(36,38))
+                    fichas_colocadas-=1
+                    window.finalize()
                     
                     
            
@@ -592,11 +614,13 @@ def main(dificultad,datosC):
                         
                    
                     if fichas_colocadas == 1 :  
+                        #Si ya colocó una ficha desbloqueo los lugares disponibles que esten adyacentes a la primera ficha colocada 
                         pos_disponibles= hay_espacio(window,pos_ficha_anterior[0])
                         for pos in pos_disponibles:
                             tablero.desbloquear_Pos(window,pos[0],pos[1])
                     
                     if fichas_colocadas > 1:
+                        #Si ya colocó más de una ficha me fijo la direccion a la cual forma la palabra y controlo que no se le termine el tablero
                         
                         if pos_ficha_anterior[0][0] == pos_ficha_anterior[len(pos_ficha_anterior)-1][0]:   
                             #si en la lista de posiciones no cambió el primer valor (el valor de las filas) es porque la palabra se está formando de forma horizontal
@@ -606,15 +630,14 @@ def main(dificultad,datosC):
                             elif pos_ficha_anterior[0][1] > pos_ficha_anterior[len(pos_ficha_anterior)-1][1] and hay_espacio(window,pos_ficha_anterior[0],"izquierda"):
                                 #Si la columna de la ultima ficha colocada tiene un valor menor a la primera ficha colocada entonces la palabra se está formando hacia la izquierda
                                 tablero.desbloquear_Pos(window, pos_ficha_anterior[0][0],pos_ficha_anterior[0][1]-1)
+                            
+                            
                             else: 
                                 #Si no tenia espacio a la izquierda o a la derecha entra a el else
                                 sigue=0
                                 puede_colocar=False
-                                Estante.retornar_Ficha_Al_Estante(Estante,evento_ficha,ficha[0],window)
-                       
-                       
-                       
-                        #elif pos_ficha_anterior[0][1] == pos_ficha_anterior[len(pos_ficha_anterior)-1][1]:
+                                jugador_estante.estante.retornar_Ficha_Al_Estante(evento_ficha,window)
+
                         else:
                             #Si entra en este else es porque el valor de la columna de la primera ficha colocada y la ultima no cambió, por lo tanto la palabra se forma de manera vertical
                             if pos_ficha_anterior[0][0] < pos_ficha_anterior[len(pos_ficha_anterior)-1][0] and hay_espacio(window,pos_ficha_anterior[len(pos_ficha_anterior)-1],"abajo"): 
@@ -623,34 +646,38 @@ def main(dificultad,datosC):
                             elif pos_ficha_anterior[0][0] > pos_ficha_anterior[len(pos_ficha_anterior)-1][0] and hay_espacio(window,pos_ficha_anterior[0],"arriba"):  
                                 #pregunto si se forma hacia arriba y si se puede formar          
                                 tablero.desbloquear_Pos(window,pos_ficha_anterior[0][0]-1,pos_ficha_anterior[0][1])        
+                            
+                            
                             else: 
                                 #qué pasa si no se puede formar más la palabra          
                                 sigue=0
                                 puede_colocar=False
-                                Estante.retornar_Ficha_Al_Estante(Estante, evento_ficha, ficha[0], window)
+                                jugador_estante.estante.retornar_Ficha_Al_Estante( evento_ficha, window)
                    
                    
                     if puede_colocar and not( event in range(7)) and isinstance(event, tuple): 
                         #si la variable puede colocar está en true, el evento no es el atril y el evento es una tupla, coloco la ficha
                         window.FindElement(event).Update(text=ficha[0], image_filename=(("imagenes/"+ficha[0]+".png")))
                         tablero.bloquear_tablero(window)
-                        ATRIL_JUGADOR[evento_ficha]=True
+                        ATRIL_JUGADOR[evento_ficha]=ficha[0]
                         #vuelvo a desbloquear el atril para que puedan seguir tomando fichas
                         
-                        Estante.desbloquear_Estante(Estante,window)  
+                        jugador_estante.estante.desbloquear_Estante(window) 
+                        #Me guardo las posiciones en las cuales colocó una ficha 
                         pos_ficha_anterior.append(event)
                         #agrego la ficha junto a su posicion para luego ver si hay un multiplicador
                         ficha_pos.update({ficha[0]:event})
                         fichas_colocadas=fichas_colocadas + 1
                         sigue=0
                         palabra_formada+= ficha[0]
+                        pos_fichas_estante.append(evento_ficha)
                 
                 if fichas_colocadas == 2:
                     #Si ya colocó 2 fichas aparece el boton para confirmar palabra
                     window.FindElement('Confirmar Palabra').Update(visible=True)
+                
                 if event == 'Confirmar Palabra':
-
-                    #Si toca el boton de confirmar palabra:
+                    
                     if (confirmar_Palabra(palabra_formada, dificultad)):
                         puntos_provisional=puntos.puntaje_palabra(fichas_punt,palabra_formada,window)
                         for pos in pos_ficha_anterior:
@@ -670,8 +697,35 @@ def main(dificultad,datosC):
                         no_termina_turno=False
                         window.FindElement('Confirmar Palabra').Update(visible=False)
                         window.FindElement('-Turno-').Update(value="Turno de la maquina")
+                        pos_fichas_estante=[]
                     else:
                         sg.Popup("No era una palabra")
+                        puede_colocar=False
+                        poder_guardar=True
+                        window.FindElement('Confirmar Palabra').Update(visible=False)
+                        sigue=0
+                        for pos in pos_fichas_estante:
+                            jugador_estante.estante.retornar_Ficha_Al_Estante(pos,window)
+                            ATRIL_JUGADOR[pos]=""                        
+                        fichas_estante=[]
+                        print(pos_ficha_anterior)
+                        for pos in pos_ficha_anterior:
+                            if pos in POS_ESPECIALES[dificultad.replace("-", "")]["x2"]:
+                                tablero.quitar_elemento(window,pos,"x2")
+                            elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["x2letra"]:
+                                tablero.quitar_elemento(window,pos,"x2let")
+                            elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["x3"]:
+                                tablero.quitar_elemento(window,pos,"x3")  
+                            elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["x3letra"]:
+                                tablero.quitar_elemento(window,pos,"x3let")
+                            elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["-2"]:
+                                tablero.quitar_elemento(window,pos,"menos2")
+                            elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["-3"]:
+                                tablero.quitar_elemento(window,pos,"menos3")
+                            else:
+                                print("ENTRA") 
+                                tablero.quitar_elemento(window,pos)
+                        
 
                 if event == "Guardar":
                     datosg = guardar_partida(w,h,sw,sh,fichas_cant,fichas_punt,atril,jugador_estante,tablero,sigue,juega,turno_Act,tomo_ficha,puede_colocar,no_termina_turno,pos_ficha_anterior,fichas_colocadas,palabra_formada,dificultad,palabras_en_tablero)

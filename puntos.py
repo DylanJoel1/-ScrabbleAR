@@ -157,7 +157,7 @@ def multipal(pos1,pos2,dificultad,punt):
 def puntaje_palabra (datos,palabra,window):
     pal = split(palabra)
     punt = 0
-    window["-out-"].print("Palabra:" + palabra, text_color='black')
+   # window["-out-"].print("Palabra:" + palabra, text_color='black')
     for x in pal:
         try:
             window["-out-"].print("Letra:" + x + " Puntaje:" + datos[x], text_color='black')
