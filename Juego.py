@@ -12,7 +12,7 @@ import puntos
 import guardar
 from funcionAutenticar import confirmar_Palabra
 
-#constante que representa el atril del jugador
+#constante que representa los multiplicadores y descuentos
 POS_ESPECIALES={"facil":{"x2":[(0,0),(1,1),(2,2),(4,4),(6,6),(13,13),(12,12),(10,10),(8,8),(1,13),(2,12),(4,10),(6,8),(13,1),(12,2),(10,4),(8,6)],
                         "x2letra":[(5,5),(9,9),(5,9),(9,5),(5,1),(9,1),(6,2),(8,2),(1,5),(1,9),(2,6),(2,8),(5,13),(9,13),(8,12),(13,5),(13,9),(12,6),(12,8)],
                         "x3":[(14,14),(0,14),(14,0),(7,0),(0,7),(7,14),(14,7)],
@@ -36,6 +36,7 @@ POS_ESPECIALES={"facil":{"x2":[(0,0),(1,1),(2,2),(4,4),(6,6),(13,13),(12,12),(10
                         "-3":[(3,3),(11,11),(3,11),(11,3),(7,3),(3,7),(7,11),(11,7)]}
                 }
 
+#constante que representa el atril del jugador
 ATRIL_JUGADOR=[False for i in range(7)]
 
 TIEMPO_LIMITE_PARTIDA = datetime.datetime.now() + datetime.timedelta(seconds=60)
@@ -654,11 +655,11 @@ def main(dificultad,datosC):
                     if (confirmar_Palabra(palabra_formada, dificultad)):
                         puntos_provisional=puntos.puntaje_palabra(fichas_punt,palabra_formada,window)
                         for pos in pos_ficha_anterior:
-                            puntos_provisional = puntos.multipal(pos[0],pos[1],dificultad,puntos_provisional)
+                            puntos_provisional = puntos.multipal(pos[0],pos[1],dificultad,puntos_provisional,POS_ESPECIALES)
                             tablero.tablero[pos[0]][pos[1]]=True
                         agregado = 0
                         for key in ficha_pos:
-                            agregado = agregado + puntos.multilet(ficha_pos[key],key,dificultad,fichas_punt)
+                            agregado = agregado + puntos.multilet(ficha_pos[key],key,dificultad,fichas_punt,POS_ESPECIALES)
                         jugador_estante.incrementar_puntaje(puntos_provisional,window)
                         poder_guardar=True
                         tablero.mostrar_estado()
