@@ -400,6 +400,7 @@ def so():
 
 
 def tablero_facil(window):
+    #Esta representacion interfiere con la deteccion de lugares posibles para poner una ficha, asiq es provisional porq ni vi otra forma
     window.FindElement((0,0)).Update(text="P x3")
     window.FindElement((1,1)).Update(text="P x2")
     window.FindElement((2,2)).Update(text="P x2")
