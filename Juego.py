@@ -42,6 +42,7 @@ ATRIL_JUGADOR=["" for i in range(7)]
 TIEMPO_LIMITE_PARTIDA = datetime.datetime.now() + datetime.timedelta(seconds=60)
 
 def cargar():
+    #Carga el archivo de configuracion
     try:
         with open('guardado/datos.json', 'r') as jsonFile:
             datos = json.load(jsonFile)
@@ -54,6 +55,7 @@ def cargar():
 
 
 def guardar_partida(w,h,sw,sh,fichas_cant,fichas_punt,atril,jugador_estante,tablero,sigue,juega,turno_Act,tomo_ficha,puede_colocar,no_termina_turno,pos_ficha_anterior,fichas_colocadas,palabra_formada,dificultad,palabras_en_tablero,ficha_pos,pos_fichas_estante):
+    #guarda la partida
     atrilStr = atril.atril
     atril1 = []
     atril2 = []
@@ -119,8 +121,9 @@ class Atril:
         #agrega una letra, la cantidad de veces que se indique, al atril
         for a in range(int(cantidad)):
             self.atril.append(letra)
+
     def inicializa_atril(self, fichas_cant, fichas_punt):
-        #agrega las 100 fichas al atril y las mezcla (shuffle)
+        #agrega las fichas al atril y las mezcla (shuffle)
         self.agregar(Ficha("A", fichas_punt["A"]), fichas_cant["A"])
         self.agregar(Ficha("B", fichas_punt["B"]), fichas_cant["B"])
         self.agregar(Ficha("C", fichas_punt["C"]), fichas_cant["C"])
@@ -200,23 +203,29 @@ class Estante:
         return self.estante
         
     def bloquear_Estante(self, window):
+        #Bloquea el estante
         for i in range(7):
             window.FindElement(i).Update(disabled=True)
+
     def desbloquear_Estante(self, window):
+        #desbloquea el estante
         for i in range(7):
             window.FindElement(i).Update(disabled=False)
             
     def desbloquear_pos_Estante(self, window):
+        #desbloquea el estante
         for i in range(7):
             if ATRIL_JUGADOR[i]=="":
                 window.FindElement(i).Update(disabled=False)
        
     def quitar_Ficha_De_Estante(self, bot, window):
+        #quita una ficha del estante
         ATRIL_JUGADOR[bot]=window.FindElement(bot).get_text()
         self.bloquear_Estante(window)
         window.FindElement(bot).Update(text="",image_size=(36,38) ,image_filename=(""),disabled=True)
     
     def retornar_Ficha_Al_Estante(self,window,pos_estante):
+        #devuelve una ficha del tablero al estante
         if ATRIL_JUGADOR[pos_estante]=="":
             window.FindElement(pos_estante).Update(image_filename=(""),visible=True,image_size=(36,38))
         else:
@@ -266,6 +275,7 @@ class Tablero:
     Clase que representa al tablero para poder modificarlo
     '''
     def __init__(self,datos=None):
+        #Se inicializa el tablero
         if datos != None:
             self.tablero= datos["tablero"]
         else:
@@ -336,6 +346,7 @@ class Tablero:
 
 
 def estante_ps(estante, window):
+    #actualiza el estante con las letras que le toco al jugador
     i=0
     for x in estante:
        # print(estante[i].get_letra())
@@ -344,6 +355,7 @@ def estante_ps(estante, window):
 
 
 def datos(dificultad):
+    #Devuelve la cantidad de fichas y los puntajes de cada una dependiendo de la dificultad y el archivo de configuracion
     if dificultad == "-facil-":
         valores = cargar()
         keys = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "LL", "M", "N", "Ñ", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "RR",]
@@ -370,6 +382,7 @@ def datos(dificultad):
         return fichas_cant, fichas_punt
 
 def salir_juego(evento):
+    #Funcion que detecta si se salio del juego
     if evento is None or evento == 'Salir':
         return True
 
@@ -421,6 +434,7 @@ def hay_espacio(window,lista_pos, direc="disponibles"): #Funcion que retorna si 
             
 
 def so():
+    #Funcion que detecta el sistema operativo para reacomodar el tamaño de las casillas (ya que en linux se ve diferente)
     try:
         if os.name == "nt":
             WIDTH  = 4
@@ -443,6 +457,7 @@ def so():
 
 
 def tablero_especial(window,dificultad):
+    #Pone las fichas especiales en el tablero segun la dificultad
     for pos in POS_ESPECIALES[dificultad]["x2"]:
         window.FindElement(pos).Update(image_filename=("imagenes/x2.png"))
     for pos in POS_ESPECIALES[dificultad]["x2letra"]:
@@ -458,6 +473,7 @@ def tablero_especial(window,dificultad):
 
 
 def main(dificultad,datosC):
+    #Se inicializan todas las variables a utilizar y se ejecuta el juego en si
     if datosC != None:
         dificultad = datosC["dificultad"]
         w,h,sw,sh = so()
