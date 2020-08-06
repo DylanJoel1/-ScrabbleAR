@@ -3,6 +3,6 @@ Migueles Dylan -
 Gramblicka Dante
 
 Para ejecutar el juego:
-Python 3.6.8 con PySimpleGui 4.26.0 y Pattern 3.6
+Python 3.6.8 con PySimpleGui 4.26.0 y Pattern 2.6
 
 Abrir el archivo ScrabbleAR.py. Se abrirá un menú que permitirá configurar el juego y a su vez jugarlo.
