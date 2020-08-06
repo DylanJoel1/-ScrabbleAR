@@ -36,12 +36,8 @@ POS_ESPECIALES={"facil":{"x2":[(0,0),(1,1),(2,2),(4,4),(6,6),(13,13),(12,12),(10
                         "-3":[(3,3),(11,11),(3,11),(11,3),(7,3),(3,7),(7,11),(11,7)]}
                 }
 
-<<<<<<< HEAD
-ATRIL_JUGADOR=["" for i in range(7)]
-=======
 #constante que representa el atril del jugador
 ATRIL_JUGADOR=[False for i in range(7)]
->>>>>>> 2c3c08ad5de9e8f46555da2cc6c6002fc6174b76
 
 TIEMPO_LIMITE_PARTIDA = datetime.datetime.now() + datetime.timedelta(seconds=60)
 
@@ -57,7 +53,7 @@ def cargar():
         return datos
 
 
-def guardar_partida(w,h,sw,sh,fichas_cant,fichas_punt,atril,jugador_estante,tablero,sigue,juega,turno_Act,tomo_ficha,puede_colocar,no_termina_turno,pos_ficha_anterior,fichas_colocadas,palabra_formada,dificultad,palabras_en_tablero):
+def guardar_partida(w,h,sw,sh,fichas_cant,fichas_punt,atril,jugador_estante,tablero,sigue,juega,turno_Act,tomo_ficha,puede_colocar,no_termina_turno,pos_ficha_anterior,fichas_colocadas,palabra_formada,dificultad,palabras_en_tablero,ficha_pos):
     atrilStr = atril.atril
     atril1 = []
     atril2 = []
@@ -74,7 +70,7 @@ def guardar_partida(w,h,sw,sh,fichas_cant,fichas_punt,atril,jugador_estante,tabl
         "w":w, "h":h, "sw":sw, "sh":sh, "fichas_cant":fichas_cant, "fichas_punt":fichas_punt, "atril1":atril1, "atril2":atril2, "jugador_estante":{"nombre":jugador_estante.nombre, "estante1":estante1, "estante2":estante2, "puntaje":jugador_estante.puntaje,}, 
         "tablero": tablero.tablero, "sigue":sigue, "juega":juega, "turno_Act":turno_Act, "tomo_ficha":tomo_ficha, "puede_colocar":puede_colocar, 
         "no_termina_turno":no_termina_turno, "pos_ficha_anterior":pos_ficha_anterior, "fichas_colocadas":fichas_colocadas, "palabra_formada":palabra_formada, "dificultad":dificultad,
-        "palabras_en_tablero":palabras_en_tablero
+        "palabras_en_tablero":palabras_en_tablero, "ficha_pos":ficha_pos
     }
     print(datos)
     return datos
@@ -475,6 +471,7 @@ def main(dificultad,datosC):
         palabra_formada=datosC["palabra_formada"]
         primera = 1
         poder_guardar = False
+        ficha_pos=datosC["ficha_pos"]
     else:
         w,h,sw,sh = so()
         fichas_cant, fichas_punt = datos(dificultad)
@@ -736,7 +733,7 @@ def main(dificultad,datosC):
                         
 
                 if event == "Guardar":
-                    datosg = guardar_partida(w,h,sw,sh,fichas_cant,fichas_punt,atril,jugador_estante,tablero,sigue,juega,turno_Act,tomo_ficha,puede_colocar,no_termina_turno,pos_ficha_anterior,fichas_colocadas,palabra_formada,dificultad,palabras_en_tablero)
+                    datosg = guardar_partida(w,h,sw,sh,fichas_cant,fichas_punt,atril,jugador_estante,tablero,sigue,juega,turno_Act,tomo_ficha,puede_colocar,no_termina_turno,pos_ficha_anterior,fichas_colocadas,palabra_formada,dificultad,palabras_en_tablero,ficha_pos)
                     guardar.main(datosg)
 
             elif (turno_Act==2):

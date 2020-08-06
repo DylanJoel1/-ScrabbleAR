@@ -3,24 +3,26 @@ import json
 from config import guardar
 import os
 import Juego
+import sys
+sys.path.insert(1, '/guardado')
 
 def comprobar(window):
     try:
-        with open("partida1.json", 'r'):
+        with open("guardado/partida1.json", 'r'):
             window.FindElement('-c1-').Update(button_color=('black','green'))
 
     except FileNotFoundError:
         window.FindElement('-c1-').Update(button_color=('black','grey'))
 
     try:
-        with open("partida2.json", 'r'):
+        with open("guardado/partida2.json", 'r'):
             window.FindElement('-c2-').Update(button_color=('black','green'))
 
     except FileNotFoundError:
         window.FindElement('-c2-').Update(button_color=('black','grey'))
 
     try:
-        with open("partida3.json", 'r'):
+        with open("guardado/partida3.json", 'r'):
             window.FindElement('-c3-').Update(button_color=('black','green'))
 
     except FileNotFoundError:
@@ -71,15 +73,15 @@ def main():
         if (event is None or event == '-volver-'):
             break
         if event == '-c1-':
-            datos = c("partida1.json")
+            datos = c("guardado/partida1.json")
             if datos != None:
                 Juego.main(None, datos)
         if event == '-c2-':
-            datos = c("partida2.json")
+            datos = c("guardado/partida2.json")
             if datos != None:
                 Juego.main(None, datos)
         if event == '-c3-':
-            datos = c("partida3.json")
+            datos = c("guardado/partida3.json")
             if datos != None:
                 Juego.main(None, datos)
 
