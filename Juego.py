@@ -398,6 +398,216 @@ def so():
         SH = 850
         return WIDTH, HEIGHT, SW, SH
 
+
+def tablero_facil(window):
+    window.FindElement((0,0)).Update(text="P x3")
+    window.FindElement((1,1)).Update(text="P x2")
+    window.FindElement((2,2)).Update(text="P x2")
+    window.FindElement((3,3)).Update(text="D -3")
+    window.FindElement((4,4)).Update(text="P x2")
+    window.FindElement((5,5)).Update(text="L x2")
+    window.FindElement((6,6)).Update(text="P x2")
+
+    window.FindElement((14,14)).Update(text="P x3")
+    window.FindElement((13,13)).Update(text="P x2")
+    window.FindElement((12,12)).Update(text="P x2")
+    window.FindElement((11,11)).Update(text="D -3")
+    window.FindElement((10,10)).Update(text="P x2")
+    window.FindElement((9,9)).Update(text="L x2")
+    window.FindElement((8,8)).Update(text="P x2")
+
+    window.FindElement((0,14)).Update(text="P x3")
+    window.FindElement((1,13)).Update(text="P x2")
+    window.FindElement((2,12)).Update(text="P x2")
+    window.FindElement((3,11)).Update(text="D -3")
+    window.FindElement((4,10)).Update(text="P x2")
+    window.FindElement((5,9)).Update(text="L x2")
+    window.FindElement((6,8)).Update(text="P x2")
+
+    window.FindElement((14,0)).Update(text="P x3")
+    window.FindElement((13,1)).Update(text="P x2")
+    window.FindElement((12,2)).Update(text="P x2")
+    window.FindElement((11,3)).Update(text="D -3")
+    window.FindElement((10,4)).Update(text="P x2")
+    window.FindElement((9,5)).Update(text="L x2")
+    window.FindElement((8,6)).Update(text="P x2")
+
+    window.FindElement((7,0)).Update(text="P x3")   
+    window.FindElement((3,0)).Update(text="L x3")
+    window.FindElement((11,0)).Update(text="L x3")
+    window.FindElement((5,1)).Update(text="L x2")
+    window.FindElement((9,1)).Update(text="L x2")
+    window.FindElement((6,2)).Update(text="L x2")
+    window.FindElement((8,2)).Update(text="L x2")
+    window.FindElement((7,3)).Update(text="D -1")
+
+    window.FindElement((0,7)).Update(text="P x3")   
+    window.FindElement((0,3)).Update(text="L x3")
+    window.FindElement((0,11)).Update(text="L x3")
+    window.FindElement((1,5)).Update(text="L x2")
+    window.FindElement((1,9)).Update(text="L x2")
+    window.FindElement((2,6)).Update(text="L x2")
+    window.FindElement((2,8)).Update(text="L x2")
+    window.FindElement((3,7)).Update(text="D -1")
+
+    window.FindElement((7,14)).Update(text="P x3")   
+    window.FindElement((3,14)).Update(text="L x3")
+    window.FindElement((11,14)).Update(text="L x3")
+    window.FindElement((5,13)).Update(text="L x2")
+    window.FindElement((9,13)).Update(text="L x2")
+    window.FindElement((6,12)).Update(text="L x2")
+    window.FindElement((8,12)).Update(text="L x2")
+    window.FindElement((7,11)).Update(text="D -1")
+
+    window.FindElement((14,7)).Update(text="P x3")   
+    window.FindElement((14,3)).Update(text="L x3")
+    window.FindElement((14,11)).Update(text="L x3")
+    window.FindElement((13,5)).Update(text="L x2")
+    window.FindElement((13,9)).Update(text="L x2")
+    window.FindElement((12,6)).Update(text="L x2")
+    window.FindElement((12,8)).Update(text="L x2")
+    window.FindElement((11,7)).Update(text="D -1")
+
+
+def tablero_medio(window):
+    window.FindElement((0,0)).Update(text="P x3")
+    window.FindElement((1,1)).Update(text="P x2")
+    window.FindElement((2,2)).Update(text="P x2")
+    window.FindElement((3,3)).Update(text="D -3")
+    window.FindElement((4,4)).Update(text="P x2")
+    window.FindElement((5,5)).Update(text="D -2")
+    window.FindElement((6,6)).Update(text="P x2")
+
+    window.FindElement((14,14)).Update(text="P x3")
+    window.FindElement((13,13)).Update(text="P x2")
+    window.FindElement((12,12)).Update(text="P x2")
+    window.FindElement((11,11)).Update(text="D -3")
+    window.FindElement((10,10)).Update(text="P x2")
+    window.FindElement((9,9)).Update(text="D -2")
+    window.FindElement((8,8)).Update(text="P x2")
+
+    window.FindElement((0,14)).Update(text="P x3")
+    window.FindElement((1,13)).Update(text="P x2")
+    window.FindElement((2,12)).Update(text="P x2")
+    window.FindElement((3,11)).Update(text="D -3")
+    window.FindElement((4,10)).Update(text="P x2")
+    window.FindElement((5,9)).Update(text="D -2")
+    window.FindElement((6,8)).Update(text="P x2")
+
+    window.FindElement((14,0)).Update(text="P x3")
+    window.FindElement((13,1)).Update(text="P x2")
+    window.FindElement((12,2)).Update(text="P x2")
+    window.FindElement((11,3)).Update(text="D -3")
+    window.FindElement((10,4)).Update(text="P x2")
+    window.FindElement((9,5)).Update(text="D -2")
+    window.FindElement((8,6)).Update(text="P x2")
+
+    window.FindElement((7,0)).Update(text="P x3")   
+    window.FindElement((3,0)).Update(text="L x3")
+    window.FindElement((11,0)).Update(text="L x3")
+    window.FindElement((5,1)).Update(text="L x2")
+    window.FindElement((9,1)).Update(text="L x2")
+    window.FindElement((6,2)).Update(text="L x2")
+    window.FindElement((8,2)).Update(text="L x2")
+    window.FindElement((7,3)).Update(text="D -1")
+
+    window.FindElement((0,7)).Update(text="P x3")   
+    window.FindElement((0,3)).Update(text="L x3")
+    window.FindElement((0,11)).Update(text="L x3")
+    window.FindElement((1,5)).Update(text="L x2")
+    window.FindElement((1,9)).Update(text="L x2")
+    window.FindElement((2,6)).Update(text="L x2")
+    window.FindElement((2,8)).Update(text="L x2")
+    window.FindElement((3,7)).Update(text="D -1")
+
+    window.FindElement((7,14)).Update(text="P x3")   
+    window.FindElement((3,14)).Update(text="L x3")
+    window.FindElement((11,14)).Update(text="L x3")
+    window.FindElement((5,13)).Update(text="L x2")
+    window.FindElement((9,13)).Update(text="L x2")
+    window.FindElement((6,12)).Update(text="L x2")
+    window.FindElement((8,12)).Update(text="L x2")
+    window.FindElement((7,11)).Update(text="D -1")
+
+    window.FindElement((14,7)).Update(text="P x3")   
+    window.FindElement((14,3)).Update(text="L x3")
+    window.FindElement((14,11)).Update(text="L x3")
+    window.FindElement((13,5)).Update(text="L x2")
+    window.FindElement((13,9)).Update(text="L x2")
+    window.FindElement((12,6)).Update(text="L x2")
+    window.FindElement((12,8)).Update(text="L x2")
+    window.FindElement((11,7)).Update(text="D -1")
+
+
+def tablero_dificil(window):
+    window.FindElement((0,0)).Update(text="P x3")
+
+    window.FindElement((2,2)).Update(text="P x2")
+    window.FindElement((3,3)).Update(text="D -3")
+    window.FindElement((4,4)).Update(text="P x2")
+    window.FindElement((5,5)).Update(text="D -2")
+
+
+    window.FindElement((14,14)).Update(text="P x3")
+
+    window.FindElement((12,12)).Update(text="P x2")
+    window.FindElement((11,11)).Update(text="D -3")
+    window.FindElement((10,10)).Update(text="P x2")
+    window.FindElement((9,9)).Update(text="D -2")
+
+
+    window.FindElement((0,14)).Update(text="P x3")
+
+    window.FindElement((2,12)).Update(text="P x2")
+    window.FindElement((3,11)).Update(text="D -3")
+    window.FindElement((4,10)).Update(text="P x2")
+    window.FindElement((5,9)).Update(text="D -2")
+
+
+    window.FindElement((14,0)).Update(text="P x3")
+
+    window.FindElement((12,2)).Update(text="P x2")
+    window.FindElement((11,3)).Update(text="D -3")
+    window.FindElement((10,4)).Update(text="P x2")
+    window.FindElement((9,5)).Update(text="D -2")
+
+
+    window.FindElement((7,0)).Update(text="P x3")   
+    window.FindElement((3,0)).Update(text="L x3")
+    window.FindElement((11,0)).Update(text="L x3")
+    window.FindElement((5,1)).Update(text="L x2")
+    window.FindElement((9,1)).Update(text="L x2")
+
+
+    window.FindElement((7,3)).Update(text="D -3")
+
+    window.FindElement((0,7)).Update(text="P x3")   
+    window.FindElement((0,3)).Update(text="L x3")
+    window.FindElement((0,11)).Update(text="L x3")
+    window.FindElement((1,5)).Update(text="L x2")
+    window.FindElement((1,9)).Update(text="L x2")
+
+
+    window.FindElement((3,7)).Update(text="D -3")
+
+    window.FindElement((7,14)).Update(text="P x3")   
+    window.FindElement((3,14)).Update(text="L x3")
+    window.FindElement((11,14)).Update(text="L x3")
+    window.FindElement((5,13)).Update(text="L x2")
+    window.FindElement((9,13)).Update(text="L x2")
+
+
+    window.FindElement((7,11)).Update(text="D -3")
+
+    window.FindElement((14,7)).Update(text="P x3")   
+    window.FindElement((14,3)).Update(text="L x3")
+    window.FindElement((14,11)).Update(text="L x3")
+    window.FindElement((13,5)).Update(text="L x2")
+    window.FindElement((13,9)).Update(text="L x2")
+
+
+    window.FindElement((11,7)).Update(text="D -3")
+
 def main(dificultad,datosC):
     if datosC != None:
         dificultad = datosC["dificultad"]
@@ -475,6 +685,12 @@ def main(dificultad,datosC):
             tablero.bloquear_tablero(window)
             window.FindElement('Jugar').Update(visible=False)
             window.FindElement('Guardar').Update(visible=True)
+            if dificultad == "-facil-":
+                tablero_facil(window)
+            elif dificultad == "-medio-":
+                tablero_medio(window)
+            else:
+                tablero_dificil(window)
             juega= True
             palabras_en_tablero = 0
         elif juega:
@@ -576,7 +792,7 @@ def main(dificultad,datosC):
                 if event == 'Confirmar Palabra':
 
                     #Si toca el boton de confirmar palabra:
-                    if (confirmar_Palabra(palabra_formada, "facil")):
+                    if (confirmar_Palabra(palabra_formada, dificultad)):
                         for pos in pos_ficha_anterior:
                             tablero.tablero[pos[0]][pos[1]]=True
                         jugador_estante.incrementar_puntaje(puntos.puntaje_palabra(fichas_punt,palabra_formada,window),window) #Dante: agregue el puntaje
