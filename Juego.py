@@ -13,14 +13,14 @@ import guardar
 from funcionAutenticar import confirmar_Palabra
 
 #constante que representa los multiplicadores y descuentos
-POS_ESPECIALES={"facil":{"x2":[(0,0),(1,1),(2,2),(4,4),(6,6),(13,13),(12,12),(10,10),(8,8),(1,13),(2,12),(4,10),(6,8),(13,1),(12,2),(10,4),(8,6)],
-                        "x2letra":[(5,5),(9,9),(5,9),(9,5),(5,1),(9,1),(6,2),(8,2),(1,5),(1,9),(2,6),(2,8),(5,13),(9,13),(8,12),(13,5),(13,9),(12,6),(12,8)],
-                        "x3":[(14,14),(0,14),(14,0),(7,0),(0,7),(7,14),(14,7)],
+POS_ESPECIALES={"facil":{"x2":[(1,1),(2,2),(4,4),(6,6),(13,13),(12,12),(10,10),(8,8),(1,13),(2,12),(4,10),(6,8),(13,1),(12,2),(10,4),(8,6)],
+                        "x2letra":[(5,5),(9,9),(5,9),(9,5),(5,1),(9,1),(6,2),(8,2),(1,5),(1,9),(2,6),(2,8),(5,13),(9,13),(6,12),(8,12),(13,5),(13,9),(12,6),(12,8)],
+                        "x3":[(0,0),(14,14),(0,14),(14,0),(7,0),(0,7),(7,14),(14,7)],
                         "x3letra":[(3,0),(11,0),(0,3),(0,11),(3,14),(11,14),(14,3),(14,11)],
                         "-2":[(7,3),(3,7),(7,11),(11,7)],
                         "-3":[(3,3),(11,11),(3,11),(11,3)]},
             
-                "medio":{"x2":[(1,1),(2,2),(4,4),(6,6),(13,13),(12,12),(10,10),(8,8),(1,13),(1,12),(4,10),(6,8),(13,1),(12,2),(10,4),(8,6)],
+                "medio":{"x2":[(1,1),(2,2),(4,4),(6,6),(13,13),(12,12),(10,10),(8,8),(1,13),(2,12),(4,10),(6,8),(13,1),(12,2),(10,4),(8,6)],
                         "x2letra":[(5,1),(9,1),(6,2),(8,2),(1,5),(1,9),(2,6),(2,8),(5,13),(9,13),(6,12),(8,12),(13,5),(13,9),(12,6),(12,8)],
                         "x3":[(0,0),(14,14),(0,14),(14,0),(7,0),(0,7),(7,14),(14,7)],
                         "x3letra":[(3,0),(11,0),(0,3),(0,11),(3,14),(11,14),(14,3),(14,11)],
@@ -443,7 +443,6 @@ def so():
 
 
 def tablero_especial(window,dificultad):
-    #Esta representacion interfiere con la deteccion de lugares posibles para poner una ficha, asiq es provisional porq ni vi otra forma 
     for pos in POS_ESPECIALES[dificultad]["x2"]:
         window.FindElement(pos).Update(image_filename=("imagenes/x2.png"))
     for pos in POS_ESPECIALES[dificultad]["x2letra"]:
@@ -456,8 +455,6 @@ def tablero_especial(window,dificultad):
         window.FindElement(pos).Update(image_filename=("imagenes/menos2.png"))
     for pos in POS_ESPECIALES[dificultad]["-3"]:
         window.FindElement(pos).Update(image_filename=("imagenes/menos3.png"))
-    
-
 
 
 def main(dificultad,datosC):
@@ -693,11 +690,11 @@ def main(dificultad,datosC):
                     if (confirmar_Palabra(palabra_formada, dificultad)):
                         puntos_provisional=puntos.puntaje_palabra(fichas_punt,palabra_formada,window)
                         for pos in pos_ficha_anterior:
-                            puntos_provisional = puntos.multipal(pos[0],pos[1],dificultad,puntos_provisional,POS_ESPECIALES)
+                            puntos_provisional = puntos.multipal(pos[0],pos[1],dificultad,puntos_provisional,POS_ESPECIALES,window)
                             tablero.tablero[pos[0]][pos[1]]=True
                         agregado = 0
                         for key in ficha_pos:
-                            agregado = agregado + puntos.multilet(ficha_pos[key],key,dificultad,fichas_punt,POS_ESPECIALES)
+                            agregado = agregado + puntos.multilet(ficha_pos[key],key,dificultad,fichas_punt,POS_ESPECIALES,window)
                         jugador_estante.incrementar_puntaje(puntos_provisional,window)
                         poder_guardar=True
                         tablero.mostrar_estado()

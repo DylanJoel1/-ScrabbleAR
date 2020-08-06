@@ -5,3 +5,12 @@ back/ScrabbleAr.py
 prueba q salio mal/config.py
 prueba q salio mal/ScrabbleAr.py
 __pycache__/Juego.cpython-36.pyc
+__pycache__/cargar.cpython-36.pyc
+__pycache__/comoJugar.cpython-36.pyc
+__pycache__/config.cpython-36.pyc
+__pycache__/dificultad.cpython-36.pyc
+__pycache__/funcionAutenticar.cpython-36.pyc
+__pycache__/guardar.cpython-36.pyc
+__pycache__/Juego.cpython-36.pyc
+__pycache__/puntos.cpython-36.pyc
+__pycache__/top10.cpython-36.pyc
