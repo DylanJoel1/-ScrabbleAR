@@ -13,7 +13,30 @@ import guardar
 from funcionAutenticar import confirmar_Palabra
 
 #constante que representa el atril del jugador
-ATRIL_JUGADOR=[[""] for i in range(7)]
+POS_ESPECIALES={"facil":{"x2":[(0,0),(1,1),(2,2),(4,4),(6,6),(13,13),(12,12),(10,10),(8,8),(1,13),(2,12),(4,10),(6,8),(13,1),(12,2),(10,4),(8,6)],
+                        "x2letra":[(5,5),(9,9),(5,9),(9,5),(5,1),(9,1),(6,2),(8,2),(1,5),(1,9),(2,6),(2,8),(5,13),(9,13),(8,12),(13,5),(13,9),(12,6),(12,8)],
+                        "x3":[(14,14),(0,14),(14,0),(7,0),(0,7),(7,14),(14,7)],
+                        "x3letra":[(3,0),(11,0),(0,3),(0,11),(3,14),(11,14),(14,3),(14,11)],
+                        "-2":[(7,3),(3,7),(7,11),(11,7)],
+                        "-3":[(3,3),(11,11),(3,11),(11,3)]},
+            
+                "medio":{"x2":[(1,1),(2,2),(4,4),(6,6),(13,13),(12,12),(10,10),(8,8),(1,13),(1,12),(4,10),(6,8),(13,1),(12,2),(10,4),(8,6)],
+                        "x2letra":[(5,1),(9,1),(6,2),(8,2),(1,5),(1,9),(2,6),(2,8),(5,13),(9,13),(6,12),(8,12),(13,5),(13,9),(12,6),(12,8)],
+                        "x3":[(0,0),(14,14),(0,14),(14,0),(7,0),(0,7),(7,14),(14,7)],
+                        "x3letra":[(3,0),(11,0),(0,3),(0,11),(3,14),(11,14),(14,3),(14,11)],
+                        "-2":[(5,5),(9,9),(5,9),(9,5),(7,3),(3,7),(7,11),(11,7)],
+                        "-3":[(3,3),(11,11),(3,11),(11,3)]},
+                
+                
+                "dificil":{"x2":[(2,2),(4,4),(12,12),(10,10),(2,12),(4,10),(12,2),(10,4)],
+                        "x2letra":[(5,1),(9,1),(1,5),(1,9),(5,13),(9,13),(13,5),(13,9)],
+                        "x3":[(0,0),(14,14),(0,14),(14,0),(7,0),(0,7),(7,14),(14,7)],
+                        "x3letra":[(3,0),(11,0),(0,3),(0,11),(3,14),(11,14),(14,3),(14,11)],
+                        "-2":[(5,5),(9,9),(5,9),(9,5)],
+                        "-3":[(3,3),(11,11),(3,11),(11,3),(7,3),(3,7),(7,11),(11,7)]}
+                }
+
+ATRIL_JUGADOR=[False for i in range(7)]
 
 TIEMPO_LIMITE_PARTIDA = datetime.datetime.now() + datetime.timedelta(seconds=60)
 
@@ -186,8 +209,10 @@ class Estante:
         ATRIL_JUGADOR[bot]=window.FindElement(bot).get_text()
         self.bloquear_Estante(self, window)
         window.FindElement(bot).Update(text="",button_color=("black", "orange"), visible=False)
-    def retornar_Ficha_Al_Estante(self,pos,ficha,window):
-        window.FindElement(pos).Update(text=ficha,button_color=("black","white"), visible=True)
+    
+    def retornar_Ficha_Al_Estante(self,pos,window):
+        window.FindElement(pos).Update( visible=True)#text=ficha,button_color=("black","white"),
+        self.desbloquear_Estante(self,window)
 
 class Jugador:
     """
@@ -385,232 +410,39 @@ def so():
         if os.name == "nt":
             WIDTH  = 4
             HEIGHT = 2
-            SW = 850
-            SH = 850
+            SW = 900
+            SH = 900
             return WIDTH, HEIGHT, SW, SH
         elif os.name == "posix":
             WIDTH  = 1
             HEIGHT = 1
-            SW = 650
-            SH = 600
+            SW = 700
+            SH = 700
             return WIDTH, HEIGHT, SW, SH
     except Exception:
         WIDTH  = 4
         HEIGHT = 2
-        SW = 850
-        SH = 850
+        SW = 900
+        SH = 900
         return WIDTH, HEIGHT, SW, SH
 
 
-def tablero_facil(window):
-    #Esta representacion interfiere con la deteccion de lugares posibles para poner una ficha, asiq es provisional porq ni vi otra forma
-    window.FindElement((0,0)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((1,1)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((2,2)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((3,3)).Update(image_filename=("imagenes/menos3.png"))
-    window.FindElement((4,4)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((5,5)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((6,6)).Update(image_filename=("imagenes/x2.png"))
+def tablero_especial(window,dificultad):
+    #Esta representacion interfiere con la deteccion de lugares posibles para poner una ficha, asiq es provisional porq ni vi otra forma 
+    for pos in POS_ESPECIALES[dificultad]["x2"]:
+        window.FindElement(pos).Update(image_filename=("imagenes/x2.png"))
+    for pos in POS_ESPECIALES[dificultad]["x2letra"]:
+        window.FindElement(pos).Update(image_filename=("imagenes/x2let.png"))
+    for pos in POS_ESPECIALES[dificultad]["x3"]:
+        window.FindElement(pos).Update(image_filename=("imagenes/x3.png"))
+    for pos in POS_ESPECIALES[dificultad]["x3letra"]:
+        window.FindElement(pos).Update(image_filename=("imagenes/x3let.png"))
+    for pos in POS_ESPECIALES[dificultad]["-2"]:
+        window.FindElement(pos).Update(image_filename=("imagenes/menos2.png"))
+    for pos in POS_ESPECIALES[dificultad]["-3"]:
+        window.FindElement(pos).Update(image_filename=("imagenes/menos3.png"))
+    
 
-    window.FindElement((14,14)).Update(image_filename=("imagenes/x3.png"))
-    window.FindElement((13,13)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((12,12)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((11,11)).Update(image_filename=("imagenes/menos3.png"))
-    window.FindElement((10,10)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((9,9)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((8,8)).Update(image_filename=("imagenes/x2.png"))
-
-    window.FindElement((0,14)).Update(image_filename=("imagenes/x3.png"))
-    window.FindElement((1,13)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((2,12)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((3,11)).Update(image_filename=("imagenes/menos3.png"))
-    window.FindElement((4,10)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((5,9)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((6,8)).Update(image_filename=("imagenes/x2.png"))
-
-    window.FindElement((14,0)).Update(image_filename=("imagenes/x3.png"))
-    window.FindElement((13,1)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((12,2)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((11,3)).Update(image_filename=("imagenes/menos3.png"))
-    window.FindElement((10,4)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((9,5)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((8,6)).Update(image_filename=("imagenes/x2.png"))
-
-    window.FindElement((7,0)).Update(image_filename=("imagenes/x3.png"))
-    window.FindElement((3,0)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((11,0)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((5,1)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((9,1)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((6,2)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((8,2)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((7,3)).Update(image_filename=("imagenes/menos2.png"))
-
-    window.FindElement((0,7)).Update(image_filename=("imagenes/x3.png"))
-    window.FindElement((0,3)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((0,11)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((1,5)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((1,9)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((2,6)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((2,8)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((3,7)).Update(image_filename=("imagenes/menos2.png"))
-
-    window.FindElement((7,14)).Update(image_filename=("imagenes/x3.png"))
-    window.FindElement((3,14)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((11,14)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((5,13)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((9,13)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((6,12)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((8,12)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((7,11)).Update(image_filename=("imagenes/menos2.png"))
-
-    window.FindElement((14,7)).Update(image_filename=("imagenes/x3.png"))
-    window.FindElement((14,3)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((14,11)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((13,5)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((13,9)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((12,6)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((12,8)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((11,7)).Update(image_filename=("imagenes/menos2.png"))
-
-
-def tablero_medio(window):
-    window.FindElement((0,0)).Update(image_filename=("imagenes/x3.png"))
-    window.FindElement((1,1)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((2,2)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((3,3)).Update(image_filename=("imagenes/menos3.png"))
-    window.FindElement((4,4)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((5,5)).Update(image_filename=("imagenes/menos2.png"))
-    window.FindElement((6,6)).Update(image_filename=("imagenes/x2.png"))
-
-    window.FindElement((14,14)).Update(image_filename=("imagenes/x3.png"))
-    window.FindElement((13,13)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((12,12)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((11,11)).Update(image_filename=("imagenes/menos3.png"))
-    window.FindElement((10,10)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((9,9)).Update(image_filename=("imagenes/menos2.png"))
-    window.FindElement((8,8)).Update(image_filename=("imagenes/x2.png"))
-
-    window.FindElement((0,14)).Update(image_filename=("imagenes/x3.png"))
-    window.FindElement((1,13)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((2,12)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((3,11)).Update(image_filename=("imagenes/menos3.png"))
-    window.FindElement((4,10)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((5,9)).Update(image_filename=("imagenes/menos2.png"))
-    window.FindElement((6,8)).Update(image_filename=("imagenes/x2.png"))
-
-    window.FindElement((14,0)).Update(image_filename=("imagenes/x3.png"))
-    window.FindElement((13,1)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((12,2)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((11,3)).Update(image_filename=("imagenes/menos3.png"))
-    window.FindElement((10,4)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((9,5)).Update(image_filename=("imagenes/menos2.png"))
-    window.FindElement((8,6)).Update(image_filename=("imagenes/x2.png"))
-
-    window.FindElement((7,0)).Update(image_filename=("imagenes/x3.png"))   
-    window.FindElement((3,0)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((11,0)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((5,1)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((9,1)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((6,2)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((8,2)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((7,3)).Update(image_filename=("imagenes/menos2.png"))
-
-    window.FindElement((0,7)).Update(image_filename=("imagenes/x3.png"))   
-    window.FindElement((0,3)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((0,11)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((1,5)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((1,9)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((2,6)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((2,8)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((3,7)).Update(image_filename=("imagenes/menos2.png"))
-
-    window.FindElement((7,14)).Update(image_filename=("imagenes/x3.png"))   
-    window.FindElement((3,14)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((11,14)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((5,13)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((9,13)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((6,12)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((8,12)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((7,11)).Update(image_filename=("imagenes/menos2.png"))
-
-    window.FindElement((14,7)).Update(image_filename=("imagenes/x3.png"))   
-    window.FindElement((14,3)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((14,11)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((13,5)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((13,9)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((12,6)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((12,8)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((11,7)).Update(image_filename=("imagenes/menos2.png"))
-
-
-def tablero_dificil(window):
-    window.FindElement((0,0)).Update(image_filename=("imagenes/x3.png"))
-
-    window.FindElement((2,2)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((3,3)).Update(image_filename=("imagenes/menos3.png"))
-    window.FindElement((4,4)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((5,5)).Update(image_filename=("imagenes/menos2.png"))
-
-
-    window.FindElement((14,14)).Update(image_filename=("imagenes/x3.png"))
-
-    window.FindElement((12,12)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((11,11)).Update(image_filename=("imagenes/menos3.png"))
-    window.FindElement((10,10)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((9,9)).Update(image_filename=("imagenes/menos2.png"))
-
-
-    window.FindElement((0,14)).Update(image_filename=("imagenes/x3.png"))
-
-    window.FindElement((2,12)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((3,11)).Update(image_filename=("imagenes/menos3.png"))
-    window.FindElement((4,10)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((5,9)).Update(image_filename=("imagenes/menos2.png"))
-
-
-    window.FindElement((14,0)).Update(image_filename=("imagenes/x3.png"))
-
-    window.FindElement((12,2)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((11,3)).Update(image_filename=("imagenes/menos3.png"))
-    window.FindElement((10,4)).Update(image_filename=("imagenes/x2.png"))
-    window.FindElement((9,5)).Update(image_filename=("imagenes/menos2.png"))
-
-
-    window.FindElement((7,0)).Update(image_filename=("imagenes/x3.png"))   
-    window.FindElement((3,0)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((11,0)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((5,1)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((9,1)).Update(image_filename=("imagenes/x2let.png"))
-
-
-    window.FindElement((7,3)).Update(image_filename=("imagenes/menos3.png"))
-
-    window.FindElement((0,7)).Update(image_filename=("imagenes/x3.png"))   
-    window.FindElement((0,3)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((0,11)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((1,5)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((1,9)).Update(image_filename=("imagenes/x2let.png"))
-
-
-    window.FindElement((3,7)).Update(image_filename=("imagenes/menos3.png"))
-
-    window.FindElement((7,14)).Update(image_filename=("imagenes/x3.png"))   
-    window.FindElement((3,14)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((11,14)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((5,13)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((9,13)).Update(image_filename=("imagenes/x2let.png"))
-
-
-    window.FindElement((7,11)).Update(image_filename=("imagenes/menos3.png"))
-
-    window.FindElement((14,7)).Update(image_filename=("imagenes/x3.png"))   
-    window.FindElement((14,3)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((14,11)).Update(image_filename=("imagenes/x3let.png"))
-    window.FindElement((13,5)).Update(image_filename=("imagenes/x2let.png"))
-    window.FindElement((13,9)).Update(image_filename=("imagenes/x2let.png"))
-
-
-    window.FindElement((11,7)).Update(image_filename=("imagenes/menos3.png"))
 
 
 def main(dificultad,datosC):
@@ -642,8 +474,7 @@ def main(dificultad,datosC):
         sigue=0
         juega= False
         
-#       turno_Act= random.choice(range(1,2)) #Genero de forma aleatoria quien inicia a jugar
-        turno_Act=1
+        
         tomo_ficha= False
         puede_colocar= False
         no_termina_turno= True
@@ -655,10 +486,12 @@ def main(dificultad,datosC):
         primera = 0
         poder_guardar = True
     
-    layout2 =  [[sg.B   ('', button_color=("black","white"), key=(i,j), size=(w,h), pad=(2,2)) for j in range(15)]  for i in range(15)]    
+    layout2 =  [[sg.B   ('', button_color=("black","white"), key=(i,j), size=(w,h), pad=(2,2), disabled_button_color=("black","white")) for j in range(15)]  for i in range(15)]    
+    layout2.append([sg.T("",font=('arial',15),key="-Turno-",size=(25,1),justification="r")])
     layout2.append([sg.T('Estante Jugador',	font=('arial',15)) ])
     layout2.append([sg.B('', button_color=("black","white"), key=(a), size=(w,h), pad=(2,2)) for a in range(7)]) #Desde que puse el layout3 y el layout aca se duplican keys???
-    layout2.append([sg.B('Jugar',size=(8,2)), sg.B('Guardar',size=(8,2),visible=False), sg.B('Confirmar Palabra', visible=False,size=(14,2),button_color=("black","green")), sg.B('Salir',size=(8,h))])
+    layout2.append([sg.B('Jugar',size=(8,2)), sg.B('Guardar',size=(8,2),visible=False), sg.B('Confirmar Palabra', visible=False,size=(14,2),button_color=("black","green")), sg.B("retornar ficha", size=(14,2),visible=False,button_color=("black","#FFA500"), key="-devolver_ficha-") ])
+    layout2.append([sg.B('Salir',size=(8,h))])
     
     layout3 = [
         [sg.T("Dificultad:", font=('arial',15)), sg.T(text=dificultad, font=("arial",15, ), size=(5,1))],
@@ -671,7 +504,7 @@ def main(dificultad,datosC):
     layout = [
         [sg.TabGroup([[sg.Tab('Tablero', layout2, key="elemt"), sg.Tab('Datos', layout3, key="elemd")]])]
     ]
-    window = sg.Window('ScrabbleAR', size=(sw,sh),element_justification='c').Layout(layout)
+    window = sg.Window('ScrabbleAR', size=(sw,sh),element_justification='c',resizable=True).Layout(layout)
     
     while True:
         if primera == 1:
@@ -695,13 +528,20 @@ def main(dificultad,datosC):
             window.FindElement('Jugar').Update(visible=False)
             window.FindElement('Guardar').Update(visible=True)
             if dificultad == "-facil-":
-                tablero_facil(window)
+                tablero_especial(window,"facil")
             elif dificultad == "-medio-":
-                tablero_medio(window)
+                tablero_especial(window,"medio")
             else:
-                tablero_dificil(window)
+                tablero_especial(window,"dificil")
             juega= True
             palabras_en_tablero = 0
+            turno_Act= random.choice(range(1,3)) #Genero de forma aleatoria quien inicia a jugar
+            
+            if turno_Act==1:
+                window.FindElement('-Turno-').Update(value="Turno de el jugador")
+            else:
+                window.FindElement('-Turno-').Update(value="Turno de la maquina")
+                
         elif juega:
             #Si ya se tocó el boton de jugar inicia a preguntar por los turnos y preparar el tablero para las jugadas
 
@@ -720,8 +560,10 @@ def main(dificultad,datosC):
 
                 
             #CLIKEA UNA FICHA
-                
+                if fichas_colocadas > -1:
+                    window.FindElement("-devolver_ficha-").Update(visible=True)
                 if event in range(7):
+                    window.FindElement("-devolver_ficha-").Update(visible=False)
                     window.FindElement('Guardar').Update(visible=False)
                     evento_ficha=event
                     estante= jugador_estante.get_estante()
@@ -730,6 +572,13 @@ def main(dificultad,datosC):
                     Estante.quitar_Ficha_De_Estante(Estante,evento_ficha, window)
                     sigue = 1
                     puede_colocar= True
+                elif event == "-devolver_ficha-":
+                    puede_colocar=False
+                    sigue=0
+                    Estante.retornar_Ficha_Al_Estante(Estante, evento_ficha, window)
+                    window.FindElement(pos_ficha_anterior[len(pos_ficha_anterior)-1]).Update(text="", image_filename=(("imagenes/"+ficha[0]+".png")))
+                    
+                    
            
            #COLOCA LA FICHA EN EL TABLERO
            
@@ -785,7 +634,7 @@ def main(dificultad,datosC):
                         #si la variable puede colocar está en true, el evento no es el atril y el evento es una tupla, coloco la ficha
                         window.FindElement(event).Update(text=ficha[0], image_filename=(("imagenes/"+ficha[0]+".png")))
                         tablero.bloquear_tablero(window)
-                        
+                        ATRIL_JUGADOR[evento_ficha]=True
                         #vuelvo a desbloquear el atril para que puedan seguir tomando fichas
                         
                         Estante.desbloquear_Estante(Estante,window)  
@@ -820,8 +669,9 @@ def main(dificultad,datosC):
                         puede_colocar=False
                         no_termina_turno=False
                         window.FindElement('Confirmar Palabra').Update(visible=False)
+                        window.FindElement('-Turno-').Update(value="Turno de la maquina")
                     else:
-                        sg.Popup("No era una palabra aaa")
+                        sg.Popup("No era una palabra")
 
                 if event == "Guardar":
                     datosg = guardar_partida(w,h,sw,sh,fichas_cant,fichas_punt,atril,jugador_estante,tablero,sigue,juega,turno_Act,tomo_ficha,puede_colocar,no_termina_turno,pos_ficha_anterior,fichas_colocadas,palabra_formada,dificultad,palabras_en_tablero)
@@ -835,6 +685,7 @@ def main(dificultad,datosC):
                 no_termina_turno=True
                 sigue=1
                 pos_ficha_anterior=[]
+                window.FindElement('-Turno-').Update(value="Turno de el jugador")
                 
                     
 
