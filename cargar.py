@@ -34,6 +34,7 @@ def c(a):
             return datos
     except FileNotFoundError:
         sg.Popup("No se encontro el archivo")
+        return None
 
 
 def borrar(a):
@@ -71,12 +72,15 @@ def main():
             break
         if event == '-c1-':
             datos = c("partida1.json")
-            Juego.main(None, datos)
+            if datos != None:
+                Juego.main(None, datos)
         if event == '-c2-':
             datos = c("partida2.json")
-            Juego.main(None, datos)
+            if datos != None:
+                Juego.main(None, datos)
         if event == '-c3-':
             datos = c("partida3.json")
-            Juego.main(None, datos)
+            if datos != None:
+                Juego.main(None, datos)
 
     window.close()

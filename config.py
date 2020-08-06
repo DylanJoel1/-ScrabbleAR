@@ -1,10 +1,11 @@
 import PySimpleGUI as sg
 import json
 from os import path
+import sys
+sys.path.insert(1, '/guardado')
 
-
-archivo_config = path.join(path.dirname(__file__), r'datos.json')
-default_config = path.join(path.dirname(__file__), r'datos_default.json')
+archivo_config = path.join(path.dirname(__file__), r'guardado/datos.json')
+default_config = path.join(path.dirname(__file__), r'guardado/datos_default.json')
 
 
 def val_hora(values, nhora, window):

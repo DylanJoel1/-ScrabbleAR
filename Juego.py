@@ -5,6 +5,9 @@ import json
 import random
 import datetime, time
 import os
+from os import path
+import sys
+sys.path.insert(1, '/imagenes')
 import puntos
 import guardar
 from funcionAutenticar import confirmar_Palabra
@@ -16,12 +19,12 @@ TIEMPO_LIMITE_PARTIDA = datetime.datetime.now() + datetime.timedelta(seconds=60)
 
 def cargar():
     try:
-        with open('datos.json', 'r') as jsonFile:
+        with open('guardado/datos.json', 'r') as jsonFile:
             datos = json.load(jsonFile)
         return datos
     except FileNotFoundError:
         sg.popup("No se encontró el archivo de configuracion, se procedera a crear uno...")
-        with open('datos_default.json', 'r') as jsonFile:
+        with open('guardado/datos_default.json', 'r') as jsonFile:
             datos = json.load(jsonFile)
         return datos
 
@@ -401,213 +404,213 @@ def so():
 
 def tablero_facil(window):
     #Esta representacion interfiere con la deteccion de lugares posibles para poner una ficha, asiq es provisional porq ni vi otra forma
-    window.FindElement((0,0)).Update(text="P x3")
-    window.FindElement((1,1)).Update(text="P x2")
-    window.FindElement((2,2)).Update(text="P x2")
-    window.FindElement((3,3)).Update(text="D -3")
-    window.FindElement((4,4)).Update(text="P x2")
-    window.FindElement((5,5)).Update(text="L x2")
-    window.FindElement((6,6)).Update(text="P x2")
+    window.FindElement((0,0)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((1,1)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((2,2)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((3,3)).Update(image_filename=("imagenes/menos3.png"))
+    window.FindElement((4,4)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((5,5)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((6,6)).Update(image_filename=("imagenes/x2.png"))
 
-    window.FindElement((14,14)).Update(text="P x3")
-    window.FindElement((13,13)).Update(text="P x2")
-    window.FindElement((12,12)).Update(text="P x2")
-    window.FindElement((11,11)).Update(text="D -3")
-    window.FindElement((10,10)).Update(text="P x2")
-    window.FindElement((9,9)).Update(text="L x2")
-    window.FindElement((8,8)).Update(text="P x2")
+    window.FindElement((14,14)).Update(image_filename=("imagenes/x3.png"))
+    window.FindElement((13,13)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((12,12)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((11,11)).Update(image_filename=("imagenes/menos3.png"))
+    window.FindElement((10,10)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((9,9)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((8,8)).Update(image_filename=("imagenes/x2.png"))
 
-    window.FindElement((0,14)).Update(text="P x3")
-    window.FindElement((1,13)).Update(text="P x2")
-    window.FindElement((2,12)).Update(text="P x2")
-    window.FindElement((3,11)).Update(text="D -3")
-    window.FindElement((4,10)).Update(text="P x2")
-    window.FindElement((5,9)).Update(text="L x2")
-    window.FindElement((6,8)).Update(text="P x2")
+    window.FindElement((0,14)).Update(image_filename=("imagenes/x3.png"))
+    window.FindElement((1,13)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((2,12)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((3,11)).Update(image_filename=("imagenes/menos3.png"))
+    window.FindElement((4,10)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((5,9)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((6,8)).Update(image_filename=("imagenes/x2.png"))
 
-    window.FindElement((14,0)).Update(text="P x3")
-    window.FindElement((13,1)).Update(text="P x2")
-    window.FindElement((12,2)).Update(text="P x2")
-    window.FindElement((11,3)).Update(text="D -3")
-    window.FindElement((10,4)).Update(text="P x2")
-    window.FindElement((9,5)).Update(text="L x2")
-    window.FindElement((8,6)).Update(text="P x2")
+    window.FindElement((14,0)).Update(image_filename=("imagenes/x3.png"))
+    window.FindElement((13,1)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((12,2)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((11,3)).Update(image_filename=("imagenes/menos3.png"))
+    window.FindElement((10,4)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((9,5)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((8,6)).Update(image_filename=("imagenes/x2.png"))
 
-    window.FindElement((7,0)).Update(text="P x3")
-    window.FindElement((3,0)).Update(text="L x3")
-    window.FindElement((11,0)).Update(text="L x3")
-    window.FindElement((5,1)).Update(text="L x2")
-    window.FindElement((9,1)).Update(text="L x2")
-    window.FindElement((6,2)).Update(text="L x2")
-    window.FindElement((8,2)).Update(text="L x2")
-    window.FindElement((7,3)).Update(text="D -1")
+    window.FindElement((7,0)).Update(image_filename=("imagenes/x3.png"))
+    window.FindElement((3,0)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((11,0)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((5,1)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((9,1)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((6,2)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((8,2)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((7,3)).Update(image_filename=("imagenes/menos2.png"))
 
-    window.FindElement((0,7)).Update(text="P x3")
-    window.FindElement((0,3)).Update(text="L x3")
-    window.FindElement((0,11)).Update(text="L x3")
-    window.FindElement((1,5)).Update(text="L x2")
-    window.FindElement((1,9)).Update(text="L x2")
-    window.FindElement((2,6)).Update(text="L x2")
-    window.FindElement((2,8)).Update(text="L x2")
-    window.FindElement((3,7)).Update(text="D -1")
+    window.FindElement((0,7)).Update(image_filename=("imagenes/x3.png"))
+    window.FindElement((0,3)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((0,11)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((1,5)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((1,9)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((2,6)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((2,8)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((3,7)).Update(image_filename=("imagenes/menos2.png"))
 
-    window.FindElement((7,14)).Update(text="P x3")
-    window.FindElement((3,14)).Update(text="L x3")
-    window.FindElement((11,14)).Update(text="L x3")
-    window.FindElement((5,13)).Update(text="L x2")
-    window.FindElement((9,13)).Update(text="L x2")
-    window.FindElement((6,12)).Update(text="L x2")
-    window.FindElement((8,12)).Update(text="L x2")
-    window.FindElement((7,11)).Update(text="D -1")
+    window.FindElement((7,14)).Update(image_filename=("imagenes/x3.png"))
+    window.FindElement((3,14)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((11,14)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((5,13)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((9,13)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((6,12)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((8,12)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((7,11)).Update(image_filename=("imagenes/menos2.png"))
 
-    window.FindElement((14,7)).Update(text="P x3")
-    window.FindElement((14,3)).Update(text="L x3")
-    window.FindElement((14,11)).Update(text="L x3")
-    window.FindElement((13,5)).Update(text="L x2")
-    window.FindElement((13,9)).Update(text="L x2")
-    window.FindElement((12,6)).Update(text="L x2")
-    window.FindElement((12,8)).Update(text="L x2")
-    window.FindElement((11,7)).Update(text="D -1")
+    window.FindElement((14,7)).Update(image_filename=("imagenes/x3.png"))
+    window.FindElement((14,3)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((14,11)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((13,5)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((13,9)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((12,6)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((12,8)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((11,7)).Update(image_filename=("imagenes/menos2.png"))
 
 
 def tablero_medio(window):
-    window.FindElement((0,0)).Update(text="P x3")
-    window.FindElement((1,1)).Update(text="P x2")
-    window.FindElement((2,2)).Update(text="P x2")
-    window.FindElement((3,3)).Update(text="D -3")
-    window.FindElement((4,4)).Update(text="P x2")
-    window.FindElement((5,5)).Update(text="D -2")
-    window.FindElement((6,6)).Update(text="P x2")
+    window.FindElement((0,0)).Update(image_filename=("imagenes/x3.png"))
+    window.FindElement((1,1)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((2,2)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((3,3)).Update(image_filename=("imagenes/menos3.png"))
+    window.FindElement((4,4)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((5,5)).Update(image_filename=("imagenes/menos2.png"))
+    window.FindElement((6,6)).Update(image_filename=("imagenes/x2.png"))
 
-    window.FindElement((14,14)).Update(text="P x3")
-    window.FindElement((13,13)).Update(text="P x2")
-    window.FindElement((12,12)).Update(text="P x2")
-    window.FindElement((11,11)).Update(text="D -3")
-    window.FindElement((10,10)).Update(text="P x2")
-    window.FindElement((9,9)).Update(text="D -2")
-    window.FindElement((8,8)).Update(text="P x2")
+    window.FindElement((14,14)).Update(image_filename=("imagenes/x3.png"))
+    window.FindElement((13,13)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((12,12)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((11,11)).Update(image_filename=("imagenes/menos3.png"))
+    window.FindElement((10,10)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((9,9)).Update(image_filename=("imagenes/menos2.png"))
+    window.FindElement((8,8)).Update(image_filename=("imagenes/x2.png"))
 
-    window.FindElement((0,14)).Update(text="P x3")
-    window.FindElement((1,13)).Update(text="P x2")
-    window.FindElement((2,12)).Update(text="P x2")
-    window.FindElement((3,11)).Update(text="D -3")
-    window.FindElement((4,10)).Update(text="P x2")
-    window.FindElement((5,9)).Update(text="D -2")
-    window.FindElement((6,8)).Update(text="P x2")
+    window.FindElement((0,14)).Update(image_filename=("imagenes/x3.png"))
+    window.FindElement((1,13)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((2,12)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((3,11)).Update(image_filename=("imagenes/menos3.png"))
+    window.FindElement((4,10)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((5,9)).Update(image_filename=("imagenes/menos2.png"))
+    window.FindElement((6,8)).Update(image_filename=("imagenes/x2.png"))
 
-    window.FindElement((14,0)).Update(text="P x3")
-    window.FindElement((13,1)).Update(text="P x2")
-    window.FindElement((12,2)).Update(text="P x2")
-    window.FindElement((11,3)).Update(text="D -3")
-    window.FindElement((10,4)).Update(text="P x2")
-    window.FindElement((9,5)).Update(text="D -2")
-    window.FindElement((8,6)).Update(text="P x2")
+    window.FindElement((14,0)).Update(image_filename=("imagenes/x3.png"))
+    window.FindElement((13,1)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((12,2)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((11,3)).Update(image_filename=("imagenes/menos3.png"))
+    window.FindElement((10,4)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((9,5)).Update(image_filename=("imagenes/menos2.png"))
+    window.FindElement((8,6)).Update(image_filename=("imagenes/x2.png"))
 
-    window.FindElement((7,0)).Update(text="P x3")   
-    window.FindElement((3,0)).Update(text="L x3")
-    window.FindElement((11,0)).Update(text="L x3")
-    window.FindElement((5,1)).Update(text="L x2")
-    window.FindElement((9,1)).Update(text="L x2")
-    window.FindElement((6,2)).Update(text="L x2")
-    window.FindElement((8,2)).Update(text="L x2")
-    window.FindElement((7,3)).Update(text="D -1")
+    window.FindElement((7,0)).Update(image_filename=("imagenes/x3.png"))   
+    window.FindElement((3,0)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((11,0)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((5,1)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((9,1)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((6,2)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((8,2)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((7,3)).Update(image_filename=("imagenes/menos2.png"))
 
-    window.FindElement((0,7)).Update(text="P x3")   
-    window.FindElement((0,3)).Update(text="L x3")
-    window.FindElement((0,11)).Update(text="L x3")
-    window.FindElement((1,5)).Update(text="L x2")
-    window.FindElement((1,9)).Update(text="L x2")
-    window.FindElement((2,6)).Update(text="L x2")
-    window.FindElement((2,8)).Update(text="L x2")
-    window.FindElement((3,7)).Update(text="D -1")
+    window.FindElement((0,7)).Update(image_filename=("imagenes/x3.png"))   
+    window.FindElement((0,3)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((0,11)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((1,5)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((1,9)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((2,6)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((2,8)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((3,7)).Update(image_filename=("imagenes/menos2.png"))
 
-    window.FindElement((7,14)).Update(text="P x3")   
-    window.FindElement((3,14)).Update(text="L x3")
-    window.FindElement((11,14)).Update(text="L x3")
-    window.FindElement((5,13)).Update(text="L x2")
-    window.FindElement((9,13)).Update(text="L x2")
-    window.FindElement((6,12)).Update(text="L x2")
-    window.FindElement((8,12)).Update(text="L x2")
-    window.FindElement((7,11)).Update(text="D -1")
+    window.FindElement((7,14)).Update(image_filename=("imagenes/x3.png"))   
+    window.FindElement((3,14)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((11,14)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((5,13)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((9,13)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((6,12)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((8,12)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((7,11)).Update(image_filename=("imagenes/menos2.png"))
 
-    window.FindElement((14,7)).Update(text="P x3")   
-    window.FindElement((14,3)).Update(text="L x3")
-    window.FindElement((14,11)).Update(text="L x3")
-    window.FindElement((13,5)).Update(text="L x2")
-    window.FindElement((13,9)).Update(text="L x2")
-    window.FindElement((12,6)).Update(text="L x2")
-    window.FindElement((12,8)).Update(text="L x2")
-    window.FindElement((11,7)).Update(text="D -1")
+    window.FindElement((14,7)).Update(image_filename=("imagenes/x3.png"))   
+    window.FindElement((14,3)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((14,11)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((13,5)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((13,9)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((12,6)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((12,8)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((11,7)).Update(image_filename=("imagenes/menos2.png"))
 
 
 def tablero_dificil(window):
-    window.FindElement((0,0)).Update(text="P x3")
+    window.FindElement((0,0)).Update(image_filename=("imagenes/x3.png"))
 
-    window.FindElement((2,2)).Update(text="P x2")
-    window.FindElement((3,3)).Update(text="D -3")
-    window.FindElement((4,4)).Update(text="P x2")
-    window.FindElement((5,5)).Update(text="D -2")
-
-
-    window.FindElement((14,14)).Update(text="P x3")
-
-    window.FindElement((12,12)).Update(text="P x2")
-    window.FindElement((11,11)).Update(text="D -3")
-    window.FindElement((10,10)).Update(text="P x2")
-    window.FindElement((9,9)).Update(text="D -2")
+    window.FindElement((2,2)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((3,3)).Update(image_filename=("imagenes/menos3.png"))
+    window.FindElement((4,4)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((5,5)).Update(image_filename=("imagenes/menos2.png"))
 
 
-    window.FindElement((0,14)).Update(text="P x3")
+    window.FindElement((14,14)).Update(image_filename=("imagenes/x3.png"))
 
-    window.FindElement((2,12)).Update(text="P x2")
-    window.FindElement((3,11)).Update(text="D -3")
-    window.FindElement((4,10)).Update(text="P x2")
-    window.FindElement((5,9)).Update(text="D -2")
-
-
-    window.FindElement((14,0)).Update(text="P x3")
-
-    window.FindElement((12,2)).Update(text="P x2")
-    window.FindElement((11,3)).Update(text="D -3")
-    window.FindElement((10,4)).Update(text="P x2")
-    window.FindElement((9,5)).Update(text="D -2")
+    window.FindElement((12,12)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((11,11)).Update(image_filename=("imagenes/menos3.png"))
+    window.FindElement((10,10)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((9,9)).Update(image_filename=("imagenes/menos2.png"))
 
 
-    window.FindElement((7,0)).Update(text="P x3")   
-    window.FindElement((3,0)).Update(text="L x3")
-    window.FindElement((11,0)).Update(text="L x3")
-    window.FindElement((5,1)).Update(text="L x2")
-    window.FindElement((9,1)).Update(text="L x2")
+    window.FindElement((0,14)).Update(image_filename=("imagenes/x3.png"))
+
+    window.FindElement((2,12)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((3,11)).Update(image_filename=("imagenes/menos3.png"))
+    window.FindElement((4,10)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((5,9)).Update(image_filename=("imagenes/menos2.png"))
 
 
-    window.FindElement((7,3)).Update(text="D -3")
+    window.FindElement((14,0)).Update(image_filename=("imagenes/x3.png"))
 
-    window.FindElement((0,7)).Update(text="P x3")   
-    window.FindElement((0,3)).Update(text="L x3")
-    window.FindElement((0,11)).Update(text="L x3")
-    window.FindElement((1,5)).Update(text="L x2")
-    window.FindElement((1,9)).Update(text="L x2")
-
-
-    window.FindElement((3,7)).Update(text="D -3")
-
-    window.FindElement((7,14)).Update(text="P x3")   
-    window.FindElement((3,14)).Update(text="L x3")
-    window.FindElement((11,14)).Update(text="L x3")
-    window.FindElement((5,13)).Update(text="L x2")
-    window.FindElement((9,13)).Update(text="L x2")
+    window.FindElement((12,2)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((11,3)).Update(image_filename=("imagenes/menos3.png"))
+    window.FindElement((10,4)).Update(image_filename=("imagenes/x2.png"))
+    window.FindElement((9,5)).Update(image_filename=("imagenes/menos2.png"))
 
 
-    window.FindElement((7,11)).Update(text="D -3")
-
-    window.FindElement((14,7)).Update(text="P x3")   
-    window.FindElement((14,3)).Update(text="L x3")
-    window.FindElement((14,11)).Update(text="L x3")
-    window.FindElement((13,5)).Update(text="L x2")
-    window.FindElement((13,9)).Update(text="L x2")
+    window.FindElement((7,0)).Update(image_filename=("imagenes/x3.png"))   
+    window.FindElement((3,0)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((11,0)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((5,1)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((9,1)).Update(image_filename=("imagenes/x2let.png"))
 
 
-    window.FindElement((11,7)).Update(text="D -3")
+    window.FindElement((7,3)).Update(image_filename=("imagenes/menos3.png"))
+
+    window.FindElement((0,7)).Update(image_filename=("imagenes/x3.png"))   
+    window.FindElement((0,3)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((0,11)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((1,5)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((1,9)).Update(image_filename=("imagenes/x2let.png"))
+
+
+    window.FindElement((3,7)).Update(image_filename=("imagenes/menos3.png"))
+
+    window.FindElement((7,14)).Update(image_filename=("imagenes/x3.png"))   
+    window.FindElement((3,14)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((11,14)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((5,13)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((9,13)).Update(image_filename=("imagenes/x2let.png"))
+
+
+    window.FindElement((7,11)).Update(image_filename=("imagenes/menos3.png"))
+
+    window.FindElement((14,7)).Update(image_filename=("imagenes/x3.png"))   
+    window.FindElement((14,3)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((14,11)).Update(image_filename=("imagenes/x3let.png"))
+    window.FindElement((13,5)).Update(image_filename=("imagenes/x2let.png"))
+    window.FindElement((13,9)).Update(image_filename=("imagenes/x2let.png"))
+
+
+    window.FindElement((11,7)).Update(image_filename=("imagenes/menos3.png"))
 
 
 def main(dificultad,datosC):
@@ -777,8 +780,7 @@ def main(dificultad,datosC):
                    
                     if puede_colocar and not( event in range(7)) and isinstance(event, tuple): 
                         #si la variable puede colocar está en true, el evento no es el atril y el evento es una tupla, coloco la ficha
-                        
-                        window.FindElement(event).Update(text=ficha[0])
+                        window.FindElement(event).Update(text=ficha[0], image_filename=(("imagenes/"+ficha[0]+".png")))
                         tablero.bloquear_tablero(window)
                         
                         #vuelvo a desbloquear el atril para que puedan seguir tomando fichas
@@ -788,7 +790,7 @@ def main(dificultad,datosC):
                         #agrego la ficha junto a su posicion para luego ver si hay un multiplicador
                         ficha_pos.update({ficha[0]:event})
                         fichas_colocadas=fichas_colocadas + 1
-                        sigue=0  
+                        sigue=0
                         palabra_formada+= ficha[0]
                 
                 if fichas_colocadas == 2:

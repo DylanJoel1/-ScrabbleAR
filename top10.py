@@ -1,10 +1,12 @@
 import PySimpleGUI as sg
 from config import cargar, cargar_default, guardar
 from os import path
+import sys
+sys.path.insert(1, '/guardado')
 
 
-archivo_config = path.join(path.dirname(__file__), r'top10.json')
-default_config = path.join(path.dirname(__file__), r'top10vacio.json')
+archivo_config = path.join(path.dirname(__file__), r'guardado/top10.json')
+default_config = path.join(path.dirname(__file__), r'guardado/top10vacio.json')
 
 
 def main():
