@@ -260,11 +260,11 @@ class Tablero:
         #Desbloquea todas las pos del tablero
         for m in range(15):
             for n in range(15):
-                window.FindElement((m,n)).Update(disabled=False, button_color=("black","green"))
+                window.FindElement((m,n)).Update(disabled=False, button_color=("green","green"))
 
     def desbloquear_Pos(self,window,x,y):
         #Desbloquea una pos en particular del tablero
-        window.FindElement((x,y)).Update(disabled=False, button_color=("black","green"))
+        window.FindElement((x,y)).Update(disabled=False, button_color=("green","green"))
 
     def bloquear_Pos(self,window,x,y):
         #Bloquea una pos en particular del tablero
@@ -655,7 +655,6 @@ def main(dificultad,datosC):
         primera = 0
         poder_guardar = True
     
-    #Por culpa de como esta escrito esto se bugean las imagenes
     layout2 =  [[sg.B   ('', button_color=("black","white"), key=(i,j), size=(w,h), pad=(2,2)) for j in range(15)]  for i in range(15)]    
     layout2.append([sg.T('Estante Jugador',	font=('arial',15)) ])
     layout2.append([sg.B('', button_color=("black","white"), key=(a), size=(w,h), pad=(2,2)) for a in range(7)]) #Desde que puse el layout3 y el layout aca se duplican keys???
