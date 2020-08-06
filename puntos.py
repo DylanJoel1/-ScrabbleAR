@@ -6,6 +6,9 @@ def puntaje_palabra (datos,palabra,window):
     pal = split(palabra)
     punt = 0
     for x in pal:
-        window["-out-"].print("Letra:" + x + " Puntaje:" + datos[x], text_color='green')
+        try:
+            window["-out-"].print("Letra:" + x + " Puntaje:" + datos[x], text_color='black')
+        except Exception:
+            pass
         punt += int(datos[x])
     return punt

@@ -442,15 +442,15 @@ def main(dificultad,datosC):
     
     layout2 =  [[sg.B   ('', button_color=("black","#F8F8F8"), key=(i,j), size=(w,h), pad=(2,2)) for j in range(15)]  for i in range(15)]    
     layout2.append([sg.T('Estante Jugador',	font=('arial',15)) ])
-    layout2.append([sg.B('', button_color=("black","#F8F8F8"), key=(a), size=(w,h), pad=(2,2)) for a in range(7)])
+    layout2.append([sg.B('', button_color=("black","#F8F8F8"), key=(a), size=(w,h), pad=(2,2)) for a in range(7)]) #Desde que puse el layout3 y el layout aca se duplican keys???
     layout2.append([sg.B('Jugar',size=(8,2)), sg.B('Guardar',size=(8,2),visible=False), sg.B('Confirmar Palabra', visible=False,size=(14,2),button_color=("black","green")), sg.B('Salir',size=(8,h))])
-
+    
     layout3 = [
         [sg.T("Puntaje Jugador:", font=('arial',15)), sg.T("0", font=("arial",15, ), size=(5,1), key="-puntaje-")],
         [sg.Multiline(size=(30,20), disabled=True, autoscroll=False, key="-out-")],
     ]
     layout = [
-        [sg.TabGroup([[sg.Tab('Tablero', layout2), sg.Tab('Datos', layout3)]])]
+        [sg.TabGroup([[sg.Tab('Tablero', layout2, key="elemt"), sg.Tab('Datos', layout3, key="elemd")]])]
     ]
     window = sg.Window('ScrabbleAR', size=(sw,sh),element_justification='c').Layout(layout)
     
