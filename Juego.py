@@ -53,7 +53,7 @@ def cargar():
         return datos
 
 
-def guardar_partida(w,h,sw,sh,fichas_cant,fichas_punt,atril,jugador_estante,tablero,sigue,juega,turno_Act,tomo_ficha,puede_colocar,no_termina_turno,pos_ficha_anterior,fichas_colocadas,palabra_formada,dificultad,palabras_en_tablero,ficha_pos):
+def guardar_partida(w,h,sw,sh,fichas_cant,fichas_punt,atril,jugador_estante,tablero,sigue,juega,turno_Act,tomo_ficha,puede_colocar,no_termina_turno,pos_ficha_anterior,fichas_colocadas,palabra_formada,dificultad,palabras_en_tablero,ficha_pos,pos_fichas_estante):
     atrilStr = atril.atril
     atril1 = []
     atril2 = []
@@ -70,7 +70,7 @@ def guardar_partida(w,h,sw,sh,fichas_cant,fichas_punt,atril,jugador_estante,tabl
         "w":w, "h":h, "sw":sw, "sh":sh, "fichas_cant":fichas_cant, "fichas_punt":fichas_punt, "atril1":atril1, "atril2":atril2, "jugador_estante":{"nombre":jugador_estante.nombre, "estante1":estante1, "estante2":estante2, "puntaje":jugador_estante.puntaje,}, 
         "tablero": tablero.tablero, "sigue":sigue, "juega":juega, "turno_Act":turno_Act, "tomo_ficha":tomo_ficha, "puede_colocar":puede_colocar, 
         "no_termina_turno":no_termina_turno, "pos_ficha_anterior":pos_ficha_anterior, "fichas_colocadas":fichas_colocadas, "palabra_formada":palabra_formada, "dificultad":dificultad,
-        "palabras_en_tablero":palabras_en_tablero, "ficha_pos":ficha_pos
+        "palabras_en_tablero":palabras_en_tablero, "ficha_pos":ficha_pos, "pos_fichas_estante":pos_fichas_estante
     }
     print(datos)
     return datos
@@ -472,6 +472,7 @@ def main(dificultad,datosC):
         primera = 1
         poder_guardar = False
         ficha_pos=datosC["ficha_pos"]
+        pos_fichas_estante=datosC["pos_fichas_estante"]
     else:
         w,h,sw,sh = so()
         fichas_cant, fichas_punt = datos(dificultad)
@@ -733,7 +734,7 @@ def main(dificultad,datosC):
                         
 
                 if event == "Guardar":
-                    datosg = guardar_partida(w,h,sw,sh,fichas_cant,fichas_punt,atril,jugador_estante,tablero,sigue,juega,turno_Act,tomo_ficha,puede_colocar,no_termina_turno,pos_ficha_anterior,fichas_colocadas,palabra_formada,dificultad,palabras_en_tablero,ficha_pos)
+                    datosg = guardar_partida(w,h,sw,sh,fichas_cant,fichas_punt,atril,jugador_estante,tablero,sigue,juega,turno_Act,tomo_ficha,puede_colocar,no_termina_turno,pos_ficha_anterior,fichas_colocadas,palabra_formada,dificultad,palabras_en_tablero,ficha_pos,pos_fichas_estante)
                     guardar.main(datosg)
 
             elif (turno_Act==2):
