@@ -211,7 +211,7 @@ class Estante:
         window.FindElement(bot).Update(text="",button_color=("black", "orange"), visible=False)
     
     def retornar_Ficha_Al_Estante(self,pos,window):
-        window.FindElement(pos).Update(image_filename=(("imagenes/"+ATRIL_JUGADOR[pos]+".png")),visible=True)
+        window.FindElement(pos).Update(image_filename=(("imagenes/"+ATRIL_JUGADOR[pos].upper()+".png")),visible=True)
         self.desbloquear_Estante(window)
 
 class Jugador:
@@ -725,6 +725,9 @@ def main(dificultad,datosC):
                             else:
                                 print("ENTRA") 
                                 tablero.quitar_elemento(window,pos)
+                            tablero.tablero[pos[0]][pos[1]]=False
+                        pos_ficha_anterior=[]
+                        fichas_colocadas=0
                         
 
                 if event == "Guardar":
