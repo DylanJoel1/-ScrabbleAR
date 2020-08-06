@@ -270,6 +270,30 @@ class Tablero:
     def bloquear_Pos(self,window,x,y):
         #Bloquea una pos en particular del tablero
         window.FindElement((x,y)).Update(disabled= True,button_color=("black","white"),disabled_button_color=("black","white"))
+    
+    def Pos_Libres_Tablero(self):
+        #Funcion que retorna una lista con las coordenadas de las pos disponibles adyacentes a las palabras formadas en el tablero
+        coords=[]
+        for m in range(15):
+            for n in range(15):
+                if self.tablero[m][n]==True:
+                    if m > 0:
+                    #si no es la primera fila
+                        if self.tablero[m-1][n]==False:
+                            coords.append((m-1,n))
+                    if m<14:
+                        #si no estoy en la ultima fila
+                        if self.tablero[m+1][n]==False:
+                            coords.append((m+1,n))
+                    if n > 0:
+                        #si no es la primera columna:
+                        if self.tablero[m][n-1] == False:
+                             coords.append((m,n-1))
+                    if n< 14:
+                         #Si no estoy en la ultima columna:
+                        if self.tablero[m][n+1]== False:
+                             coords.append((m,n+1))
+        return coords
 
 
 def estante_ps(estante, window):
@@ -408,9 +432,8 @@ def main(dificultad,datosC):
         sigue=0
         juega= False
         
-        turno_opciones=["jugador","maquina"]
-#        turno_Act= random.choice(turno_opciones) #Genero de forma aleatoria quien inicia a jugar
-        turno_Act="jugador"
+#       turno_Act= random.choice(range(1,2)) #Genero de forma aleatoria quien inicia a jugar
+        turno_Act=1
         tomo_ficha= False
         puede_colocar= False
         no_termina_turno= True
@@ -452,9 +475,9 @@ def main(dificultad,datosC):
             window.FindElement('Jugar').Update(visible=False)
             window.FindElement('Guardar').Update(visible=True)
             juega= True
+            palabras_en_tablero = 0
         elif juega:
             #Si ya se tocó el boton de jugar inicia a preguntar por los turnos y preparar el tablero para las jugadas
-            palabras_en_tablero = 0
 
             if (palabras_en_tablero==0 and fichas_colocadas==0 ):  
                #si no hay palabras en el tablero y tampoco hay fichas colocadas solo desbloqueo el centro del tablero
@@ -464,7 +487,7 @@ def main(dificultad,datosC):
            #TURNO JUGADOR
            
 
-            if (turno_Act == "jugador") and (no_termina_turno):   #si es el turno del jugador y su turno aun no finaliza...
+            if (turno_Act == 1) and (no_termina_turno):   #si es el turno del jugador y su turno aun no finaliza...
                 if poder_guardar:
                     window.FindElement('Guardar').Update(visible=True)
                     poder_guardar = False
@@ -487,7 +510,10 @@ def main(dificultad,datosC):
                 if (sigue==1):
                     
                     if fichas_colocadas==0 and palabras_en_tablero > 0:
-                        pass
+                        #Si ya hay palabras formadas en el tablero y no coloqué fichas, desbloqueo todas las pos adyacentes a las palabras formadas
+                        pos_adyacentes= tablero.Pos_Libres_Tablero()
+                        for pos in pos_adyacentes:
+                            tablero.desbloquear_Pos(window,pos[0],pos[1])
                         
                    
                     if fichas_colocadas == 1 :  
@@ -556,7 +582,7 @@ def main(dificultad,datosC):
                         poder_guardar=True
                         tablero.mostrar_estado()
                         sigue=0
-                        turno_Act="Maquina"
+                        turno_Act=2
                         palabras_en_tablero+=1
                         fichas_colocadas=0
                         puede_colocar=False
@@ -569,8 +595,14 @@ def main(dificultad,datosC):
                     datosg = guardar_partida(w,h,sw,sh,fichas_cant,fichas_punt,atril,jugador_estante,tablero,sigue,juega,turno_opciones,turno_Act,tomo_ficha,puede_colocar,no_termina_turno,pos_ficha_anterior,fichas_colocadas,palabra_formada,dificultad,palabras_en_tablero)
                     guardar.main(datosg)
 
-            elif (turno_Act=="maquina"):
-                sg.Popup("Ahora le toca a la maquina")
+            elif (turno_Act==2):
+
+                sg.Popup("Ahora le toca a la maquina, clickea un boton del atril para continuar")
+                time.sleep(1)
+                turno_Act=1
+                no_termina_turno=True
+                sigue=1
+                pos_ficha_anterior=[]
                 
                     
 
