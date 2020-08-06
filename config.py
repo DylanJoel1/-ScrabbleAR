@@ -244,17 +244,23 @@ def Config():
 
 
     facil_layout = [
-        [sg.T("Facil", justification="center", font=(FUENTE,20), size=(55,1),background_color="#00FFFF",text_color="#000080")],
+        [sg.T("Fácil", justification="center", font=(FUENTE,20), size=(54,1),background_color="#00FFFF",text_color="#000080")],
+        [sg.T("A continuación podrá configurar la partida para la dificultad seleccionada. La minima duración de partida es de 1 minuto.", justification="center", size=(110,1))],
+        [sg.T("P y C significan Puntos y Cantidad respectivamente. No se pueden cambiar los tipos de palabras permitidas.", justification="center", size=(110,1))],
         [sg.Column(columnaf1), sg.Column(columnaf2), sg.Column(columnaf3), sg.Column(columnahf)]
     ]
 
     medio_layout = [
-        [sg.T("Medio", justification="center", font=(FUENTE,20), size=(55,1),background_color="#00FFFF",text_color="#000080" )],
+        [sg.T("Medio", justification="center", font=(FUENTE,20), size=(54,1),background_color="#00FFFF",text_color="#000080" )],
+        [sg.T("A continuación podrá configurar la partida para la dificultad seleccionada. La minima duración de partida es de 1 minuto.", justification="center", size=(110,1))],
+        [sg.T("P y C significan Puntos y Cantidad respectivamente. No se pueden cambiar los tipos de palabras permitidas.", justification="center", size=(110,1))],
         [sg.Column(columnam1), sg.Column(columnam2), sg.Column(columnam3), sg.Column(columnahm)]
     ]
 
     dificil_layout = [
-        [sg.T("Dificil", justification="center", font=(FUENTE,20), size=(55,1),background_color="#00FFFF",text_color="#000080" )],
+        [sg.T("Difícil", justification="center", font=(FUENTE,20), size=(54,1),background_color="#00FFFF",text_color="#000080" )],
+        [sg.T("A continuación podrá configurar la partida para la dificultad seleccionada. La minima duración de partida es de 1 minuto.", justification="center", size=(110,1))],
+        [sg.T("P y C significan Puntos y Cantidad respectivamente. No se pueden cambiar los tipos de palabras permitidas.", justification="center", size=(110,1))],
         [sg.Column(columnad1), sg.Column(columnad2), sg.Column(columnad3), sg.Column(columnahd)]
     ]
 

@@ -26,11 +26,7 @@ def cargar():
         return datos
 
 
-def cargar_partida(datos):
-    pass
-
-
-def guardar_partida(w,h,sw,sh,fichas_cant,fichas_punt,atril,jugador_estante,tablero,sigue,juega,turno_opciones,turno_Act,tomo_ficha,puede_colocar,no_termina_turno,pos_ficha_anterior,fichas_colocadas,palabra_formada,dificultad,palabras_en_tablero):
+def guardar_partida(w,h,sw,sh,fichas_cant,fichas_punt,atril,jugador_estante,tablero,sigue,juega,turno_Act,tomo_ficha,puede_colocar,no_termina_turno,pos_ficha_anterior,fichas_colocadas,palabra_formada,dificultad,palabras_en_tablero):
     atrilStr = atril.atril
     atril1 = []
     atril2 = []
@@ -45,7 +41,7 @@ def guardar_partida(w,h,sw,sh,fichas_cant,fichas_punt,atril,jugador_estante,tabl
         estante2.append(x.valor)
     datos = {
         "w":w, "h":h, "sw":sw, "sh":sh, "fichas_cant":fichas_cant, "fichas_punt":fichas_punt, "atril1":atril1, "atril2":atril2, "jugador_estante":{"nombre":jugador_estante.nombre, "estante1":estante1, "estante2":estante2, "puntaje":jugador_estante.puntaje,}, 
-        "tablero": tablero.tablero, "sigue":sigue, "juega":juega, "turno_opciones":turno_opciones, "turno_Act":turno_Act, "tomo_ficha":tomo_ficha, "puede_colocar":puede_colocar, 
+        "tablero": tablero.tablero, "sigue":sigue, "juega":juega, "turno_Act":turno_Act, "tomo_ficha":tomo_ficha, "puede_colocar":puede_colocar, 
         "no_termina_turno":no_termina_turno, "pos_ficha_anterior":pos_ficha_anterior, "fichas_colocadas":fichas_colocadas, "palabra_formada":palabra_formada, "dificultad":dificultad,
         "palabras_en_tablero":palabras_en_tablero
     }
@@ -404,7 +400,7 @@ def so():
 
 def main(dificultad,datosC):
     if datosC != None:
-        dificulad = datosC["dificultad"]
+        dificultad = datosC["dificultad"]
         w,h,sw,sh = so()
         fichas_cant, fichas_punt = datosC["fichas_cant"],datosC["fichas_punt"]
         atril = Atril(None,None,datosC)
@@ -412,7 +408,6 @@ def main(dificultad,datosC):
         tablero= Tablero(datosC)
         sigue=datosC["sigue"]
         juega=datosC["juega"]
-        turno_opciones=datosC["turno_opciones"]
         turno_Act=datosC["turno_Act"]
         tomo_ficha= datosC["tomo_ficha"]
         puede_colocar= datosC["puede_colocar"]
@@ -444,14 +439,20 @@ def main(dificultad,datosC):
         primera = 0
         poder_guardar = True
     
-    layout2 =  [[sg.B   ('', button_color=("black","#F8F8F8"), key=(i,j), size=(w,h), pad=(2,2)) for j in range(15)]  for i in range(15)]
-    layout2.append([sg.T("Puntaje:", font=('arial',15)), sg.T("0", font=("arial",15, ), size=(5,1), key="-puntaje-")])
-    layout2.append([sg.T('Estante',	font=('arial',15)) ])
-    layout2.append([sg.B('', button_color=("black","#F8F8F8"), key=(a), size=(w,h), pad=(2,2)) for a in range(7)])
-    layout2.append([sg.B('Confirmar Palabra', visible=False,size=(14,2),button_color=("black","green"))])
-    layout2.append([sg.B('Jugar',size=(8,2)), sg.B('Guardar',size=(8,2),visible=False), sg.Button('Salir',size=(8,h))])
     
-    window = sg.Window('ScrabbleAr', size=(sw,sh),element_justification='c').Layout(layout2)
+    layout2 =  [[sg.B   ('', button_color=("black","#F8F8F8"), key=(i,j), size=(w,h), pad=(2,2)) for j in range(15)]  for i in range(15)]    
+    layout2.append([sg.T('Estante Jugador',	font=('arial',15)) ])
+    layout2.append([sg.B('', button_color=("black","#F8F8F8"), key=(a), size=(w,h), pad=(2,2)) for a in range(7)])
+    layout2.append([sg.B('Jugar',size=(8,2)), sg.B('Guardar',size=(8,2),visible=False), sg.B('Confirmar Palabra', visible=False,size=(14,2),button_color=("black","green")), sg.B('Salir',size=(8,h))])
+
+    layout3 = [
+        [sg.T("Puntaje Jugador:", font=('arial',15)), sg.T("0", font=("arial",15, ), size=(5,1), key="-puntaje-")],
+        [sg.Multiline(size=(30,20), disabled=True, autoscroll=False, key="-out-")],
+    ]
+    layout = [
+        [sg.TabGroup([[sg.Tab('Tablero', layout2), sg.Tab('Datos', layout3)]])]
+    ]
+    window = sg.Window('ScrabbleAR', size=(sw,sh),element_justification='c').Layout(layout)
     
     while True:
         if primera == 1:
@@ -578,7 +579,7 @@ def main(dificultad,datosC):
                     if (confirmar_Palabra(palabra_formada, "facil")):
                         for pos in pos_ficha_anterior:
                             tablero.tablero[pos[0]][pos[1]]=True
-                        jugador_estante.incrementar_puntaje(puntos.puntaje_palabra(fichas_punt,palabra_formada),window) #Dante: agregue el puntaje
+                        jugador_estante.incrementar_puntaje(puntos.puntaje_palabra(fichas_punt,palabra_formada,window),window) #Dante: agregue el puntaje
                         poder_guardar=True
                         tablero.mostrar_estado()
                         sigue=0
@@ -592,7 +593,7 @@ def main(dificultad,datosC):
                         sg.Popup("No era una palabra aaa")
 
                 if event == "Guardar":
-                    datosg = guardar_partida(w,h,sw,sh,fichas_cant,fichas_punt,atril,jugador_estante,tablero,sigue,juega,turno_opciones,turno_Act,tomo_ficha,puede_colocar,no_termina_turno,pos_ficha_anterior,fichas_colocadas,palabra_formada,dificultad,palabras_en_tablero)
+                    datosg = guardar_partida(w,h,sw,sh,fichas_cant,fichas_punt,atril,jugador_estante,tablero,sigue,juega,turno_Act,tomo_ficha,puede_colocar,no_termina_turno,pos_ficha_anterior,fichas_colocadas,palabra_formada,dificultad,palabras_en_tablero)
                     guardar.main(datosg)
 
             elif (turno_Act==2):
