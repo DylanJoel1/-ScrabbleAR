@@ -2,6 +2,8 @@ Integrantes del grupo numero 27:
 Migueles Dylan -
 Gramblicka Dante
 
+Todas las imagenes usadas fueron creadas por los integrantes del grupo.
+
 Para ejecutar el juego:
 Python 3.6.8 con PySimpleGui 4.26.0 y Pattern 2.6
 
