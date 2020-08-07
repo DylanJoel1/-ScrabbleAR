@@ -6,6 +6,7 @@ import sys
 sys.path.insert(1, '/guardado')
 
 def comprobar(window):
+    #Se comprueba si existen los archivos para asi representar graficamente al usuario su existencia o no
     try:
         with open("guardado/partida1.json", 'r'):
             window.FindElement('-g1-').Update(button_color=('black','grey'))
@@ -30,6 +31,7 @@ def comprobar(window):
 
 
 def borrar(a):
+    #Borra un archivo
     os.remove(a)
 
 

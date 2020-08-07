@@ -2,6 +2,7 @@ def split(palabra):
     return [caracter for caracter in palabra]
 
 def multilet(pos,key,dificultad,fichas_punt,POS_ESPECIALES,window):
+    #Se aplican los multiplicadores si alguna letra de la palabra esta sobre alguno de estos
     agregado = 0
     try:
         if dificultad == "-facil-":
@@ -37,6 +38,7 @@ def multilet(pos,key,dificultad,fichas_punt,POS_ESPECIALES,window):
 
 
 def multipal(pos1,pos2,dificultad,punt,POS_ESPECIALES,window):
+    #Se aplican los multiplicadores/descuentos si la palabra esta sobre alguno de estos
     try:
         if dificultad == "-facil-":
             for p in POS_ESPECIALES["facil"]["x2"]:
@@ -95,6 +97,7 @@ def multipal(pos1,pos2,dificultad,punt,POS_ESPECIALES,window):
 
 
 def puntaje_palabra (datos,palabra,window):
+    #Define el puntaje de cada letra de la palabra
     pal = split(palabra)
     punt = 0
     try:
