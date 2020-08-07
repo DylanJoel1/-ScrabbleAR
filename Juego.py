@@ -525,13 +525,22 @@ def main(dificultad,datosC):
     layout2.append([sg.B('Salir',size=(8,h),button_color=("black","#ff4d4d")),sg.B('Guardar',size=(8,2),visible=False)])
     
     layout3 = [
-        [sg.T("Dificultad:", font=('arial',15)), sg.T(text=dificultad, font=("arial",15, ), size=(5,1))],
         [sg.T("Puntaje Jugador:", font=('arial',15)), sg.T("0", font=("arial",15, ), size=(5,1), key="-puntaje-")],
         [sg.Multiline(size=(30,20), disabled=True, autoscroll=False, key="-out-")],
         [sg.T("Casillas con premio o descuento:", font=('arial',15))],
         [sg.T("Palabras x2:"), sg.B("", image_filename="imagenes/x2.png"), sg.T("Palabras x3:"), sg.B("", image_filename="imagenes/x3.png"), sg.T("Letras x2:"), sg.B("", image_filename="imagenes/x2let.png"), sg.T("Letras x3:"), sg.B("", image_filename="imagenes/x3let.png")],
         [sg.T("Descuento -1:"), sg.B("", image_filename="imagenes/menos1.png"), sg.T("Descuento -2:"), sg.B("", image_filename="imagenes/menos2.png"), sg.T("Descuento -3:"), sg.B("", image_filename="imagenes/menos3.png"),]
     ]
+    if dificultad == "-facil-":
+        layout3.append([sg.T("Dificultad:", font=('arial',15)), sg.T(text="Fácil", font=("arial",15, ), size=(5,1))])
+        layout3.append([sg.T("Se permite cualquier tipo de palabra")])
+    elif dificultad == "-medio-":
+        layout3.append([sg.T("Dificultad:", font=('arial',15)), sg.T(text="Medio", font=("arial",15, ), size=(5,1))])
+        layout3.append([sg.T("Solo se permiten verbos y adjetivos")])
+    else:
+        layout3.append([sg.T("Dificultad:", font=('arial',15)), sg.T(text="Difícil", font=("arial",15, ), size=(5,1))])
+        layout3.append([sg.T("Solo se permiten verbos y adjetivos")])
+
     layout = [
         [sg.TabGroup([[sg.Tab('Tablero', layout2, key="elemt"), sg.Tab('Datos', layout3, key="elemd")]])]
     ]
