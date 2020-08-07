@@ -343,6 +343,9 @@ class Tablero:
                         if self.tablero[m][n+1]== False:
                              coords.append((m,n+1))
         return coords
+    
+
+
 
 
 def estante_ps(estante, window):
@@ -418,6 +421,7 @@ def hay_espacio(window,lista_pos, direc="disponibles"): #Funcion que retorna si 
             return False
     elif direc=="arriba":
         if lista_pos[0] !=0:
+
             if (window.FindElement((lista_pos[0]-1,lista_pos[1])).GetText() !=""):
                 return False
             return True
@@ -612,6 +616,8 @@ def main(dificultad,datosC):
                 if fichas_colocadas > -1:
                     #Si ya colocó una ficha aparece el boton para recuperarla
                     window.FindElement("-devolver_ficha-").Update(visible=True)
+                else:
+                    window.FindElement("-devolver_ficha-").Update(visible=False)
                     
                     jugador_estante
                 if event in range(7):
@@ -625,12 +631,31 @@ def main(dificultad,datosC):
                     jugador_estante.estante.quitar_Ficha_De_Estante(evento_ficha, window)
                     sigue = 1
                     puede_colocar= True
-                elif event == "-devolver_ficha-":
+                if event == "-devolver_ficha-" and fichas_colocadas>0:
                     puede_colocar=False
                     sigue=0
-                    jugador_estante.estante.retornar_Ficha_Al_Estante( window,evento_ficha)
-                    window.FindElement(pos_ficha_anterior[len(pos_ficha_anterior)-1]).Update(text="", image_filename=(""),image_size=(36,38))
+                    jugador_estante.estante.retornar_Ficha_Al_Estante( window,pos_fichas_estante[len(pos_fichas_estante)-1])
+                    pos= pos_ficha_anterior[len(pos_ficha_anterior)-1]
+                    if pos in POS_ESPECIALES[dificultad.replace("-", "")]["x2"]:
+                        tablero.quitar_elemento(window,pos,"x2")
+                    elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["x2letra"]:
+                        tablero.quitar_elemento(window,pos,"x2let")
+                    elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["x3"]:
+                        tablero.quitar_elemento(window,pos,"x3")  
+                    elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["x3letra"]:
+                        tablero.quitar_elemento(window,pos,"x3let")
+                    elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["-2"]:
+                        tablero.quitar_elemento(window,pos,"menos2")
+                    elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["-3"]:
+                        tablero.quitar_elemento(window,pos,"menos3")
+                    else:
+                        tablero.quitar_elemento(window,pos)
+                    tablero.tablero[pos[0]][pos[1]]=False
                     fichas_colocadas-=1
+                    ATRIL_JUGADOR[pos_fichas_estante[len(pos_fichas_estante)-1]]=""
+                    pos_fichas_estante.pop()
+                    pos_ficha_anterior.pop()
+
                     window.finalize()
                     
                     
@@ -759,6 +784,7 @@ def main(dificultad,datosC):
                             else:
                                 tablero.quitar_elemento(window,pos)
                             tablero.tablero[pos[0]][pos[1]]=False
+                    
                         pos_ficha_anterior=[]
                         pos_fichas_estante=[]
                         fichas_colocadas=0
