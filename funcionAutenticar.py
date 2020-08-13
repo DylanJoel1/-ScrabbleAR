@@ -18,7 +18,7 @@ def tipo_Palabra(pal, dif):     #la funcion pregunta si el tipo de palabra se en
 	if(dif == '-facil-'):
 		return True
 	elif(dif == '-medio-'):                       #En caso de ser la dificultad "medio", pregunto por solo 2 tipo de palabras en el diccionario
-		if ((pal in TIPO['sus']) or (pal in TIPO["adj"])):
+		if ((pal in TIPO['verb']) or (pal in TIPO["adj"])):
 			return True
 	else:                                       #En caso de ser dificil la palabra debe ser de un tipo generado aleatoriamente
 		if (pal in TIPO["verb"]):

@@ -296,6 +296,7 @@ class Tablero:
         window.FindElement((pos[0],pos[1])).Update(text=element)
     
     def quitar_elemento(self, window,pos ,img=""):
+        self.tablero[pos[0]][pos[1]]=False
         if img != "":
             window.FindElement(pos).Update(text="",image_filename=("imagenes/"+img+".png"))
         else:
@@ -389,32 +390,38 @@ def salir_juego(evento):
     if evento is None or evento == 'Salir':
         return True
 
-def hay_espacio(window,lista_pos, direc="disponibles"): #Funcion que retorna si es válido o no colocar una ficha en la posición de la direccion asignada. En caso de no dar una direccion retorna una lista con todas las posiciones válidas que rodeen a la ultima ficha colocada.
+def hay_espacio(window,lista_pos,tablero, direc="disponibles"): #Funcion que retorna si es válido o no colocar una ficha en la posición de la direccion asignada. En caso de no dar una direccion retorna una lista con todas las posiciones válidas que rodeen a la ultima ficha colocada.
     if direc== "disponibles":
         aux=[]
         if lista_pos[0] != 0:
-            if window.FindElement((lista_pos[0]-1,lista_pos[1])).GetText() == "":
+            if tablero.tablero[lista_pos[0]-1][lista_pos[1]] == False:
                 aux.append([lista_pos[0]-1,lista_pos[1]])
         if lista_pos[0] != 15:    
-            if window.FindElement((lista_pos[0]+1,lista_pos[1])).GetText() == "":
+            if tablero.tablero[lista_pos[0]+1][lista_pos[1]] == False:
                 aux.append([lista_pos[0]+1,lista_pos[1]])
         if lista_pos[1] != 0:
-            if window.FindElement((lista_pos[0],lista_pos[1]-1)).GetText() == "":
+           
+            if tablero.tablero[lista_pos[0]][lista_pos[1]-1] == False:
                 aux.append([lista_pos[0], lista_pos[1]-1])
         if lista_pos[1] != 15:
-            if window.FindElement((lista_pos[0],lista_pos[1]+1)).GetText() == "":
+    
+            if tablero.tablero[lista_pos[0]][lista_pos[1]+1] == False:
                 aux.append([lista_pos[0],lista_pos[1]+1])
         return aux
     elif direc== "derecha":
         if lista_pos[1] != 15:
-            if window.FindElement((lista_pos[0],lista_pos[1]+1)).GetText() != "":
+        
+            if tablero.tablero[lista_pos[0]][lista_pos[1]+1] == True:
+
                 return False
             return True
         else:
             return False
+            
     elif direc=="izquierda":
         if lista_pos[1] !=0:
-            if (window.FindElement((lista_pos[0],lista_pos[1]-1)).GetText() != ""):
+            
+            if tablero.tablero[lista_pos[0]][lista_pos[1]-1] == True:
                 return False
             return True
         else:
@@ -422,14 +429,16 @@ def hay_espacio(window,lista_pos, direc="disponibles"): #Funcion que retorna si 
     elif direc=="arriba":
         if lista_pos[0] !=0:
 
-            if (window.FindElement((lista_pos[0]-1,lista_pos[1])).GetText() !=""):
+            if tablero.tablero[lista_pos[0]-1][lista_pos[1]] == True:
+
                 return False
             return True
         else:
             return False
     elif direc=="abajo":
         if lista_pos[0] !=15:
-            if(window.FindElement((lista_pos[0]+1,lista_pos[1])).GetText() !=""):
+
+            if tablero.tablero[lista_pos[0]+1][lista_pos[1]] == True:
                 return False
             return True
         else:
@@ -673,7 +682,7 @@ def main(dificultad,datosC):
                    
                     if fichas_colocadas == 1 :  
                         #Si ya colocó una ficha desbloqueo los lugares disponibles que esten adyacentes a la primera ficha colocada 
-                        pos_disponibles= hay_espacio(window,pos_ficha_anterior[0])
+                        pos_disponibles= hay_espacio(window,pos_ficha_anterior[0],tablero)
                         for pos in pos_disponibles:
                             tablero.desbloquear_Pos(window,pos[0],pos[1])
                     
@@ -682,12 +691,14 @@ def main(dificultad,datosC):
                         
                         if pos_ficha_anterior[0][0] == pos_ficha_anterior[len(pos_ficha_anterior)-1][0]:   
                             #si en la lista de posiciones no cambió el primer valor (el valor de las filas) es porque la palabra se está formando de forma horizontal
-                            if(pos_ficha_anterior[0][1] < pos_ficha_anterior[len(pos_ficha_anterior)-1][1] and hay_espacio(window,pos_ficha_anterior[len(pos_ficha_anterior)-1],"derecha")): 
+                            
+                            if(pos_ficha_anterior[0][1] < pos_ficha_anterior[len(pos_ficha_anterior)-1][1] and hay_espacio(window,pos_ficha_anterior[len(pos_ficha_anterior)-1],tablero,"derecha")): 
                                 #si el valor de la columna de la primera letra colocada es menor al de la ultima letra colocada, la palabra se está formando hacia la derecha
                                 tablero.desbloquear_Pos(window,pos_ficha_anterior[len(pos_ficha_anterior)-1][0],pos_ficha_anterior[len(pos_ficha_anterior)-1][1]+1)
-                            elif pos_ficha_anterior[0][1] > pos_ficha_anterior[len(pos_ficha_anterior)-1][1] and hay_espacio(window,pos_ficha_anterior[0],"izquierda"):
+                            
+                            elif pos_ficha_anterior[0][1] > pos_ficha_anterior[len(pos_ficha_anterior)-1][1] and hay_espacio(window,pos_ficha_anterior[len(pos_ficha_anterior)-1],tablero,"izquierda"):
                                 #Si la columna de la ultima ficha colocada tiene un valor menor a la primera ficha colocada entonces la palabra se está formando hacia la izquierda
-                                tablero.desbloquear_Pos(window, pos_ficha_anterior[0][0],pos_ficha_anterior[0][1]-1)
+                                tablero.desbloquear_Pos(window, pos_ficha_anterior[0][0],pos_ficha_anterior[len(pos_ficha_anterior)-1][1]-1)
                             
                             
                             else: 
@@ -699,19 +710,21 @@ def main(dificultad,datosC):
 
                         else:
                             #Si entra en este else es porque el valor de la columna de la primera ficha colocada y la ultima no cambió, por lo tanto la palabra se forma de manera vertical
-                            if pos_ficha_anterior[0][0] < pos_ficha_anterior[len(pos_ficha_anterior)-1][0] and hay_espacio(window,pos_ficha_anterior[len(pos_ficha_anterior)-1],"abajo"): 
+                            
+                            if pos_ficha_anterior[0][0] < pos_ficha_anterior[len(pos_ficha_anterior)-1][0] and hay_espacio(window,pos_ficha_anterior[len(pos_ficha_anterior)-1],tablero,"abajo"): 
                                 #pregunto si se forma hacia abajo y si se puede formar        
                                 tablero.desbloquear_Pos(window, pos_ficha_anterior[len(pos_ficha_anterior)-1][0]+1,pos_ficha_anterior[len(pos_ficha_anterior)-1][1])            
-                            elif pos_ficha_anterior[0][0] > pos_ficha_anterior[len(pos_ficha_anterior)-1][0] and hay_espacio(window,pos_ficha_anterior[0],"arriba"):  
+                            
+                            elif pos_ficha_anterior[0][0] > pos_ficha_anterior[len(pos_ficha_anterior)-1][0] and hay_espacio(window,pos_ficha_anterior[0],tablero,"arriba"):  
                                 #pregunto si se forma hacia arriba y si se puede formar          
-                                tablero.desbloquear_Pos(window,pos_ficha_anterior[0][0]-1,pos_ficha_anterior[0][1])        
+                                tablero.desbloquear_Pos(window,pos_ficha_anterior[len(pos_ficha_anterior)-1][0]-1,pos_ficha_anterior[0][1])        
                             
                             
                             else: 
                                 #qué pasa si no se puede formar más la palabra          
                                 sigue=0
                                 puede_colocar=False
-                                sg.Popup("No hay más espacio en el tablero")
+                                sg.Popup("No hay más espacio en el tablero, confirme la palabra o ")
                                 jugador_estante.estante.retornar_Ficha_Al_Estante(window,evento_ficha)
                    
                    
