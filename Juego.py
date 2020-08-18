@@ -186,6 +186,7 @@ class Estante:
         self.estante.append(self.atril.quitar_ficha())
     
     def agregar_fichas(self,cant,window):
+        #agrega la cantidad de fichas que se le envían por parametro al estante del jugador.
         aux=[]
         for i in range(len(ATRIL_JUGADOR)): 
                 if ATRIL_JUGADOR[i] != "":
@@ -195,6 +196,7 @@ class Estante:
             window.FindElement(pos).Update(text=self.estante[pos].get_letra(), image_filename=("imagenes/"+self.estante[pos].get_letra()+".png"))
             
     def eliminar_fichas_estante(self):
+        #Elimina la ficha del estante, no solo de la interfaz
         for i in range(len(ATRIL_JUGADOR)): 
             if ATRIL_JUGADOR[i] != "":
                 self.estante[i]=""
@@ -233,7 +235,7 @@ class Estante:
                 window.FindElement(i).Update(disabled=False)
        
     def quitar_Ficha_De_Estante(self, bot, window):
-        #quita una ficha del estante
+        #quita de la interfaz una ficha del estante
         ATRIL_JUGADOR[bot]=window.FindElement(bot).get_text()
         self.bloquear_Estante(window)
         window.FindElement(bot).Update(text="",image_size=(36,38) ,image_filename=(""),disabled=True)
@@ -549,7 +551,7 @@ def main(dificultad,datosC):
     layout2.append([sg.T("",font=('arial',15),key="-Turno-",size=(25,1),justification="r")])
     layout2.append([sg.T('Estante Jugador',	font=('arial',15)) ])
     layout2.append([sg.B('', button_color=("black","white"), key=(a), size=(w,h), pad=(2,2)) for a in range(7)]) #Desde que puse el layout3 y el layout aca se duplican keys???
-    layout2.append([sg.B('Jugar',size=(8,2)), sg.B('Confirmar Palabra', visible=False,size=(14,2),button_color=("black","green")), sg.B("retornar ficha", size=(14,2),visible=False,button_color=("black","#FFA500"), key="-devolver_ficha-") ])
+    layout2.append([sg.B('Jugar',size=(8,2)), sg.B('Confirmar Palabra', disabled=True,size=(14,2),button_color=("black","green"),disabled_button_color=("#2e2e1f","green")), sg.B("retornar ficha", size=(14,2),disabled=True,button_color=("black","#FFA500"),disabled_button_color=("#2e2e1f","#FFA500"), key="-devolver_ficha-") ])
     layout2.append([sg.B('Salir',size=(8,h),button_color=("black","#ff4d4d")),sg.B('Guardar',size=(8,2),visible=False)])
     
     layout3 = [
@@ -638,16 +640,16 @@ def main(dificultad,datosC):
                     poder_guardar = False
 
                 
-                if fichas_colocadas > -1:
+                if fichas_colocadas > 0:
                     #Si ya colocó una ficha aparece el boton para recuperarla
-                    window.FindElement("-devolver_ficha-").Update(visible=True)
+                    window.FindElement("-devolver_ficha-").Update(disabled=False)
                 else:
-                    window.FindElement("-devolver_ficha-").Update(visible=False)
+                    window.FindElement("-devolver_ficha-").Update(disabled=True)
                     
                     jugador_estante
                 if event in range(7):
                     #CLIKEA UNA FICHA:
-                    window.FindElement("-devolver_ficha-").Update(visible=False)
+                    window.FindElement("-devolver_ficha-").Update(disabled=True)
                     window.FindElement('Guardar').Update(visible=False)
                     evento_ficha=event
                     estante= jugador_estante.get_estante()
@@ -740,7 +742,7 @@ def main(dificultad,datosC):
                                 #qué pasa si no se puede formar más la palabra          
                                 sigue=0
                                 puede_colocar=False
-                                sg.Popup("No hay más espacio en el tablero, confirme la palabra o ")
+                                sg.Popup("No hay más espacio en el tablero, confirme la palabra o intente formar otra")
                                 jugador_estante.estante.retornar_Ficha_Al_Estante(window,evento_ficha)
                    
                    
@@ -762,7 +764,7 @@ def main(dificultad,datosC):
                 
                 if fichas_colocadas == 2:
                     #Si ya colocó 2 fichas aparece el boton para confirmar palabra
-                    window.FindElement('Confirmar Palabra').Update(visible=True)
+                    window.FindElement('Confirmar Palabra').Update(disabled=False)
                 
                 if event == 'Confirmar Palabra':
                     
@@ -784,7 +786,7 @@ def main(dificultad,datosC):
                         fichas_colocadas=0
                         puede_colocar=False
                         no_termina_turno=False
-                        window.FindElement('Confirmar Palabra').Update(visible=False)
+                        window.FindElement('Confirmar Palabra').Update(disabled=True)
                         window.FindElement('-Turno-').Update(value="Turno de la maquina")
                         for pos in range(len(ATRIL_JUGADOR)):
                             if ATRIL_JUGADOR[pos]!="":
@@ -796,7 +798,7 @@ def main(dificultad,datosC):
                         sg.Popup("No era una palabra")
                         puede_colocar=False
                         poder_guardar=True
-                        window.FindElement('Confirmar Palabra').Update(visible=False)
+                        window.FindElement('Confirmar Palabra').Update(disabled=True)
                         sigue=0
                         
                         for pos in pos_fichas_estante:
