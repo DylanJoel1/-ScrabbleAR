@@ -8,7 +8,6 @@ from funcionAutenticar import confirmar_Palabra
 
 DIFICULTAD = 'dificil'  
 
-condicion_Dificultad = ["verb", "verb"]
 
 
 class Computadora:
@@ -24,15 +23,18 @@ class Computadora:
    		
 	
 	def crearPalabra(self):
-		palabras = set()                                                   #uso un conjunto para no guardar palabras repetidas
+		palabras = set()                                                   
+        #uso un conjunto para no guardar palabras repetidas
 		
-		for i in range(2,len(self.let)+1):                                 #minimo las palabras son de 2 letras y va hasta n+1
-			palabras.update((map("".join, it.permutations(self.let,i))))   #permutations me devuelve todas las permutaciones posibles con esas letras
+		for i in range(2,len(self.let)+1):                                
+             #minimo las palabras son de 2 letras y va hasta n+1
+			palabras.update((map("".join, it.permutations(self.let,i))))   
+            #permutations me devuelve todas las permutaciones posibles con esas letras
 		
 		conj_aux= palabras.copy()										   #creo un conjunto secundario con los valores del primero								
 		
 		for elem in conj_aux:											   #itero con los valores del conjuto secundario asi voy borrando los elementos que no sean palabras válidas
-			if ((confirmar_Palabra(elem,DIFICULTAD, condicion_Dificultad))==False):
+			if ((confirmar_Palabra(elem,DIFICULTAD))==False):
 				palabras.remove(elem)
 		
 		# if (palabras==none):

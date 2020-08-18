@@ -184,7 +184,21 @@ class Estante:
     def agregar_estante(self):
         #Agrega una ficha al estante quitando esa misma del atril
         self.estante.append(self.atril.quitar_ficha())
-
+    
+    def agregar_fichas(self,cant,window):
+        aux=[]
+        for i in range(len(ATRIL_JUGADOR)): 
+                if ATRIL_JUGADOR[i] != "":
+                    aux+=[i]
+        for pos in aux:
+            self.estante[pos]=self.atril.quitar_ficha()
+            window.FindElement(pos).Update(text=self.estante[pos].get_letra(), image_filename=("imagenes/"+self.estante[pos].get_letra()+".png"))
+            
+    def eliminar_fichas_estante(self):
+        for i in range(len(ATRIL_JUGADOR)): 
+            if ATRIL_JUGADOR[i] != "":
+                self.estante[i]=""
+    
     def inicializar(self):
         #Añade las primeras 7 fichas al estante
         for i in range(7):
@@ -226,6 +240,7 @@ class Estante:
     
     def retornar_Ficha_Al_Estante(self,window,pos_estante):
         #devuelve una ficha del tablero al estante
+        self.estante[pos_estante]=ATRIL_JUGADOR[pos_estante]
         if ATRIL_JUGADOR[pos_estante]=="":
             window.FindElement(pos_estante).Update(image_filename=(""),visible=True,image_size=(36,38))
         else:
@@ -353,7 +368,7 @@ def estante_ps(estante, window):
     #actualiza el estante con las letras que le toco al jugador
     i=0
     for x in estante:
-       # print(estante[i].get_letra())
+       #print(estante[i].get_letra())
         window.FindElement(i).Update(text=estante[i].get_letra(), image_filename=("imagenes/"+estante[i].get_letra()+".png"))
         i=i+1
 
@@ -452,8 +467,8 @@ def so():
         if os.name == "nt":
             WIDTH  = 4
             HEIGHT = 2
-            SW = 900
-            SH = 900
+            SW = 1000
+            SH = 1000
             return WIDTH, HEIGHT, SW, SH
         elif os.name == "posix":
             WIDTH  = 1
@@ -571,6 +586,7 @@ def main(dificultad,datosC):
             primera =0
 
         event, values = window.Read()
+        window.Maximize()
         if(salir_juego(event)):
             break
         if event == 'Jugar':                                  
@@ -760,7 +776,8 @@ def main(dificultad,datosC):
                             agregado = agregado + puntos.multilet(ficha_pos[key],key,dificultad,fichas_punt,POS_ESPECIALES,window)
                         jugador_estante.incrementar_puntaje(puntos_provisional,window)
                         poder_guardar=True
-                        tablero.mostrar_estado()
+                        jugador_estante.estante.eliminar_fichas_estante()
+                        jugador_estante.estante.agregar_fichas(fichas_colocadas,window)
                         sigue=0
                         turno_Act=2
                         palabras_en_tablero+=1
@@ -769,7 +786,12 @@ def main(dificultad,datosC):
                         no_termina_turno=False
                         window.FindElement('Confirmar Palabra').Update(visible=False)
                         window.FindElement('-Turno-').Update(value="Turno de la maquina")
+                        for pos in range(len(ATRIL_JUGADOR)):
+                            if ATRIL_JUGADOR[pos]!="":
+                                ATRIL_JUGADOR[pos]=""
                         pos_fichas_estante=[]
+                        #Vuelvo a desbloquear el estante para que siga jugando con las nuevas fichas
+                        jugador_estante.estante.desbloquear_pos_Estante(window) 
                     else:
                         sg.Popup("No era una palabra")
                         puede_colocar=False
