@@ -942,14 +942,20 @@ def hay_espacio(
 def so():
     # Funcion que detecta el sistema operativo para reacomodar el tamaño de las casillas (ya que en linux se ve diferente)
     try:
-        if os.name == "nt":
+        if os.name != "nt" or os.name != "posix":
+            WIDTH = 4
+            HEIGHT = 2
+            SW = 1000
+            SH = 1000
+            return WIDTH, HEIGHT, SW, SH
+        elif os.name == "nt":
             WIDTH = 4
             HEIGHT = 2
             SW = 1000
             SH = 1000
             return WIDTH, HEIGHT, SW, SH
         elif os.name == "posix":
-            WIDTH = 1
+            WIDTH = 2
             HEIGHT = 1
             SW = 700
             SH = 700
@@ -957,8 +963,8 @@ def so():
     except Exception:
         WIDTH = 4
         HEIGHT = 2
-        SW = 900
-        SH = 900
+        SW = 1000
+        SH = 1000
         return WIDTH, HEIGHT, SW, SH
 
 
@@ -1445,6 +1451,7 @@ def main(dificultad, datosC):
                 if event == "Confirmar Palabra":
 
                     if confirmar_Palabra(palabra_formada, dificultad):
+                        palabra_formada = ""
                         no_agarro_letra=1
                         puede_cambiar_letras=1
                         
@@ -1492,6 +1499,7 @@ def main(dificultad, datosC):
                         # Vuelvo a desbloquear el estante para que siga jugando con las nuevas fichas
                         jugador_estante.estante.desbloquear_pos_Estante(window)
                     else:
+                        palabra_formada = ""
                         puede_cambiar_letras=1
                         no_agarro_letra=1
                         sg.Popup("No era una palabra")

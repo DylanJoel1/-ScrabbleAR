@@ -31,6 +31,7 @@ TIPO = {
 def es_Palabra(
     p,
 ):  # Funcion que pregunta si la palabra se encuentra en los diccionarios de pattern
+    print(p[0][0][0])
     if p[0][0][0] in lexicon.keys() and p[0][0][0] in spelling.keys():
         return True
     else:

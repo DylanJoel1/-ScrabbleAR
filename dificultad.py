@@ -1,12 +1,34 @@
 import PySimpleGUI as sg
 import Juego
 import cargar
+import os
+
+def so():
+    try:
+        if os.name != "nt" or os.name != "posix":
+            WIDTH = 20
+            HEIGHT = 3
+            BUTTON_BORDER = 4
+            return WIDTH, HEIGHT, BUTTON_BORDER
+        elif os.name == "nt":
+            WIDTH = 20
+            HEIGHT = 3
+            BUTTON_BORDER = 4
+            return WIDTH, HEIGHT, BUTTON_BORDER
+        elif os.name == "posix":
+            WIDTH = 20
+            HEIGHT = 2
+            BUTTON_BORDER = 2
+            return WIDTH, HEIGHT, BUTTON_BORDER
+    except Exception:
+        WIDTH = 20
+        HEIGHT = 3
+        BUTTON_BORDER = 4
+        return WIDTH, HEIGHT, BUTTON_BORDER
 
 
 def main():
-    WIDTH = 20
-    HEIGHT = 3
-    BUTTON_BORDER = 4
+    WIDTH, HEIGHT, BUTTON_BORDER = so()
     FUENTE = "arial"
     datos = None
 

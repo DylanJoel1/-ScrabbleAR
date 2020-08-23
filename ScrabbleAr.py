@@ -9,14 +9,19 @@ import os
 
 def so():
     try:
-        if os.name == "nt":
+        if os.name != "nt" or os.name != "posix":
+            WIDTH = 20
+            HEIGHT = 3
+            BUTTON_BORDER = 4
+            return WIDTH, HEIGHT, BUTTON_BORDER
+        elif os.name == "nt":
             WIDTH = 20
             HEIGHT = 3
             BUTTON_BORDER = 4
             return WIDTH, HEIGHT, BUTTON_BORDER
         elif os.name == "posix":
             WIDTH = 20
-            HEIGHT = 1
+            HEIGHT = 2
             BUTTON_BORDER = 2
             return WIDTH, HEIGHT, BUTTON_BORDER
     except Exception:
