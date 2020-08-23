@@ -1387,6 +1387,8 @@ def main(dificultad, datosC):
                     ATRIL_JUGADOR[pos_fichas_estante[len(pos_fichas_estante) - 1]] = ""
                     pos_fichas_estante.pop()
                     pos_ficha_anterior.pop()
+                    list(ficha_pos)[-1]
+                    palabra_formada = palabra_formada[:-1]
 
                     window.finalize()
 
@@ -1636,6 +1638,7 @@ def main(dificultad, datosC):
                         pos_ficha_anterior = []
                         pos_fichas_estante = []
                         fichas_colocadas = 0
+                        ficha_pos = {}
                         palabra_formada = ""
 
                 if event == "Guardar":
