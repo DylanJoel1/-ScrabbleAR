@@ -911,20 +911,20 @@ def hay_espacio(
         if lista_pos[0] != 0:
             if tablero.tablero[lista_pos[0] - 1][lista_pos[1]] == False:
                 aux.append([lista_pos[0] - 1, lista_pos[1]])
-        if lista_pos[0] != 15:
+        if lista_pos[0] != 14:
             if tablero.tablero[lista_pos[0] + 1][lista_pos[1]] == False:
                 aux.append([lista_pos[0] + 1, lista_pos[1]])
         if lista_pos[1] != 0:
 
             if tablero.tablero[lista_pos[0]][lista_pos[1] - 1] == False:
                 aux.append([lista_pos[0], lista_pos[1] - 1])
-        if lista_pos[1] != 15:
+        if lista_pos[1] != 14:
 
             if tablero.tablero[lista_pos[0]][lista_pos[1] + 1] == False:
                 aux.append([lista_pos[0], lista_pos[1] + 1])
         return aux
     elif direc == "derecha":
-        if lista_pos[1] != 15:
+        if lista_pos[1] != 14:
 
             if tablero.tablero[lista_pos[0]][lista_pos[1] + 1] == True:
 
@@ -951,7 +951,7 @@ def hay_espacio(
         else:
             return False
     elif direc == "abajo":
-        if lista_pos[0] != 15:
+        if lista_pos[0] != 14:
 
             if tablero.tablero[lista_pos[0] + 1][lista_pos[1]] == True:
                 return False
@@ -1173,7 +1173,7 @@ def main(dificultad, datosC):
                 sg.T(text="Fácil", font=("arial", 15,), size=(5, 1)),
             ]
         )
-        layout3.append([sg.T("Se permite cualquier tipo de palabra")])
+        layout3.append([sg.T("Se permite cualquier tipo de palabra (Sustantivos, adjetivos y verbos)")])
     elif dificultad == "-medio-":
         layout3.append(
             [
@@ -1250,8 +1250,10 @@ def main(dificultad, datosC):
             # Muestro en pantalla el turno actual
             if turno_Act == 1:
                 window.FindElement("-Turno-").Update(value="Turno de el jugador")
+                window.Finalize()
             else:
                 window.FindElement("-Turno-").Update(value="Turno de la maquina")
+                window.Finalize()
 
         elif juega:
             # Si ya se tocó el boton de jugar inicia a preguntar por los turnos y preparar el tablero para las jugadas
@@ -1400,9 +1402,7 @@ def main(dificultad, datosC):
 
                     if fichas_colocadas == 1:
                         # Si ya colocó una ficha desbloqueo los lugares disponibles que esten adyacentes a la primera ficha colocada
-                        pos_disponibles = hay_espacio(
-                            window, pos_ficha_anterior[0], tablero
-                        )
+                        pos_disponibles = hay_espacio(window, pos_ficha_anterior[0], tablero)
                         for pos in pos_disponibles:
                             tablero.desbloquear_Pos(window, pos[0], pos[1])
 
@@ -1562,6 +1562,7 @@ def main(dificultad, datosC):
                                 POS_ESPECIALES,
                                 window,
                             )
+                        puntos_provisional += agregado
                         jugador_estante.incrementar_puntaje(puntos_provisional, window)
                         poder_guardar = True
                         jugador_estante.estante.eliminar_fichas_estante()
@@ -1665,7 +1666,6 @@ def main(dificultad, datosC):
                     guardar.main(datosg)
 
             elif turno_Act == 2:
-
                 sg.Popup(
                     "Ahora le toca a la maquina, clickea un boton del atril para"
                     " continuar"
