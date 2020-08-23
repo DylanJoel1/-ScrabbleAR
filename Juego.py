@@ -1067,18 +1067,31 @@ def main(dificultad, datosC):
         for i in range(15)
     ]
     layout2.append(
-        [sg.T("", font=("arial", 15), key="-Turno-", size=(25, 1), justification="r")]
+        [sg.T("", font=("arial", 15), size=(18, 1)),
+        sg.T("", font=("arial", 15), key="-Turno-", size=(25, 1))]
     )
-    layout2.append([sg.T("Estante Jugador", font=("arial", 15))])
+    layout2.append([sg.T("Estante Jugador", font=("arial", 15), size=(37, 1)), sg.T("Estante Computadora", font=("arial", 15))])
     layout2.append(
         [
-            sg.B("", button_color=("black", "white"), key=(a), size=(w, h), pad=(2, 2))
-            for a in range(7)
+            sg.B("", button_color=("black", "white"), key=(0), size=(w, h), pad=(2, 2)),
+            sg.B("", button_color=("black", "white"), key=(1), size=(w, h), pad=(2, 2)),
+            sg.B("", button_color=("black", "white"), key=(2), size=(w, h), pad=(2, 2)),
+            sg.B("", button_color=("black", "white"), key=(3), size=(w, h), pad=(2, 2)),
+            sg.B("", button_color=("black", "white"), key=(4), size=(w, h), pad=(2, 2)),
+            sg.B("", button_color=("black", "white"), key=(5), size=(w, h), pad=(2, 2)),
+            sg.B("", button_color=("black", "white"), key=(6), size=(w, h), pad=(2, 2)),
+            sg.T("", size=(3, 1)),
+            sg.B("", button_color=("black", "white"), key=(7), size=(w, h), pad=(2, 2), disabled=True),
+            sg.B("", button_color=("black", "white"), key=(8), size=(w, h), pad=(2, 2), disabled=True),
+            sg.B("", button_color=("black", "white"), key=(9), size=(w, h), pad=(2, 2), disabled=True),
+            sg.B("", button_color=("black", "white"), key=(10), size=(w, h), pad=(2, 2), disabled=True),
+            sg.B("", button_color=("black", "white"), key=(11), size=(w, h), pad=(2, 2), disabled=True),
+            sg.B("", button_color=("black", "white"), key=(12), size=(w, h), pad=(2, 2), disabled=True),
+            sg.B("", button_color=("black", "white"), key=(13), size=(w, h), pad=(2, 2), disabled=True),
         ]
     )  # Desde que puse el layout3 y el layout aca se duplican keys???
     layout2.append(
         [
-            sg.B("Jugar", size=(8, 2)),
             sg.B(
                 "Confirmar Palabra",
                 disabled=True,
@@ -1118,6 +1131,7 @@ def main(dificultad, datosC):
     )
     layout2.append(
         [
+            sg.B("Jugar", size=(8, 2)),
             sg.B("Salir", size=(8, h), button_color=("black", "#ff4d4d")),
             sg.B("Guardar", size=(8, 2), visible=False),
         ]
@@ -1127,8 +1141,11 @@ def main(dificultad, datosC):
         [
             sg.T("Puntaje Jugador:", font=("arial", 15)),
             sg.T("0", font=("arial", 15,), size=(5, 1), key="-puntaje-"),
+            sg.T("Puntaje Computadora:", font=("arial", 15)),
+            sg.T("0", font=("arial", 15,), size=(5, 1), key="-puntajepc-"),
         ],
-        [sg.Multiline(size=(30, 20), disabled=True, autoscroll=False, key="-out-")],
+        [sg.Multiline(size=(30, 20), disabled=True, autoscroll=False, key="-out-"),
+        sg.Multiline(size=(30, 20), disabled=True, autoscroll=False, key="-outpc-")],
         [sg.T("Casillas con premio o descuento:", font=("arial", 15))],
         [
             sg.T("Palabras x2:"),
