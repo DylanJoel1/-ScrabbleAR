@@ -345,8 +345,8 @@ class Estante:
         # Agrega una ficha al estante quitando esa misma del atril
         self.estante.append(self.atril.quitar_ficha())
     
-    def cambiar_fichas(self, window,cant=-1):
-        if cant==-1:
+    def cambiar_fichas(self, window,cant="todas"):
+        if cant=="todas":
             for i in range(len(ATRIL_JUGADOR)):
                 self.estante[i] = self.atril.quitar_ficha()
                 window.FindElement(i).Update(
@@ -354,6 +354,15 @@ class Estante:
                     image_filename=("imagenes/" + self.estante[i].get_letra()+ ".png"),
                 
                 )
+        elif cant=="marcadas":
+            for i in range(len(ATRIL_JUGADOR)):
+                if ATRIL_JUGADOR[i]!="":
+                    self.estante[i] = self.atril.quitar_ficha()
+                    window.FindElement(i).Update(
+                        text=self.estante[i].get_letra(),
+                        image_filename=("imagenes/" + self.estante[i].get_letra()+ ".png"),
+                
+                    )   
         
 
     def agregar_fichas(self, cant, window):
@@ -369,11 +378,24 @@ class Estante:
                 image_filename=("imagenes/" + self.estante[pos].get_letra() + ".png"),
             )
 
-    def eliminar_fichas_estante(self):
+    def eliminar_fichas_estante(self, pos=""):
         # Elimina la ficha del estante, no solo de la interfaz
-        for i in range(len(ATRIL_JUGADOR)):
-            if ATRIL_JUGADOR[i] != "":
-                self.estante[i] = ""
+        if pos=="":
+            for i in range(len(ATRIL_JUGADOR)):
+                if ATRIL_JUGADOR[i] != "":
+                    self.estante[i] = ""
+        else:
+            if ATRIL_JUGADOR[pos] !="":
+                self.estante[pos]=""
+    
+    def no_tiene_fichas(self):
+
+        elementos= self.estante.count("")
+        if elementos == 7:
+            return True
+        else:
+            return False
+        
 
     def inicializar(self):
         # Añade las primeras 7 fichas al estante
@@ -411,7 +433,6 @@ class Estante:
     def quitar_Ficha_De_Estante(self, bot, window):
         # quita de la interfaz una ficha del estante
         ATRIL_JUGADOR[bot] = window.FindElement(bot).get_text()
-        self.bloquear_Estante(window)
         window.FindElement(bot).Update(
             text="", image_size=(36, 38), image_filename="", disabled=True
         )
@@ -1016,8 +1037,9 @@ def main(dificultad, datosC):
         sigue = 0
         juega = False
         puede_cambiar_letras=1
-        no_agarro_letra=1
 
+        marcar_fichas=False
+        contador_clickeadas=-1
         tomo_ficha = False
         puede_colocar = False
         no_termina_turno = True
@@ -1188,6 +1210,8 @@ def main(dificultad, datosC):
             arregloEstante = jugador_estante.get_estante()
             estante_ps(arregloEstante, window)
             tablero.bloquear_tablero(window)
+            
+            estante = jugador_estante.get_estante()
 
             window.FindElement("Jugar").Update(visible=False)
             window.FindElement("Guardar").Update(visible=True)
@@ -1232,12 +1256,53 @@ def main(dificultad, datosC):
                 turno_Act = 2
                 no_termina_turno= False
                 jugador_estante.estante.cambiar_fichas(window)
+                
             if event == "-cambiar_fichas-" and  turno_Act==1:
-                sg.popup("Cambiar algunas")
+                sg.popup("Clikea las fichas que quiere cambiar, cuando termine aprete el boton 'confirmar' ")
                 window.FindElement("-confirmar_letras-").Update(disabled=False)
-                #Implementar que se guarde en una lista las fichas que se van clickeando para ser cambiadas
-                #Hasta que no se toque el boton de confirmar, se deben seguir guardando las fichas
-
+                turno_Act=0
+                marcar_fichas=True
+            
+            if marcar_fichas:
+                if event in range(7):
+                    
+                    ficha = str(estante[event])
+                    
+                    ficha = ficha.split(
+                        ","
+                    )
+                    ATRIL_JUGADOR[event]=ficha[0] 
+                    
+                    window.FindElement(event).Update(button_color=("black","green"))
+                    
+                    contador_clickeadas= ATRIL_JUGADOR.count("")
+        
+                if  contador_clickeadas == 0:
+                    time.sleep(1)
+                    turno_Act = 2
+                    no_termina_turno= False
+                    jugador_estante.estante.cambiar_fichas(window)
+                    marcar_fichas=False
+                    contador_clickeadas=-1
+                    for i in range(7):
+                    
+                        window.FindElement(i).Update(button_color=("black", "white"))
+                    
+                        ATRIL_JUGADOR[i]=""
+                        
+                if event== "-confirmar_letras-":
+                    time.sleep(1)
+                    turno_Act = 2
+                    no_termina_turno=False
+                    marcar_fichas=False
+                    jugador_estante.estante.cambiar_fichas(window,"marcadas")
+                    for i in range(7):
+                    
+                        window.FindElement(i).Update(button_color=("black", "white"))
+                    
+                        ATRIL_JUGADOR[i]=""
+                    window.FindElement("-confirmar_letras-").Update(disabled=True)
+                    
 
 
             if (turno_Act == 1) and (no_termina_turno):
@@ -1245,7 +1310,7 @@ def main(dificultad, datosC):
                 if poder_guardar:
                     window.FindElement("Guardar").Update(visible=True)
                     poder_guardar = False
-                
+
                 if puede_cambiar_letras == 1:
                     window.FindElement("-cambiar_fichas-").Update(disabled=False)
                     window.FindElement("-cambiar_todas_fichas-").Update(disabled=False)
@@ -1258,19 +1323,15 @@ def main(dificultad, datosC):
                 else:
                     window.FindElement("-devolver_ficha-").Update(disabled=True)
 
-                if event in range(7):
+                if event in range(7) and puede_colocar==False:
                     # CLIKEA UNA FICHA:
                     
-                    if no_agarro_letra==1:
-                        #si tomo una letra bloqueo los botones para cambiar de letra
-                        no_agarro_letra=0
-                        window.FindElement("-cambiar_fichas-").Update(disabled=True)
-                        window.FindElement("-cambiar_todas_fichas-").Update(disabled=True)
+                    window.FindElement("-cambiar_fichas-").Update(disabled=True)
+                    window.FindElement("-cambiar_todas_fichas-").Update(disabled=True)
                         
                     window.FindElement("-devolver_ficha-").Update(disabled=True)
                     window.FindElement("Guardar").Update(visible=False)
                     evento_ficha = event
-                    estante = jugador_estante.get_estante()
                     ficha = str(estante[event])
                     ficha = ficha.split(
                         ","
@@ -1280,6 +1341,7 @@ def main(dificultad, datosC):
                     )
                     sigue = 1
                     puede_colocar = True
+                    puede_cambias_letras=0
                 if event == "-devolver_ficha-" and fichas_colocadas > 0:
                     puede_colocar = False
                     sigue = 0
@@ -1443,6 +1505,11 @@ def main(dificultad, datosC):
                         sigue = 0
                         palabra_formada += ficha[0]
                         pos_fichas_estante.append(evento_ficha)
+                        puede_colocar=False
+                        puede_cambiar_letras=0
+                        window.FindElement("-cambiar_fichas-").Update(disabled=True)
+                        window.FindElement("-cambiar_todas_fichas-").Update(disabled=True)
+
 
                 if fichas_colocadas == 2:
                     # Si ya colocó 2 fichas aparece el boton para confirmar palabra
