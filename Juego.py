@@ -1518,7 +1518,7 @@ def main(dificultad, datosC):
                 if event == "Confirmar Palabra":
 
                     if confirmar_Palabra(palabra_formada, dificultad):
-                        palabra_formada = ""
+                        
                         no_agarro_letra=1
                         puede_cambiar_letras=1
                         
@@ -1563,10 +1563,11 @@ def main(dificultad, datosC):
                             if ATRIL_JUGADOR[pos] != "":
                                 ATRIL_JUGADOR[pos] = ""
                         pos_fichas_estante = []
+                        palabra_formada = ""
                         # Vuelvo a desbloquear el estante para que siga jugando con las nuevas fichas
                         jugador_estante.estante.desbloquear_pos_Estante(window)
                     else:
-                        palabra_formada = ""
+                        
                         puede_cambiar_letras=1
                         no_agarro_letra=1
                         sg.Popup("No era una palabra")
@@ -1617,6 +1618,7 @@ def main(dificultad, datosC):
                         pos_ficha_anterior = []
                         pos_fichas_estante = []
                         fichas_colocadas = 0
+                        palabra_formada = ""
 
                 if event == "Guardar":
                     datosg = guardar_partida(
