@@ -7,6 +7,7 @@ import puntos
 import guardar
 import config
 from funcionAutenticar import confirmar_Palabra
+import itertools as it
 import datetime, time
 import os
 from os import path
@@ -366,19 +367,26 @@ class Estante:
                     )   
         
 
-    def agregar_fichas(self, cant, window):
-        # agrega la cantidad de fichas que se le envían por parametro al estante del jugador.
-        aux = []
-        for i in range(len(ATRIL_JUGADOR)):
-            if ATRIL_JUGADOR[i] != "":
-                aux += [i]
-        for pos in aux:
-            self.estante[pos] = self.atril.quitar_ficha()
-            window.FindElement(pos).Update(
-                text=self.estante[pos].get_letra(),
-                image_filename=("imagenes/" + self.estante[pos].get_letra() + ".png"),
-            )
+    def agregar_fichas(self, cant, window,turno="jugador"):
+        
+        if turno=="jugador":  
+            # agrega la cantidad de fichas que se le envían por parametro al estante del jugador.
+            aux = []
+            for i in range(len(ATRIL_JUGADOR)):
+                if ATRIL_JUGADOR[i] != "":
+                    aux += [i]
+            for pos in aux:
+                self.estante[pos] = self.atril.quitar_ficha()
+                window.FindElement(pos).Update(
+                    text=self.estante[pos].get_letra(),
+                    image_filename=("imagenes/" + self.estante[pos].get_letra() + ".png"),
+                )
+        elif turno=="maquina":
 
+            for i in range(len(self.estante)):
+                if self.estante[i]=="":
+                    self.estante[i]= self.atril.quitar_ficha()
+            
     def eliminar_fichas_estante(self, pos=""):
         # Elimina la ficha del estante, no solo de la interfaz
         if pos=="":
@@ -493,6 +501,70 @@ class Jugador:
         # Devuelve un arreglo con los elementos del estante, para poder representarlo en pysimplegui
         return self.estante.get_estante()
 
+class Computadora:
+    """ Por ahora este objeto solo posee la funcion de generar una palabra, la cual dependiendo las letras que posee la computadora genera un conjunto de las combinaciones
+        posibles. En la misma funcion se llama a una funcion de un archivo que importo para devolver la palabra de las combinaciones que cumple con las condiciones del juego
+     """
+    def __init__(self,atril,puntaje=0,letras=""):
+        self.puntaje = puntaje
+        self.let = letras
+        self.estante = Estante(atril)
+    
+    def set_letras(self,letras):
+        self.let=letras
+    
+    def get_puntaje(self):
+        # Devuelve el puntaje de la maquina
+        return self.puntaje
+    
+    # 	def pedirFichas:
+    
+    def get_estante(self):
+        # Devuelve un arreglo con los elementos del estante, para poder representarlo en pysimplegui
+        return self.estante.get_estante()
+    
+    def get_letras(self):
+        return self.let    
+
+    def crearPalabra(self, DIFICULTAD):
+        palabras = set()
+        # uso un conjunto para no guardar palabras repetidas
+
+        for i in range(2, len(self.let) + 1):
+            palabras.update((map("".join, it.permutations(self.let, i))))
+            # permutations me devuelve todas las permutaciones posibles con esas letras
+
+        conj_aux = (
+            palabras.copy()
+        )  
+
+        for elem in conj_aux:  
+            # itero con los valores del conjuto secundario asi voy borrando los elementos que no sean palabras válidas
+            if (confirmar_Palabra(elem, DIFICULTAD)) == False:
+                palabras.remove(elem)
+
+        # if (palabras==none):
+        # self.pedirFichas()
+
+        palabra_larga = max(
+            palabras, key=len
+        )  # de todas las palabras validas me quedo con la más larga dado que es la que da mayor cantidad de puntos y es más seguro que sea una palabra segura
+
+        return palabra_larga
+    
+    def cambiar_letras(self,palabra):
+        for letra in palabra:
+            #elimino las letras utilizadas de la variable con las letras disponibles
+            if letra in self.let:
+                self.let=self.let.replace(letra,"",1)
+            for i in range(len(self.estante.estante)):
+                if letra in str(self.estante.estante[i]):
+                    self.estante.estante[i]=""
+                    break
+        self.estante.agregar_fichas( len(palabra),None,"maquina")
+                    
+            
+                
 
 class Tablero:
     """
@@ -1043,6 +1115,7 @@ def main(dificultad, datosC):
         atril = Atril(fichas_cant, fichas_punt)
         jugador_estante = Jugador(atril)
         tablero = Tablero()
+        maquina= Computadora(atril)
 
         sigue = 0
         juega = False
@@ -1233,7 +1306,6 @@ def main(dificultad, datosC):
     window = sg.Window(
         "ScrabbleAR", size=(sw, sh), element_justification="c", resizable=True
     ).Layout(layout)
-
     while True:
         if primera == 1:
             window.Finalize()
@@ -1730,7 +1802,19 @@ def main(dificultad, datosC):
                     "Ahora le toca a la maquina, clickea un boton del atril para"
                     " continuar"
                 )
-                time.sleep(1)
+                #Tomo letras y se las asigno a la maquina
+                letras=""
+                estante_maquina=maquina.get_estante()
+                for elem in estante_maquina:
+                    #Le envío a la maquina todas las letras juntas
+                    aux=str(elem)
+                    letras+= aux[0]
+                maquina.set_letras(letras)
+                palabra=maquina.crearPalabra(dificultad)
+                print(palabra)
+                maquina.cambiar_letras(palabra)
+                
+                time.sleep(2)
                 turno_Act = 1
                 no_termina_turno = True
                 sigue = 1
