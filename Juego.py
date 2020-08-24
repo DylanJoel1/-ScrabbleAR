@@ -1360,9 +1360,7 @@ def main(dificultad, datosC):
         elif juega:
             # Si ya se tocó el boton de jugar inicia a preguntar por los turnos y preparar el tablero para las jugadas
 
-            if palabras_en_tablero == 0 and fichas_colocadas == 0:
-                # si no hay palabras en el tablero y tampoco hay fichas colocadas solo desbloqueo el centro del tablero
-                tablero.desbloquear_Pos(window, 7, 7)
+
 
             if no_termina_turno == False:
                 # Si el turno del jugador terminó reseteo el contador de fichas colocadas
@@ -1502,6 +1500,9 @@ def main(dificultad, datosC):
                 # COLOCA LA FICHA EN EL TABLERO
 
                 if sigue == 1:
+                    if palabras_en_tablero == 0 and fichas_colocadas == 0:
+                        # si no hay palabras en el tablero y tampoco hay fichas colocadas solo desbloqueo el centro del tablero
+                        tablero.desbloquear_Pos(window, 7, 7)
 
                     if fichas_colocadas == 0 and palabras_en_tablero > 0:
                         # Si ya hay palabras formadas en el tablero y no coloqué fichas, desbloqueo todas las pos adyacentes a las palabras formadas
@@ -1798,10 +1799,7 @@ def main(dificultad, datosC):
                     break
 
             elif turno_Act == 2:
-                sg.Popup(
-                    "Ahora le toca a la maquina, clickea un boton del atril para"
-                    " continuar"
-                )
+
                 #Tomo letras y se las asigno a la maquina
                 letras=""
                 estante_maquina=maquina.get_estante()
@@ -1811,13 +1809,33 @@ def main(dificultad, datosC):
                     letras+= aux[0]
                 maquina.set_letras(letras)
                 palabra=maquina.crearPalabra(dificultad)
-                print(palabra)
+                
+                if palabras_en_tablero==0:
+                    aux=7
+                    for let in palabra:
+                        time.sleep(2)
+                        window.FindElement((7,aux)).Update(
+                            text=let,
+                            image_filename=(("imagenes/" + let + ".png")),
+                        )
+                        aux+=1
+                        tablero.tablero[7][aux-1]=True
+                    palabras_en_tablero+=1
+                    tablero.mostrar_estado()
+                        
+                
+                
+                
+                
+                
+                
+                
                 maquina.cambiar_letras(palabra)
                 
-                time.sleep(2)
                 turno_Act = 1
                 no_termina_turno = True
                 sigue = 1
                 pos_ficha_anterior = []
+                time.sleep(4)
                 window.FindElement("-Turno-").Update(value="Turno de el jugador")
     window.Close()
