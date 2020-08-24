@@ -3,15 +3,15 @@ import PySimpleGUI as sg
 from random import shuffle
 import json
 import random
+import puntos
+import guardar
+from funcionAutenticar import confirmar_Palabra
 import datetime, time
 import os
 from os import path
 import sys
-
 sys.path.insert(1, "/imagenes")
-import puntos
-import guardar
-from funcionAutenticar import confirmar_Palabra
+
 
 # constante que representa los multiplicadores y descuentos
 POS_ESPECIALES = {
@@ -1005,6 +1005,10 @@ def tablero_especial(window, dificultad):
         window.FindElement(pos).Update(image_filename="imagenes/menos3.png")
 
 
+def tiempo_int():
+    return int(round(time.time() * 100))
+
+
 def main(dificultad, datosC):
     # Se inicializan todas las variables a utilizar y se ejecuta el juego en si
     if datosC != None:
@@ -1027,7 +1031,12 @@ def main(dificultad, datosC):
         poder_guardar = False
         ficha_pos = datosC["ficha_pos"]
         pos_fichas_estante = datosC["pos_fichas_estante"]
+
+        puede_cambiar_letras=datosC[""]
+        marcar_fichas=False
+        contador_clickeadas=-1
     else:
+        datosA = cargar()
         w, h, sw, sh = so()
         fichas_cant, fichas_punt = datos(dificultad)
         atril = Atril(fichas_cant, fichas_punt)
@@ -1051,6 +1060,21 @@ def main(dificultad, datosC):
 
         primera = 0
         poder_guardar = True
+        if dificultad == "-facil-":
+            aux = int(datosA["fhora"])*120
+            aux = aux + int(datosA["fmin"])*60
+            tiempo = (aux*100)
+            print (tiempo)
+        elif dificultad == "-medio-":
+            aux = datosA["mhora"] * 60
+            aux += datosA["mmin"]
+            tiempo = aux
+        else:
+            aux = datosA["dhora"] * 60
+            aux += datosA["dmin"]
+            tiempo = aux
+        tiempo_act = 0
+        tiempo_ini = tiempo_int()
 
     layout2 = [
         [
@@ -1138,6 +1162,8 @@ def main(dificultad, datosC):
     )
 
     layout3 = [
+        [sg.T("Tiempo restante:", font=("arial", 15)),
+        sg.T("", font=("arial", 15), key="-tiempo-", size=(30,1))],
         [
             sg.T("Puntaje Jugador:", font=("arial", 15)),
             sg.T("0", font=("arial", 15,), size=(5, 1), key="-puntaje-"),
@@ -1218,7 +1244,9 @@ def main(dificultad, datosC):
             palabras_en_tablero = datosC["palabras_en_tablero"]
             primera = 0
 
-        event, values = window.Read()
+        event, values = window.Read(timeout=10)
+        tiempo_act = tiempo_int() - tiempo_ini
+        tiempoR = tiempo - tiempo_act
         window.Maximize()
         if salir_juego(event):
             break
@@ -1250,10 +1278,10 @@ def main(dificultad, datosC):
             # Muestro en pantalla el turno actual
             if turno_Act == 1:
                 window.FindElement("-Turno-").Update(value="Turno de el jugador")
-                window.Finalize()
             else:
                 window.FindElement("-Turno-").Update(value="Turno de la maquina")
-                window.Finalize()
+            #Inicio el tiempo
+            tiempo_ini = tiempo_int()
 
         elif juega:
             # Si ya se tocó el boton de jugar inicia a preguntar por los turnos y preparar el tablero para las jugadas
@@ -1265,7 +1293,12 @@ def main(dificultad, datosC):
             if no_termina_turno == False:
                 # Si el turno del jugador terminó reseteo el contador de fichas colocadas
                 fichas_colocadas = 0
-            
+
+            #El tiempo representado
+            if tiempoR > 0:
+                window.FindElement('-tiempo-').Update('{:02d}:{:02d}.{:02d}'.format((tiempoR // 100) // 60, (tiempoR // 100) % 60, tiempoR % 100))
+            else:
+                window.FindElement('-tiempo-').Update('00:00.00')
 
                     
             
@@ -1679,5 +1712,4 @@ def main(dificultad, datosC):
                 sigue = 1
                 pos_ficha_anterior = []
                 window.FindElement("-Turno-").Update(value="Turno de el jugador")
-
     window.Close()
