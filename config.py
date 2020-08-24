@@ -60,7 +60,7 @@ def val_pc(values, pc, window):
 
 
 def guardar(a, datos):
-    """ Funcion que guarda los datos en el archivo datos.json """
+    """ Funcion que guarda los datos en el archivo a """
     with open(a, "w") as jsonFile:
         json.dump(datos, jsonFile)
     sg.popup("Se guardo correctamente")

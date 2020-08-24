@@ -5,6 +5,7 @@ import json
 import random
 import puntos
 import guardar
+import config
 from funcionAutenticar import confirmar_Palabra
 import datetime, time
 import os
@@ -154,7 +155,7 @@ def cargar():
         return datos
     except FileNotFoundError:
         sg.popup(
-            "No se encontró el archivo de configuracion, se procedera a crear uno..."
+            "No se encontró el archivo, se procedera a crear uno..."
         )
         with open("guardado/datos_default.json", "r") as jsonFile:
             datos = json.load(jsonFile)
@@ -1154,9 +1155,10 @@ def main(dificultad, datosC):
     )
     layout2.append(
         [
-            sg.B("Jugar", size=(8, 2)),
+            sg.B("Jugar", size=(8, h)),
+            sg.B("Terminar", size=(8, h), visible=True),
             sg.B("Salir", size=(8, h), button_color=("black", "#ff4d4d")),
-            sg.B("Guardar", size=(8, 2), visible=False),
+            sg.B("Guardar", size=(8, h), visible=False)
         ]
     )
 
@@ -1239,6 +1241,7 @@ def main(dificultad, datosC):
             estante_ps(arregloEstante, window)
             tablero.bloquear_tablero(window)
             window.FindElement("Jugar").Update(visible=False)
+            window.FindElement("Terminar").Update(visible=False)
             juega = datosC["juega"]
             palabras_en_tablero = datosC["palabras_en_tablero"]
             primera = 0
@@ -1256,8 +1259,8 @@ def main(dificultad, datosC):
             tablero.bloquear_tablero(window)
             
             estante = jugador_estante.get_estante()
-
-            window.FindElement("Jugar").Update(visible=False)
+            window.FindElement("Terminar").Update(visible=True)
+            window.FindElement("Jugar").Update(visible=False)            
             window.FindElement("Guardar").Update(visible=True)
             # Preparo el tablero con sus casillas especiales
             if dificultad == "-facil-":
@@ -1699,6 +1702,28 @@ def main(dificultad, datosC):
                         pos_fichas_estante,
                     )
                     guardar.main(datosg)
+                
+                if event == "Terminar":
+                    sg.Popup("Se acabó la partida")
+                    nombre=sg.popup_get_text("Ingresa tu nombre:")
+                    jugador_estante.set_nombre(nombre)
+                    sg.Popup("Nombre:",jugador_estante.nombre,"Puntuacion:", jugador_estante.puntaje)
+                    try:
+                        with open("guardado/top10.json", "r") as jsonFile:
+                            top10 = json.load(jsonFile)
+                    except Exception:
+                        with open("guardado/top10vacio.json", "r") as jsonFile:
+                            top10 = json.load(jsonFile)
+                    minimo = 9999
+                    minimon = 1
+                    for a in range(9):
+                        if int(top10["puntos"+str(a)]) < int(minimo):
+                            minimo = top10["puntos"+str(a)]
+                            minimon = a
+                    top10["nombre"+str(minimon)] = jugador_estante.nombre
+                    top10["puntos"+str(minimon)] = jugador_estante.puntaje
+                    config.guardar("guardado/top10.json",top10)
+                    break
 
             elif turno_Act == 2:
                 sg.Popup(

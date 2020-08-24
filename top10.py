@@ -13,6 +13,7 @@ default_config = path.join(path.dirname(__file__), r"guardado/top10vacio.json")
 def main():
     primera = 1
     keys = {
+        "nombre0": "",
         "nombre1": "",
         "nombre2": "",
         "nombre3": "",
@@ -22,7 +23,7 @@ def main():
         "nombre7": "",
         "nombre8": "",
         "nombre9": "",
-        "nombre10": "",
+        "puntos0": "",
         "puntos1": "",
         "puntos2": "",
         "puntos3": "",
@@ -31,8 +32,7 @@ def main():
         "puntos6": "",
         "puntos7": "",
         "puntos8": "",
-        "puntos9": "",
-        "puntos10": "",
+        "puntos9": "",        
     }
     layout = [
         [sg.T("Top 10", font=("Helvetica", 30), text_color="black", border_width=30)],
@@ -44,65 +44,65 @@ def main():
         [
             sg.T("1", size=(8, 1), justification="center", pad=(0, 0)),
             sg.T(
+                "Vacio", size=(14, 1), justification="center", pad=(0, 0), key="nombre0"
+            ),
+            sg.T("0", size=(8, 1), justification="center", pad=(0, 0), key="puntos0"),
+        ],
+        [
+            sg.T("2", size=(8, 1), justification="center", pad=(0, 0)),
+            sg.T(
                 "Vacio", size=(14, 1), justification="center", pad=(0, 0), key="nombre1"
             ),
             sg.T("0", size=(8, 1), justification="center", pad=(0, 0), key="puntos1"),
         ],
         [
-            sg.T("2", size=(8, 1), justification="center", pad=(0, 0)),
+            sg.T("3", size=(8, 1), justification="center", pad=(0, 0)),
             sg.T(
                 "Vacio", size=(14, 1), justification="center", pad=(0, 0), key="nombre2"
             ),
             sg.T("0", size=(8, 1), justification="center", pad=(0, 0), key="puntos2"),
         ],
         [
-            sg.T("3", size=(8, 1), justification="center", pad=(0, 0)),
+            sg.T("4", size=(8, 1), justification="center", pad=(0, 0)),
             sg.T(
                 "Vacio", size=(14, 1), justification="center", pad=(0, 0), key="nombre3"
             ),
             sg.T("0", size=(8, 1), justification="center", pad=(0, 0), key="puntos3"),
         ],
         [
-            sg.T("4", size=(8, 1), justification="center", pad=(0, 0)),
+            sg.T("5", size=(8, 1), justification="center", pad=(0, 0)),
             sg.T(
                 "Vacio", size=(14, 1), justification="center", pad=(0, 0), key="nombre4"
             ),
             sg.T("0", size=(8, 1), justification="center", pad=(0, 0), key="puntos4"),
         ],
         [
-            sg.T("5", size=(8, 1), justification="center", pad=(0, 0)),
+            sg.T("6", size=(8, 1), justification="center", pad=(0, 0)),
             sg.T(
                 "Vacio", size=(14, 1), justification="center", pad=(0, 0), key="nombre5"
             ),
             sg.T("0", size=(8, 1), justification="center", pad=(0, 0), key="puntos5"),
         ],
         [
-            sg.T("6", size=(8, 1), justification="center", pad=(0, 0)),
+            sg.T("7", size=(8, 1), justification="center", pad=(0, 0)),
             sg.T(
                 "Vacio", size=(14, 1), justification="center", pad=(0, 0), key="nombre6"
             ),
             sg.T("0", size=(8, 1), justification="center", pad=(0, 0), key="puntos6"),
         ],
         [
-            sg.T("7", size=(8, 1), justification="center", pad=(0, 0)),
+            sg.T("8", size=(8, 1), justification="center", pad=(0, 0)),
             sg.T(
                 "Vacio", size=(14, 1), justification="center", pad=(0, 0), key="nombre7"
             ),
             sg.T("0", size=(8, 1), justification="center", pad=(0, 0), key="puntos7"),
         ],
         [
-            sg.T("8", size=(8, 1), justification="center", pad=(0, 0)),
+            sg.T("9", size=(8, 1), justification="center", pad=(0, 0)),
             sg.T(
                 "Vacio", size=(14, 1), justification="center", pad=(0, 0), key="nombre8"
             ),
             sg.T("0", size=(8, 1), justification="center", pad=(0, 0), key="puntos8"),
-        ],
-        [
-            sg.T("9", size=(8, 1), justification="center", pad=(0, 0)),
-            sg.T(
-                "Vacio", size=(14, 1), justification="center", pad=(0, 0), key="nombre9"
-            ),
-            sg.T("0", size=(8, 1), justification="center", pad=(0, 0), key="puntos9"),
         ],
         [
             sg.T("10", size=(8, 1), justification="center", pad=(0, 0)),
@@ -111,9 +111,9 @@ def main():
                 size=(14, 1),
                 justification="center",
                 pad=(0, 0),
-                key="nombre10",
+                key="nombre9",
             ),
-            sg.T("0", size=(8, 1), justification="center", pad=(0, 0), key="puntos10"),
+            sg.T("0", size=(8, 1), justification="center", pad=(0, 0), key="puntos9"),
         ],
         [
             sg.B(
