@@ -10,6 +10,7 @@ from funcionAutenticar import confirmar_Palabra
 import datetime, time
 import os
 from os import path
+import collections
 import sys
 sys.path.insert(1, "/imagenes")
 
@@ -155,7 +156,7 @@ def cargar():
         return datos
     except FileNotFoundError:
         sg.popup(
-            "No se encontró el archivo, se procedera a crear uno..."
+            "No se encontró el archivo, se procedera a cargar un por defecto..."
         )
         with open("guardado/datos_default.json", "r") as jsonFile:
             datos = json.load(jsonFile)
@@ -185,6 +186,9 @@ def guardar_partida(
     palabras_en_tablero,
     ficha_pos,
     pos_fichas_estante,
+    puede_cambiar_letras,
+    contador_clickeadas,
+    tiempo
 ):
     # guarda la partida
     atrilStr = atril.atril
@@ -228,6 +232,9 @@ def guardar_partida(
         "palabras_en_tablero": palabras_en_tablero,
         "ficha_pos": ficha_pos,
         "pos_fichas_estante": pos_fichas_estante,
+        "puede_cambiar_letras": puede_cambiar_letras,
+        "contador_clickeadas": contador_clickeadas,
+        "tiempo": tiempo
     }
     print(datos)
     return datos
@@ -1033,9 +1040,12 @@ def main(dificultad, datosC):
         ficha_pos = datosC["ficha_pos"]
         pos_fichas_estante = datosC["pos_fichas_estante"]
 
-        puede_cambiar_letras=datosC[""]
+        puede_cambiar_letras=datosC["puede_cambiar_letras"]
         marcar_fichas=False
-        contador_clickeadas=-1
+        contador_clickeadas=datosC["contador_clickeadas"]
+        tiempo = datosC["tiempo"]
+        tiempo_act = 0
+        tiempo_ini = tiempo_int()
     else:
         datosA = cargar()
         w, h, sw, sh = so()
@@ -1244,6 +1254,15 @@ def main(dificultad, datosC):
             window.FindElement("Terminar").Update(visible=False)
             juega = datosC["juega"]
             palabras_en_tablero = datosC["palabras_en_tablero"]
+            estante = jugador_estante.get_estante()
+            if dificultad == "-facil-":
+                tablero_especial(window, "facil")
+            elif dificultad == "-medio-":
+                tablero_especial(window, "medio")
+            else:
+                tablero_especial(window, "dificil")
+            window.FindElement("-puntaje-").Update(jugador_estante.puntaje)
+            window.FindElement("Terminar").Update(visible=True)
             primera = 0
 
         event, values = window.Read(timeout=10)
@@ -1700,6 +1719,9 @@ def main(dificultad, datosC):
                         palabras_en_tablero,
                         ficha_pos,
                         pos_fichas_estante,
+                        puede_cambiar_letras,
+                        contador_clickeadas,
+                        tiempo
                     )
                     guardar.main(datosg)
                 
@@ -1717,12 +1739,15 @@ def main(dificultad, datosC):
                     minimo = 9999
                     minimon = 1
                     for a in range(9):
-                        if int(top10["puntos"+str(a)]) < int(minimo):
-                            minimo = top10["puntos"+str(a)]
+                        if int(top10[list(top10.keys())[a]]) < int(minimo):
+                            minimo = top10[list(top10.keys())[a]]
                             minimon = a
-                    top10["nombre"+str(minimon)] = jugador_estante.nombre
-                    top10["puntos"+str(minimon)] = jugador_estante.puntaje
-                    config.guardar("guardado/top10.json",top10)
+                    top10[jugador_estante.nombre] = top10.pop(list(top10.keys())[minimon])
+                    top10[jugador_estante.nombre] = jugador_estante.puntaje
+                    top10s = sorted(top10.items(), key=lambda kv: kv[1])
+                    top10s.reverse()
+                    top10or = collections.OrderedDict(top10s)
+                    config.guardar("guardado/top10.json",top10or)
                     break
 
             elif turno_Act == 2:

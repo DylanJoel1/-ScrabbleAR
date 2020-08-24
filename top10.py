@@ -1,6 +1,7 @@
 import PySimpleGUI as sg
-from config import cargar, cargar_default, guardar
+from config import guardar
 from os import path
+import json
 import sys
 
 sys.path.insert(1, "/guardado")
@@ -10,30 +11,84 @@ archivo_config = path.join(path.dirname(__file__), r"guardado/top10.json")
 default_config = path.join(path.dirname(__file__), r"guardado/top10vacio.json")
 
 
+def cargar(window, a, ad):
+    try:
+        with open(a, "r") as jsonFile:
+            datos = json.load(jsonFile)
+            window.FindElement("nombre0").Update(value=list(datos.keys())[0])
+            window.FindElement("nombre1").Update(value=list(datos.keys())[1])
+            window.FindElement("nombre2").Update(value=list(datos.keys())[2])
+            window.FindElement("nombre3").Update(value=list(datos.keys())[3])
+            window.FindElement("nombre4").Update(value=list(datos.keys())[4])
+            window.FindElement("nombre5").Update(value=list(datos.keys())[5])
+            window.FindElement("nombre6").Update(value=list(datos.keys())[6])
+            window.FindElement("nombre7").Update(value=list(datos.keys())[7])
+            window.FindElement("nombre8").Update(value=list(datos.keys())[8])
+            window.FindElement("nombre9").Update(value=list(datos.keys())[9])
+            window.FindElement("puntos0").Update(value=datos[list(datos.keys())[0]])
+            window.FindElement("puntos1").Update(value=datos[list(datos.keys())[1]])
+            window.FindElement("puntos2").Update(value=datos[list(datos.keys())[2]])
+            window.FindElement("puntos3").Update(value=datos[list(datos.keys())[3]])
+            window.FindElement("puntos4").Update(value=datos[list(datos.keys())[4]])
+            window.FindElement("puntos5").Update(value=datos[list(datos.keys())[5]])
+            window.FindElement("puntos6").Update(value=datos[list(datos.keys())[6]])
+            window.FindElement("puntos7").Update(value=datos[list(datos.keys())[7]])
+            window.FindElement("puntos8").Update(value=datos[list(datos.keys())[8]])
+            window.FindElement("puntos9").Update(value=datos[list(datos.keys())[9]])
+    except Exception:
+        with open(ad, "r") as jsonFile:
+            datos = json.load(jsonFile)
+            window.FindElement("nombre0").Update(value=list(datos.keys())[0])
+            window.FindElement("nombre1").Update(value=list(datos.keys())[1])
+            window.FindElement("nombre2").Update(value=list(datos.keys())[2])
+            window.FindElement("nombre3").Update(value=list(datos.keys())[3])
+            window.FindElement("nombre4").Update(value=list(datos.keys())[4])
+            window.FindElement("nombre5").Update(value=list(datos.keys())[5])
+            window.FindElement("nombre6").Update(value=list(datos.keys())[6])
+            window.FindElement("nombre7").Update(value=list(datos.keys())[7])
+            window.FindElement("nombre8").Update(value=list(datos.keys())[8])
+            window.FindElement("nombre9").Update(value=list(datos.keys())[9])
+            window.FindElement("puntos0").Update(value=datos[list(datos.keys())[0]])
+            window.FindElement("puntos1").Update(value=datos[list(datos.keys())[1]])
+            window.FindElement("puntos2").Update(value=datos[list(datos.keys())[2]])
+            window.FindElement("puntos3").Update(value=datos[list(datos.keys())[3]])
+            window.FindElement("puntos4").Update(value=datos[list(datos.keys())[4]])
+            window.FindElement("puntos5").Update(value=datos[list(datos.keys())[5]])
+            window.FindElement("puntos6").Update(value=datos[list(datos.keys())[6]])
+            window.FindElement("puntos7").Update(value=datos[list(datos.keys())[7]])
+            window.FindElement("puntos8").Update(value=datos[list(datos.keys())[8]])
+            window.FindElement("puntos9").Update(value=datos[list(datos.keys())[9]])
+
+
+def cargar_default(window, a, ad):
+    with open(ad, "r") as jsonFile:
+        datos = json.load(jsonFile)
+        window.FindElement("nombre0").Update(value=list(datos.keys())[0])
+        window.FindElement("nombre1").Update(value=list(datos.keys())[1])
+        window.FindElement("nombre2").Update(value=list(datos.keys())[2])
+        window.FindElement("nombre3").Update(value=list(datos.keys())[3])
+        window.FindElement("nombre4").Update(value=list(datos.keys())[4])
+        window.FindElement("nombre5").Update(value=list(datos.keys())[5])
+        window.FindElement("nombre6").Update(value=list(datos.keys())[6])
+        window.FindElement("nombre7").Update(value=list(datos.keys())[7])
+        window.FindElement("nombre8").Update(value=list(datos.keys())[8])
+        window.FindElement("nombre9").Update(value=list(datos.keys())[9])
+        window.FindElement("puntos0").Update(value=datos[list(datos.keys())[0]])
+        window.FindElement("puntos1").Update(value=datos[list(datos.keys())[1]])
+        window.FindElement("puntos2").Update(value=datos[list(datos.keys())[2]])
+        window.FindElement("puntos3").Update(value=datos[list(datos.keys())[3]])
+        window.FindElement("puntos4").Update(value=datos[list(datos.keys())[4]])
+        window.FindElement("puntos5").Update(value=datos[list(datos.keys())[5]])
+        window.FindElement("puntos6").Update(value=datos[list(datos.keys())[6]])
+        window.FindElement("puntos7").Update(value=datos[list(datos.keys())[7]])
+        window.FindElement("puntos8").Update(value=datos[list(datos.keys())[8]])
+        window.FindElement("puntos9").Update(value=datos[list(datos.keys())[9]])
+    with open(a, "w") as jsonFile:
+        json.dump(datos, jsonFile)
+
+
 def main():
     primera = 1
-    keys = {
-        "nombre0": "",
-        "nombre1": "",
-        "nombre2": "",
-        "nombre3": "",
-        "nombre4": "",
-        "nombre5": "",
-        "nombre6": "",
-        "nombre7": "",
-        "nombre8": "",
-        "nombre9": "",
-        "puntos0": "",
-        "puntos1": "",
-        "puntos2": "",
-        "puntos3": "",
-        "puntos4": "",
-        "puntos5": "",
-        "puntos6": "",
-        "puntos7": "",
-        "puntos8": "",
-        "puntos9": "",        
-    }
     layout = [
         [sg.T("Top 10", font=("Helvetica", 30), text_color="black", border_width=30)],
         [
@@ -136,13 +191,13 @@ def main():
     while True:
         if primera == 1:
             window.Finalize()
-            cargar(window, keys, archivo_config, default_config)
+            cargar(window, archivo_config, default_config)
             primera = 0
         event, values = window.read()
         if event is None or event == "-volver-":
             break
         if event == "-default-":
-            cargar_default(window, keys, default_config)
+            cargar_default(window, archivo_config, default_config)
             sg.popup("Configuracion por defecto cargada con exito")
 
     window.close()
