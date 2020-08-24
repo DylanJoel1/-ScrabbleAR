@@ -1064,15 +1064,14 @@ def main(dificultad, datosC):
             aux = int(datosA["fhora"])*120
             aux = aux + int(datosA["fmin"])*60
             tiempo = (aux*100)
-            print (tiempo)
         elif dificultad == "-medio-":
-            aux = datosA["mhora"] * 60
-            aux += datosA["mmin"]
-            tiempo = aux
+            aux = int(datosA["mhora"])*120
+            aux = aux + int(datosA["mmin"])*60
+            tiempo = (aux*100)
         else:
-            aux = datosA["dhora"] * 60
-            aux += datosA["dmin"]
-            tiempo = aux
+            aux = int(datosA["dhora"])*120
+            aux = aux + int(datosA["dmin"])*60
+            tiempo = (aux*100)
         tiempo_act = 0
         tiempo_ini = tiempo_int()
 
