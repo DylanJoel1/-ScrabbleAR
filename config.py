@@ -1156,13 +1156,15 @@ def Config():
             val_pc(values, event, window)
         if event == "-guardar-":
             if (values["fhora"] == "0") and (values["fmin"] == "0"):
-                print("doble 0")
+                sg.Popup("No se puede jugar una partida de 0 minutos. Minutos cambiados a 1")
                 window.FindElement("fmin").Update(1)
                 values["fmin"] = "1"
             if (values["mhora"] == "0") and (values["mmin"] == "0"):
+                sg.Popup("No se puede jugar una partida de 0 minutos. Minutos cambiados a 1")
                 window.FindElement("mmin").Update(1)
                 values["mmin"] = "1"
             if (values["dhora"] == "0") and (values["dmin"] == "0"):
+                sg.Popup("No se puede jugar una partida de 0 minutos. Minutos cambiados a 1")
                 window.FindElement("dmin").Update(1)
                 values["dmin"] = "1"
             datos = {
