@@ -520,6 +520,11 @@ class Computadora:
     def set_letras(self,letras):
         self.let=letras
     
+    def incrementar_puntaje(self, agregado, window):
+        # Incrementa el puntaje del jugador
+        self.puntaje += agregado
+        window["-puntajepc-"].update(self.puntaje)
+    
     def get_puntaje(self):
         # Devuelve el puntaje de la maquina
         return self.puntaje
@@ -1734,7 +1739,7 @@ def main(dificultad, datosC):
                         puede_cambiar_letras=1
                         
                         puntos_provisional = puntos.puntaje_palabra(
-                            fichas_punt, palabra_formada, window
+                            fichas_punt, palabra_formada, window, "-out-"
                         )
                         for pos in pos_ficha_anterior:
                             puntos_provisional = puntos.multipal(
@@ -1744,6 +1749,7 @@ def main(dificultad, datosC):
                                 puntos_provisional,
                                 POS_ESPECIALES,
                                 window,
+                                "-out-"
                             )
                             tablero.tablero[pos[0]][pos[1]] = True
                         agregado = 0
@@ -1755,6 +1761,7 @@ def main(dificultad, datosC):
                                 fichas_punt,
                                 POS_ESPECIALES,
                                 window,
+                                "-out-"
                             )
                         puntos_provisional += agregado
                         jugador_estante.incrementar_puntaje(puntos_provisional, window)
@@ -1902,13 +1909,38 @@ def main(dificultad, datosC):
                 
                 if palabras_en_tablero==0:
                     aux=7
+                    puntos_pc = puntos.puntaje_palabra(
+                            fichas_punt, palabra, window, "-outpc-"
+                        )
                     for let in palabra:
                         window.FindElement((7,aux)).Update(
                             text=let,
                             image_filename=(("imagenes/" + let + ".png")),
                         )
+                        puntos_pc = puntos.multipal(
+                                7,
+                                aux,
+                                dificultad,
+                                puntos_pc,
+                                POS_ESPECIALES,
+                                window,
+                                "-outpc-"
+                            )
+                        agregado = 0
+                        agregado = agregado + puntos.multilet(
+                                (7,aux),
+                                let,
+                                dificultad,
+                                fichas_punt,
+                                POS_ESPECIALES,
+                                window,
+                                "-outpc-"
+                            )
+                        puntos_pc = puntos_pc + agregado
+                        
                         aux+=1
                         tablero.tablero[7][aux-1]=True
+                    maquina.incrementar_puntaje(puntos_pc, window)
                     palabras_en_tablero+=1
                 elif palabras_en_tablero > 0:
                     puede_formar_palabra=True
