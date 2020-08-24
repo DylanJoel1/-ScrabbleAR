@@ -31,8 +31,8 @@ TIPO = {
 def es_Palabra(
     p,
 ):  # Funcion que pregunta si la palabra se encuentra en los diccionarios de pattern
-    print(p[0][0][0])
-    if p[0][0][0] in lexicon.keys() and p[0][0][0] in spelling.keys():
+    
+    if p in lexicon.keys() and p in spelling.keys():
         return True
     else:
         return False
@@ -61,7 +61,7 @@ def confirmar_Palabra(pal, DIFICULTAD):
     pal = pal.lower()
     p = parse(pal).split()
     palabra = [p[0][0]]
-    if es_Palabra(p):
+    if es_Palabra(p[0][0][0]):
 
         if tipo_Palabra(
             p[0], DIFICULTAD

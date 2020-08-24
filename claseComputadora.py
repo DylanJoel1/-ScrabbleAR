@@ -5,8 +5,6 @@ from funcionAutenticar import confirmar_Palabra
 # CONSTANTES PARA TESTEAR
 
 
-DIFICULTAD = "dificil"
-
 
 class Computadora:
     def __init__(self, letras="ekigañv"):
@@ -27,11 +25,8 @@ class Computadora:
             palabras.copy()
         )  # creo un conjunto secundario con los valores del primero
 
-        for (
-            elem
-        ) in (
-            conj_aux
-        ):  # itero con los valores del conjuto secundario asi voy borrando los elementos que no sean palabras válidas
+        for elem in conj_aux:  
+            # itero con los valores del conjuto secundario asi voy borrando los elementos que no sean palabras válidas
             if (confirmar_Palabra(elem, DIFICULTAD)) == False:
                 palabras.remove(elem)
 
