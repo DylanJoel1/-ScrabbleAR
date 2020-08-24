@@ -982,10 +982,75 @@ def salir_juego(evento):
     if evento is None or evento == "Salir":
         return True
 
+def calcular_lugares(pos,tablero,palabra):
+    #Funcion que retorna una lista con las posiciones disponibles hacia la cual puede formar la palabra completa
+    #En caso de que no pueda formar una palabra hacia ninguna direccion, retorna una lista vacía 
+    indice_aux=pos[1]
+    aux_contadora=0
+    posiciones_disp=[]
+    
+    for let in palabra:
+        if indice_aux <15:
+            if tablero[pos[0]][indice_aux] == False:
+                posiciones_disp.append((pos[0],indice_aux))
+                aux_contadora+=1
+                indice_aux+=1
+        else:
+            break
+    if aux_contadora==len(palabra):
+        return posiciones_disp
+    else:
+        posiciones_disp=[]
+        aux_contadora=0
+        indice_aux=pos[1]
+    
+    for let in palabra:
+        if indice_aux > 0:
+            if tablero[pos[0]][indice_aux]==False:
+                posiciones_disp.append((pos[0],indice_aux))
+                aux_contadora=aux_contadora+1
+                indice_aux-=1
+        else:
+            break
+    if aux_contadora==len(palabra):
+        return posiciones_disp
+    else:
+        posiciones_disp=[]
+        aux_contadora=0
+        indice_aux=pos[0]
+    for let in palabra:
+        if (indice_aux < 15):
+            if (tablero[indice_aux][pos[1]]==False):
+                posiciones_disp.append((indice_aux,pos[1]))
+                aux_contadora = aux_contadora + 1
+                indice_aux+=1
+        else:
+            break
+    if aux_contadora==len(palabra):
+        return posiciones_disp
+    else:
+        posiciones_disp=[]
+        aux_contadora=0
+        indice_aux=pos[0]
+    
+    for let in palabra:
+        if (indice_aux >0):
+            if tablero[indice_aux][pos[1]]==False:
+                posiciones_disp.append((indice_aux,pos[1]))
+                aux_contadora+=1
+                indice_aux-=1
+        else:
+            break
+    if aux_contadora==len(palabra):
+        return posiciones_disp 
+    else:
+        posiciones_disp=[]
+    return posiciones_disp
+
 
 def hay_espacio(
-    window, lista_pos, tablero, direc="disponibles"
-):  # Funcion que retorna si es válido o no colocar una ficha en la posición de la direccion asignada. En caso de no dar una direccion retorna una lista con todas las posiciones válidas que rodeen a la ultima ficha colocada.
+    window, lista_pos, tablero, direc="disponibles"):  
+    # Funcion que retorna si es válido o no colocar una ficha en la posición de la direccion asignada. En caso de no dar una direccion retorna una lista con todas las posiciones válidas que rodeen a la ultima ficha colocada.
     if direc == "disponibles":
         aux = []
         if lista_pos[0] != 0:
@@ -1838,7 +1903,6 @@ def main(dificultad, datosC):
                 if palabras_en_tablero==0:
                     aux=7
                     for let in palabra:
-                        time.sleep(2)
                         window.FindElement((7,aux)).Update(
                             text=let,
                             image_filename=(("imagenes/" + let + ".png")),
@@ -1846,15 +1910,28 @@ def main(dificultad, datosC):
                         aux+=1
                         tablero.tablero[7][aux-1]=True
                     palabras_en_tablero+=1
-                    tablero.mostrar_estado()
+                elif palabras_en_tablero > 0:
+                    puede_formar_palabra=True
+                    while puede_formar_palabra:
+                        #En caso de que la posicion que tomé de las disponibles no tiene lugar hacia ninguna dirección para formar la palabra:
+                        #Sigue en el bucle hasta que encuentre una posicion
+                        pos_adyacentes = tablero.Pos_Libres_Tablero()
+                        pos= pos_adyacentes.pop()
+                        posiciones_disponibles=calcular_lugares(pos,tablero.tablero,palabra)
+                        if (posiciones_disponibles != []):
+                            #Si la funcion que me calcula las posiciones hacia las que puedo formar la palabra no me devuelve una lista vacía:
+                            #Formo la palabra
+                            pos_letra=0
+                            for coor in posiciones_disponibles:
+                                window.FindElement((coor[0],coor[1])).Update(
+                                    text=palabra[pos_letra],
+                                    image_filename=(("imagenes/" + palabra[pos_letra] + ".png")),
+                                )
+                                pos_letra+=1
+                                tablero.tablero[coor[0]][coor[1]]=True
+                            palabras_en_tablero+=1
+                            puede_formar_palabra=False
                         
-                
-                
-                
-                
-                
-                
-                
                 maquina.cambiar_letras(palabra)
                 
                 turno_Act = 1
