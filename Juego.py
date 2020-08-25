@@ -1447,7 +1447,8 @@ def main(dificultad, datosC):
                 window.FindElement("-Turno-").Update(value="Turno de la maquina",background_color="#008B8B")
             #Inicio el tiempo
             tiempo_ini = tiempo_int()
-
+            
+            cantidad_cambios=0
         elif juega:
             # Si ya se tocó el boton de jugar inicia a preguntar por los turnos y preparar el tablero para las jugadas
 
@@ -1466,6 +1467,9 @@ def main(dificultad, datosC):
                     
             
             # --------------------------------------------TURNO JUGADOR---------------------------------------------
+            if cantidad_cambios <3:
+                window.FindElement("-cambiar_fichas-").Update(disabled=True)
+                window.FindElement("-cambiar_todas_fichas-").Update(disabled=True)
             if (event == "-cambiar_todas_fichas-") and  turno_Act==1:
                 
                 turno_Act = 2
@@ -1476,6 +1480,8 @@ def main(dificultad, datosC):
                             value="Turno de la maquina",
                             background_color="#008B8B"
                         )
+                cantidad_cambios+=1
+
             if event == "-cambiar_fichas-" and  turno_Act==1:
                 sg.popup("Clikea las fichas que quiere cambiar, cuando termine aprete el boton 'confirmar' ")
                 window.FindElement("-confirmar_letras-").Update(disabled=False)
@@ -1497,6 +1503,7 @@ def main(dificultad, datosC):
                     contador_clickeadas= ATRIL_JUGADOR.count("")
         
                 if  contador_clickeadas == 0:
+                    cantidad_cambios+=1
                     time.sleep(1)
                     turno_Act = 2
                     no_termina_turno= False
@@ -1508,8 +1515,10 @@ def main(dificultad, datosC):
                         window.FindElement(i).Update(button_color=("black", "white"))
                     
                         ATRIL_JUGADOR[i]=""
+
                         
                 if event== "-confirmar_letras-":
+                    cantidad_cambios+=1
                     
                     turno_Act = 2
                     no_termina_turno=False
@@ -1526,6 +1535,8 @@ def main(dificultad, datosC):
                             value="Turno de la maquina",
                             background_color="#008B8B"
                         )
+                    window.FindElement("-cambiar_fichas-").Update(disabled=True)
+                    window.FindElement("-cambiar_todas_fichas-").Update(disabled=True)
                     
 
 
@@ -1535,7 +1546,7 @@ def main(dificultad, datosC):
                     window.FindElement("Guardar").Update(visible=True)
                     poder_guardar = False
 
-                if puede_cambiar_letras == 1:
+                if puede_cambiar_letras == 1 and cantidad_cambios <3:
                     window.FindElement("-cambiar_fichas-").Update(disabled=False)
                     window.FindElement("-cambiar_todas_fichas-").Update(disabled=False)
                 
@@ -2011,7 +2022,7 @@ def main(dificultad, datosC):
                 
                 turno_Act = 1
                 no_termina_turno = True
-                sigue = 1
+                sigue = 0
                 pos_ficha_anterior = []
                 time.sleep(4)
                 window.FindElement("-Turno-").Update(
