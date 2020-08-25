@@ -191,7 +191,8 @@ def guardar_partida(
     contador_clickeadas,
     tiempo,
     maquina,
-    cantidad_cambios
+    cantidad_cambios,
+    ficha_pos_fija
 ):
     # guarda la partida
     atrilStr = atril.atril
@@ -263,7 +264,8 @@ def guardar_partida(
         "puede_cambiar_letras": puede_cambiar_letras,
         "contador_clickeadas": contador_clickeadas,
         "tiempo": tiempo,
-        "cantidad_cambios":cantidad_cambios
+        "cantidad_cambios":cantidad_cambios,
+        "ficha_pos_fija":ficha_pos_fija
     }
     print(datos)
     return datos
@@ -1284,6 +1286,14 @@ def fin(jugador_estante=None, maquina=None):
         sg.Popup("Perdiste")
 
 
+def cargar_fichas(ficha_pos_fija,window):
+    for key in ficha_pos_fija:
+        k = list(key)
+        k2 = tuple((int(k[1]),int(k[4])))
+        window.FindElement(k2).Update(image_filename="imagenes/"+ficha_pos_fija[key]+".png")
+
+
+
 def main(dificultad, datosC):
     # Se inicializan todas las variables a utilizar y se ejecuta el juego en si
     if datosC != None:
@@ -1316,6 +1326,8 @@ def main(dificultad, datosC):
         maquina= Computadora(atril,0,"",datosC)
         cantidad_cambios = datosC["cantidad_cambios"]
         puntos.fichas_punt_global = fichas_punt
+        ficha_pos_fija = datosC["ficha_pos_fija"]
+        
     else:
         datosA = cargar()
         w, h, sw, sh = so()
@@ -1329,6 +1341,7 @@ def main(dificultad, datosC):
         sigue = 0
         juega = False
         puede_cambiar_letras=1
+        ficha_pos_fija = {}
 
         marcar_fichas=False
         contador_clickeadas=-1
@@ -1532,6 +1545,7 @@ def main(dificultad, datosC):
                 tablero_especial(window, "medio")
             else:
                 tablero_especial(window, "dificil")
+            cargar_fichas(ficha_pos_fija,window)
             window.FindElement("-puntaje-").Update(jugador_estante.puntaje)
             window.FindElement("-puntajepc-").Update(maquina.puntaje)
             window.FindElement("Terminar").Update(visible=True)
@@ -1576,7 +1590,7 @@ def main(dificultad, datosC):
             #Inicio el tiempo
             tiempo_ini = tiempo_int()
             
-            cantidad_cambios=0
+            cantidad_cambios=3
         elif juega:
             # Si ya se tocó el boton de jugar inicia a preguntar por los turnos y preparar el tablero para las jugadas
 
@@ -1601,9 +1615,9 @@ def main(dificultad, datosC):
                     
             
             # --------------------------------------------TURNO JUGADOR---------------------------------------------
-            if cantidad_cambios <3:
-                window.FindElement("-cambiar_fichas-").Update(disabled=True)
-                window.FindElement("-cambiar_todas_fichas-").Update(disabled=True)
+            if cantidad_cambios >0:
+                window.FindElement("-cambiar_fichas-").Update("Cambiar Ficha/s ("+str(cantidad_cambios)+")",disabled=True)
+                window.FindElement("-cambiar_todas_fichas-").Update("Cambiar todas las fichas ("+str(cantidad_cambios)+")",disabled=True)
             if (event == "-cambiar_todas_fichas-") and  turno_Act==1:
                 puntos.estantejglobal = jugador_estante
                 turno_Act = 2
@@ -1618,7 +1632,7 @@ def main(dificultad, datosC):
                             value="Turno de la maquina",
                             background_color="#008B8B"
                         )
-                cantidad_cambios+=1
+                cantidad_cambios-=1
 
             if event == "-cambiar_fichas-" and  turno_Act==1:
                 sg.popup("Clikea las fichas que quiere cambiar, cuando termine aprete el boton 'confirmar' ")
@@ -1642,7 +1656,7 @@ def main(dificultad, datosC):
                     contador_clickeadas= ATRIL_JUGADOR.count("")
         
                 if  contador_clickeadas == 0:
-                    cantidad_cambios+=1
+                    cantidad_cambios-=1
                     time.sleep(1)
                     turno_Act = 2
                     no_termina_turno= False
@@ -1657,7 +1671,7 @@ def main(dificultad, datosC):
 
                         
                 if event== "-confirmar_letras-":
-                    cantidad_cambios+=1
+                    cantidad_cambios-=1
                     puntos.estantejglobal = jugador_estante
                     turno_Act = 2
                     no_termina_turno=False
@@ -1685,7 +1699,7 @@ def main(dificultad, datosC):
                     window.FindElement("Guardar").Update(visible=True)
                     poder_guardar = False
 
-                if puede_cambiar_letras == 1 and cantidad_cambios <3:
+                if puede_cambiar_letras == 1 and cantidad_cambios >0:
                     window.FindElement("-cambiar_fichas-").Update(disabled=False)
                     window.FindElement("-cambiar_todas_fichas-").Update(disabled=False)
                 
@@ -1743,6 +1757,7 @@ def main(dificultad, datosC):
                     ATRIL_JUGADOR[pos_fichas_estante[len(pos_fichas_estante) - 1]] = ""
                     pos_fichas_estante.pop()
                     pos_ficha_anterior.pop()
+                    list(ficha_pos_fija)[-1]
                     list(ficha_pos)[-1]
                     palabra_formada = palabra_formada[:-1]
 
@@ -1882,6 +1897,7 @@ def main(dificultad, datosC):
                         # Me guardo las posiciones en las cuales colocó una ficha
                         pos_ficha_anterior.append(event)
                         # agrego la ficha junto a su posicion para luego ver si hay un multiplicador
+                        ficha_pos_fija.update({str(event):ficha[0]})
                         ficha_pos.update({event:ficha[0]})
                         fichas_colocadas = fichas_colocadas + 1
                         sigue = 0
@@ -2038,7 +2054,8 @@ def main(dificultad, datosC):
                         contador_clickeadas,
                         tiempoR,
                         maquina,
-                        cantidad_cambios
+                        cantidad_cambios,
+                        ficha_pos_fija
                     )
                     guardar.main(datosg)
                 
@@ -2068,7 +2085,8 @@ def main(dificultad, datosC):
                             window.FindElement((7,aux)).Update(
                                 text=let,
                                 image_filename=(("imagenes/" + let + ".png")),
-                             )
+                            )
+                            ficha_pos_fija.update({str((7,aux)):let})
                             puntos_pc = puntos.multipal(
                                 7,
                                 aux,
@@ -2115,6 +2133,7 @@ def main(dificultad, datosC):
                                         text=palabra[pos_letra],
                                         image_filename=(("imagenes/" + palabra[pos_letra] + ".png")),
                                     )
+                                    ficha_pos_fija.update({str((coor[0],coor[1])):palabra[pos_letra]})
                                     puntos_pc = puntos.multipal(
                                             coor[0],
                                             coor[1],
