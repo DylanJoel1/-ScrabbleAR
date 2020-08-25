@@ -1975,15 +1975,15 @@ def main(dificultad, datosC):
                                         "-outpc-"
                                     )
                                 agregado = 0
-                                for let in palabra:
-                                    agregado = agregado + puntos.multilet(
-                                            (coor[0],coor[1]),
-                                            let,
-                                            dificultad,
-                                            fichas_punt,
-                                            POS_ESPECIALES,
-                                            window,
-                                            "-outpc-"
+                                
+                                agregado = agregado + puntos.multilet(
+                                        (coor[0],coor[1]),
+                                        palabra[pos_letra],
+                                        dificultad,
+                                        fichas_punt,
+                                        POS_ESPECIALES,
+                                        window,
+                                        "-outpc-"
                                         )
                                 puntos_pc = puntos_pc + agregado
                                 pos_letra+=1
