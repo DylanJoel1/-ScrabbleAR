@@ -386,7 +386,7 @@ class Estante:
                     )   
         
 
-    def agregar_fichas(self, cant, window,turno="jugador"):
+    def agregar_fichas(self, window,turno="jugador"):
         
         if turno=="jugador":  
             # agrega la cantidad de fichas que se le envían por parametro al estante del jugador.
@@ -572,15 +572,20 @@ class Computadora:
             # itero con los valores del conjuto secundario asi voy borrando los elementos que no sean palabras válidas
             if (confirmar_Palabra(elem, DIFICULTAD)) == False:
                 palabras.remove(elem)
-
-        # if (palabras==none):
-        # self.pedirFichas()
-
+        
+        if len(palabras)==0:
+            return ""
+            
         palabra_larga = max(
             palabras, key=len
         )  # de todas las palabras validas me quedo con la más larga dado que es la que da mayor cantidad de puntos y es más seguro que sea una palabra segura
 
         return palabra_larga
+    def pedir_fichas_nuevas(self):
+        self.let=""
+        for i in range(len(self.estante.estante)):
+            self.estante.estante[i]=""
+        self.estante.agregar_fichas(None,"maquina")
     
     def cambiar_letras(self,palabra):
         for letra in palabra:
@@ -591,7 +596,7 @@ class Computadora:
                 if letra in str(self.estante.estante[i]):
                     self.estante.estante[i]=""
                     break
-        self.estante.agregar_fichas( len(palabra),None,"maquina")
+        self.estante.agregar_fichas(None,"maquina")
                     
             
                 
@@ -1698,9 +1703,7 @@ def main(dificultad, datosC):
                             # si en la lista de posiciones no cambió el primer valor (el valor de las filas) es porque la palabra se está formando de forma horizontal
 
                             if pos_ficha_anterior[0][1] < pos_ficha_anterior[
-                                len(pos_ficha_anterior) - 1
-                            ][1] and hay_espacio(
-                                window,
+                                len(pos_ficha_anterior) - 1][1] and hay_espacio(window,
                                 pos_ficha_anterior[len(pos_ficha_anterior) - 1],
                                 tablero,
                                 "derecha",
@@ -1850,7 +1853,7 @@ def main(dificultad, datosC):
                         jugador_estante.incrementar_puntaje(puntos_provisional, window)
                         poder_guardar = True
                         jugador_estante.estante.eliminar_fichas_estante()
-                        jugador_estante.estante.agregar_fichas(fichas_colocadas, window)
+                        jugador_estante.estante.agregar_fichas( window)
                         sigue = 0
                         turno_Act = 2
                         palabras_en_tablero += 1
@@ -1970,18 +1973,19 @@ def main(dificultad, datosC):
                     letras+= aux[0]
                 maquina.set_letras(letras)
                 palabra=maquina.crearPalabra(dificultad)
+                if palabra != "":
                 
-                if palabras_en_tablero==0:
-                    aux=7
-                    puntos_pc = puntos.puntaje_palabra(
+                    if palabras_en_tablero==0:
+                        aux=7
+                        puntos_pc = puntos.puntaje_palabra(
                             fichas_punt, palabra, window, "-outpc-"
                         )
-                    for let in palabra:
-                        window.FindElement((7,aux)).Update(
-                            text=let,
-                            image_filename=(("imagenes/" + let + ".png")),
-                        )
-                        puntos_pc = puntos.multipal(
+                        for let in palabra:
+                            window.FindElement((7,aux)).Update(
+                                text=let,
+                                image_filename=(("imagenes/" + let + ".png")),
+                             )
+                            puntos_pc = puntos.multipal(
                                 7,
                                 aux,
                                 dificultad,
@@ -1990,72 +1994,73 @@ def main(dificultad, datosC):
                                 window,
                                 "-outpc-"
                             )
-                        agregado = 0
-                        agregado = agregado + puntos.multilet(
-                                (7,aux),
-                                let,
-                                dificultad,
-                                fichas_punt,
-                                POS_ESPECIALES,
-                                window,
-                                "-outpc-"
-                            )
-                        puntos_pc = puntos_pc + agregado
+                            agregado = 0
+                            agregado = agregado + puntos.multilet(
+                                    (7,aux),
+                                    let,
+                                    dificultad,
+                                    fichas_punt,
+                                    POS_ESPECIALES,
+                                    window,
+                                    "-outpc-"
+                             )
+                            puntos_pc = puntos_pc + agregado
                         
-                        aux+=1
-                        tablero.tablero[7][aux-1]=True
-                    maquina.incrementar_puntaje(puntos_pc, window)
-                    palabras_en_tablero+=1
-                elif palabras_en_tablero > 0:
-                    puede_formar_palabra=True
-                    while puede_formar_palabra:
+                            aux+=1
+                            tablero.tablero[7][aux-1]=True
+                        maquina.incrementar_puntaje(puntos_pc, window)
+                        palabras_en_tablero+=1
+                    elif palabras_en_tablero > 0:
+                        puede_formar_palabra=True
+                        while puede_formar_palabra:
                         #En caso de que la posicion que tomé de las disponibles no tiene lugar hacia ninguna dirección para formar la palabra:
                         #Sigue en el bucle hasta que encuentre una posicion
-                        pos_adyacentes_libres = tablero.Pos_Libres_Tablero()
-                        pos= random.choice(pos_adyacentes_libres)
-                        pos_adyacentes_libres.remove(pos)
-                        posiciones_disponibles=calcular_lugares(pos,tablero.tablero,palabra)
-                        if (posiciones_disponibles != []):
-                            #Si la funcion que me calcula las posiciones hacia las que puedo formar la palabra no me devuelve una lista vacía:
-                            #Formo la palabra
-                            puntos_pc = puntos.puntaje_palabra(
-                            fichas_punt, palabra, window, "-outpc-"
-                            )
-                            pos_letra=0
-                            for coor in posiciones_disponibles:
-                                window.FindElement((coor[0],coor[1])).Update(
-                                    text=palabra[pos_letra],
-                                    image_filename=(("imagenes/" + palabra[pos_letra] + ".png")),
+                            pos_adyacentes_libres = tablero.Pos_Libres_Tablero()
+                            pos= random.choice(pos_adyacentes_libres)
+                            pos_adyacentes_libres.remove(pos)
+                            posiciones_disponibles=calcular_lugares(pos,tablero.tablero,palabra)
+                            if (posiciones_disponibles != []):
+                                #Si la funcion que me calcula las posiciones hacia las que puedo formar la palabra no me devuelve una lista vacía:
+                                #Formo la palabra
+                                puntos_pc = puntos.puntaje_palabra(
+                                fichas_punt, palabra, window, "-outpc-"
                                 )
-                                puntos_pc = puntos.multipal(
-                                        coor[0],
-                                        coor[1],
-                                        dificultad,
-                                        puntos_pc,
-                                        POS_ESPECIALES,
-                                        window,
-                                        "-outpc-"
+                                pos_letra=0
+                                for coor in posiciones_disponibles:
+                                    window.FindElement((coor[0],coor[1])).Update(
+                                        text=palabra[pos_letra],
+                                        image_filename=(("imagenes/" + palabra[pos_letra] + ".png")),
                                     )
-                                agregado = 0
-                                
-                                agregado = agregado + puntos.multilet(
-                                        (coor[0],coor[1]),
-                                        palabra[pos_letra],
-                                        dificultad,
-                                        fichas_punt,
-                                        POS_ESPECIALES,
-                                        window,
-                                        "-outpc-"
+                                    puntos_pc = puntos.multipal(
+                                            coor[0],
+                                            coor[1],
+                                            dificultad,
+                                            puntos_pc,
+                                            POS_ESPECIALES,
+                                            window,
+                                            "-outpc-"
                                         )
-                                puntos_pc = puntos_pc + agregado
-                                pos_letra+=1
-                                tablero.tablero[coor[0]][coor[1]]=True
-                            maquina.incrementar_puntaje(puntos_pc, window)
-                            palabras_en_tablero+=1
+                                    agregado = 0
+                                
+                                    agregado = agregado + puntos.multilet(
+                                            (coor[0],coor[1]),
+                                            palabra[pos_letra],
+                                            dificultad,
+                                            fichas_punt,
+                                            POS_ESPECIALES,
+                                            window,
+                                            "-outpc-"
+                                            )
+                                    puntos_pc = puntos_pc + agregado
+                                    pos_letra+=1
+                                    tablero.tablero[coor[0]][coor[1]]=True
+                                maquina.incrementar_puntaje(puntos_pc, window)
+                                palabras_en_tablero+=1
                 
-                            puede_formar_palabra=False
-
-                maquina.cambiar_letras(palabra)
+                                puede_formar_palabra=False
+                    maquina.cambiar_letras(palabra)
+                else:
+                    maquina.pedir_fichas_nuevas()
                 
                 turno_Act = 1
                 no_termina_turno = True
