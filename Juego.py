@@ -487,9 +487,11 @@ class Estante:
     def retornar_Ficha_Al_Estante(self, window, pos_estante):
         # devuelve una ficha del tablero al estante
         self.estante[pos_estante] = ATRIL_JUGADOR[pos_estante]
+
         if ATRIL_JUGADOR[pos_estante] == "":
             window.FindElement(pos_estante).Update(
-                image_filename="", visible=True, image_size=(36, 38)
+                image_filename="", visible=True, image_size=(36, 38),
+                disabled=True
             )
         else:
             window.FindElement(pos_estante).Update(
@@ -498,8 +500,9 @@ class Estante:
                     ("imagenes/" +ATRIL_JUGADOR[pos_estante].upper() + ".png")
                 ),
                 visible=True,
+                disabled=False
             )
-        self.desbloquear_Estante(window)
+        ATRIL_JUGADOR[pos_estante]==""
 
 
 class Jugador:
@@ -1713,6 +1716,7 @@ def main(dificultad, datosC):
 
                 if event in range(7) and puede_colocar==False:
                     # CLIKEA UNA FICHA:
+                    
                     estante = jugador_estante.get_estante()
                     
                     window.FindElement("-cambiar_fichas-").Update(disabled=True)
