@@ -190,7 +190,8 @@ def guardar_partida(
     puede_cambiar_letras,
     contador_clickeadas,
     tiempo,
-    maquina
+    maquina,
+    cantidad_cambios
 ):
     # guarda la partida
     atrilStr = atril.atril
@@ -247,7 +248,8 @@ def guardar_partida(
         "pos_fichas_estante": pos_fichas_estante,
         "puede_cambiar_letras": puede_cambiar_letras,
         "contador_clickeadas": contador_clickeadas,
-        "tiempo": tiempo
+        "tiempo": tiempo,
+        "cantidad_cambios":cantidad_cambios
     }
     print(datos)
     return datos
@@ -336,7 +338,8 @@ class Atril:
     def quitar_ficha(self):
         # Quita una letra del atril y se la da al usuario
         if self.atril == []:
-            print("Se acabaron las fichas")
+            sg.Popup("Se acabaron las fichas")
+            fin(None,None,True)
         else:
             return self.atril.pop()
 
@@ -1183,7 +1186,7 @@ def tiempo_int():
     return int(round(time.time() * 100))
 
 
-def fin(jugador_estante, maquina, perder=False):
+def fin(jugador_estante=None, maquina=None, perder=False):
     sg.Popup("Se acabó la partida")
     if not perder:
         if jugador_estante.puntaje > maquina.puntaje:
@@ -1247,6 +1250,7 @@ def main(dificultad, datosC):
         tiempo_act = 0
         tiempo_ini = tiempo_int()
         maquina= Computadora(atril,0,"",datosC)
+        cantidad_cambios = datosC["cantidad_cambios"]
     else:
         datosA = cargar()
         w, h, sw, sh = so()
@@ -1274,15 +1278,15 @@ def main(dificultad, datosC):
         primera = 0
         poder_guardar = True
         if dificultad == "-facil-":
-            aux = int(datosA["fhora"])*120
+            aux = (int(datosA["fhora"])*60)*60
             aux = aux + int(datosA["fmin"])*60
             tiempo = (aux*100)
         elif dificultad == "-medio-":
-            aux = int(datosA["mhora"])*120
+            aux = (int(datosA["mhora"])*60)*60
             aux = aux + int(datosA["mmin"])*60
             tiempo = (aux*100)
         else:
-            aux = int(datosA["dhora"])*120
+            aux = (int(datosA["dhora"])*60)*60
             aux = aux + int(datosA["dmin"])*60
             tiempo = (aux*100)
         tiempo_act = 0
@@ -1471,7 +1475,7 @@ def main(dificultad, datosC):
         event, values = window.Read(timeout=10)
         tiempo_act = tiempo_int() - tiempo_ini
         tiempoR = tiempo - tiempo_act
-        window.Maximize()
+        #window.Maximize()
         if salir_juego(event):
             break
         if event == "Jugar":
@@ -1954,7 +1958,8 @@ def main(dificultad, datosC):
                         puede_cambiar_letras,
                         contador_clickeadas,
                         tiempoR,
-                        maquina
+                        maquina,
+                        cantidad_cambios
                     )
                     guardar.main(datosg)
                 
