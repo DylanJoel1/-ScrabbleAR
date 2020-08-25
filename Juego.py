@@ -996,7 +996,7 @@ def calcular_lugares(pos,tablero,palabra):
     posiciones_disp=[]
     
     for let in palabra:
-        if indice_aux <15:
+        if indice_aux <14:
             if tablero[pos[0]][indice_aux] == False:
                 posiciones_disp.append((pos[0],indice_aux))
                 aux_contadora+=1
@@ -1025,7 +1025,7 @@ def calcular_lugares(pos,tablero,palabra):
         aux_contadora=0
         indice_aux=pos[0]
     for let in palabra:
-        if (indice_aux < 15):
+        if (indice_aux < 14):
             if (tablero[indice_aux][pos[1]]==False):
                 posiciones_disp.append((indice_aux,pos[1]))
                 aux_contadora = aux_contadora + 1
@@ -1874,27 +1874,30 @@ def main(dificultad, datosC):
                 
                 if event == "Terminar":
                     sg.Popup("Se acabó la partida")
-                    nombre=sg.popup_get_text("Ingresa tu nombre:")
-                    jugador_estante.set_nombre(nombre)
-                    sg.Popup("Nombre:",jugador_estante.nombre,"Puntuacion:", jugador_estante.puntaje)
-                    try:
-                        with open("guardado/top10.json", "r") as jsonFile:
-                            top10 = json.load(jsonFile)
-                    except Exception:
-                        with open("guardado/top10vacio.json", "r") as jsonFile:
-                            top10 = json.load(jsonFile)
-                    minimo = 9999
-                    minimon = 1
-                    for a in range(9):
-                        if int(top10[list(top10.keys())[a]]) < int(minimo):
-                            minimo = top10[list(top10.keys())[a]]
-                            minimon = a
-                    top10[jugador_estante.nombre] = top10.pop(list(top10.keys())[minimon])
-                    top10[jugador_estante.nombre] = jugador_estante.puntaje
-                    top10s = sorted(top10.items(), key=lambda kv: kv[1])
-                    top10s.reverse()
-                    top10or = collections.OrderedDict(top10s)
-                    config.guardar("guardado/top10.json",top10or)
+                    if jugador_estante.puntaje > maquina.puntaje:
+                        nombre=sg.popup_get_text("Ingresa tu nombre:")
+                        jugador_estante.set_nombre(nombre)
+                        sg.Popup("Nombre:",jugador_estante.nombre,"Puntuacion:", jugador_estante.puntaje)
+                        try:
+                            with open("guardado/top10.json", "r") as jsonFile:
+                                top10 = json.load(jsonFile)
+                        except Exception:
+                            with open("guardado/top10vacio.json", "r") as jsonFile:
+                                top10 = json.load(jsonFile)
+                        minimo = 9999
+                        minimon = 1
+                        for a in range(9):
+                            if int(top10[list(top10.keys())[a]]) < int(minimo):
+                                minimo = top10[list(top10.keys())[a]]
+                                minimon = a
+                        top10[jugador_estante.nombre] = top10.pop(list(top10.keys())[minimon])
+                        top10[jugador_estante.nombre] = jugador_estante.puntaje
+                        top10s = sorted(top10.items(), key=lambda kv: kv[1])
+                        top10s.reverse()
+                        top10or = collections.OrderedDict(top10s)
+                        config.guardar("guardado/top10.json",top10or)
+                    else:
+                        sg.Popup("Perdiste")
                     break
 
             elif turno_Act == 2:
@@ -1956,14 +1959,39 @@ def main(dificultad, datosC):
                         if (posiciones_disponibles != []):
                             #Si la funcion que me calcula las posiciones hacia las que puedo formar la palabra no me devuelve una lista vacía:
                             #Formo la palabra
+                            puntos_pc = puntos.puntaje_palabra(
+                            fichas_punt, palabra, window, "-outpc-"
+                            )
                             pos_letra=0
                             for coor in posiciones_disponibles:
                                 window.FindElement((coor[0],coor[1])).Update(
                                     text=palabra[pos_letra],
                                     image_filename=(("imagenes/" + palabra[pos_letra] + ".png")),
                                 )
+                                puntos_pc = puntos.multipal(
+                                        coor[0],
+                                        coor[1],
+                                        dificultad,
+                                        puntos_pc,
+                                        POS_ESPECIALES,
+                                        window,
+                                        "-outpc-"
+                                    )
+                                agregado = 0
+                                
+                                agregado = agregado + puntos.multilet(
+                                        (coor[0],coor[1]),
+                                        palabra[pos_letra],
+                                        dificultad,
+                                        fichas_punt,
+                                        POS_ESPECIALES,
+                                        window,
+                                        "-outpc-"
+                                        )
+                                puntos_pc = puntos_pc + agregado
                                 pos_letra+=1
                                 tablero.tablero[coor[0]][coor[1]]=True
+                            maquina.incrementar_puntaje(puntos_pc, window)
                             palabras_en_tablero+=1
                 
                             puede_formar_palabra=False
