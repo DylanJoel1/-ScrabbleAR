@@ -649,6 +649,7 @@ class Tablero:
 
     def Pos_Libres_Tablero(self):
         # Funcion que retorna una lista con las coordenadas de las pos disponibles adyacentes a las palabras formadas en el tablero
+        
         coords = []
         for m in range(15):
             for n in range(15):
@@ -1595,6 +1596,7 @@ def main(dificultad, datosC):
 
                     if fichas_colocadas == 0 and palabras_en_tablero > 0:
                         # Si ya hay palabras formadas en el tablero y no coloqué fichas, desbloqueo todas las pos adyacentes a las palabras formadas
+                        
                         pos_adyacentes = tablero.Pos_Libres_Tablero()
                         for pos in pos_adyacentes:
                             tablero.desbloquear_Pos(window, pos[0], pos[1])
@@ -1947,8 +1949,9 @@ def main(dificultad, datosC):
                     while puede_formar_palabra:
                         #En caso de que la posicion que tomé de las disponibles no tiene lugar hacia ninguna dirección para formar la palabra:
                         #Sigue en el bucle hasta que encuentre una posicion
-                        pos_adyacentes = tablero.Pos_Libres_Tablero()
-                        pos= pos_adyacentes.pop()
+                        pos_adyacentes_libres = tablero.Pos_Libres_Tablero()
+                        pos= random.choice(pos_adyacentes_libres)
+                        pos_adyacentes_libres.remove(pos)
                         posiciones_disponibles=calcular_lugares(pos,tablero.tablero,palabra)
                         if (posiciones_disponibles != []):
                             #Si la funcion que me calcula las posiciones hacia las que puedo formar la palabra no me devuelve una lista vacía:
@@ -1962,8 +1965,9 @@ def main(dificultad, datosC):
                                 pos_letra+=1
                                 tablero.tablero[coor[0]][coor[1]]=True
                             palabras_en_tablero+=1
+                
                             puede_formar_palabra=False
-                        
+
                 maquina.cambiar_letras(palabra)
                 
                 turno_Act = 1
