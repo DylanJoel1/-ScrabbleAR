@@ -208,8 +208,11 @@ def guardar_partida(
             estante1.append(x.letra)
             estante2.append(x.valor)
         except AttributeError:
-            estante1.append(x)
-            estante2.append(fichas_punt[x])
+            try:
+                estante1.append(x)
+                estante2.append(fichas_punt[x])
+            except KeyError:
+                pass
     estantec = maquina.estante.estante
     estantec1 = []
     estantec2 = []
@@ -218,8 +221,11 @@ def guardar_partida(
             estantec1.append(y.letra)
             estantec2.append(y.valor)
         except AttributeError:
-            estantec1.append(y)
-            estantec2.append(fichas_punt[y])
+            try:
+                estantec1.append(y)
+                estantec2.append(fichas_punt[y])
+            except KeyError:
+                pass
     datos = {
         "w": w,
         "h": h,
@@ -1213,8 +1219,11 @@ def fin(jugador_estante=None, maquina=None):
             estante1.append(x.letra)
             estante2.append(x.valor)
         except AttributeError:
-            estante1.append(x)
-            estante2.append(puntos.fichas_punt_global[x])
+            try:
+                estante1.append(x)
+                estante2.append(puntos.fichas_punt_global[x])
+            except KeyError:
+                pass
     estantec1 = []
     estantec2 = []
     for y in estantec:
@@ -1222,8 +1231,11 @@ def fin(jugador_estante=None, maquina=None):
             estantec1.append(y.letra)
             estantec2.append(y.valor)
         except AttributeError:
-            estantec1.append(y)
-            estantec2.append(puntos.fichas_punt_global[y])
+            try:
+                estantec1.append(y)
+                estantec2.append(puntos.fichas_punt_global[y])
+            except KeyError:
+                pass
     restapj = 0
     restapc = 0
     for valor in estante2:
@@ -1510,7 +1522,6 @@ def main(dificultad, datosC):
             estante_ps(arregloEstante, window)
             tablero.bloquear_tablero(window)
             window.FindElement("Jugar").Update(visible=False)
-            window.FindElement("Terminar").Update(visible=False)
             juega = datosC["juega"]
             palabras_en_tablero = datosC["palabras_en_tablero"]
             estante = jugador_estante.get_estante()
@@ -1863,7 +1874,7 @@ def main(dificultad, datosC):
                         # Me guardo las posiciones en las cuales colocó una ficha
                         pos_ficha_anterior.append(event)
                         # agrego la ficha junto a su posicion para luego ver si hay un multiplicador
-                        ficha_pos.update({ficha[0]: event})
+                        ficha_pos.update({event:ficha[0]})
                         fichas_colocadas = fichas_colocadas + 1
                         sigue = 0
                         palabra_formada += ficha[0]
@@ -1900,10 +1911,11 @@ def main(dificultad, datosC):
                             )
                             tablero.tablero[pos[0]][pos[1]] = True
                         agregado = 0
+                        print("Ficha pos: ", ficha_pos)
                         for key in ficha_pos:
                             agregado = agregado + puntos.multilet(
-                                ficha_pos[key],
                                 key,
+                                ficha_pos[key],
                                 dificultad,
                                 fichas_punt,
                                 POS_ESPECIALES,
@@ -1932,6 +1944,7 @@ def main(dificultad, datosC):
                                 ATRIL_JUGADOR[pos] = ""
                         pos_fichas_estante = []
                         palabra_formada = ""
+                        ficha_pos = {}
                         # Vuelvo a desbloquear el estante para que siga jugando con las nuevas fichas
                         jugador_estante.estante.desbloquear_pos_Estante(window)
                     else:
