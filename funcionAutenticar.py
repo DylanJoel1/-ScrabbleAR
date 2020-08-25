@@ -46,11 +46,11 @@ def tipo_Palabra(
         dif == "-medio-"
     ):  # En caso de ser la dificultad "medio", pregunto por solo 2 tipo de palabras en el diccionario
         
-        if (pal[0][1] in TIPO["verb"]) or (pal[0][1] in TIPO["adj"]):
+        if (pal in TIPO["verb"]) or (pal in TIPO["adj"]):
             return True
             
     else:  # En caso de ser dificil la palabra debe ser de un tipo generado aleatoriamente
-        if (pal[0][1] in TIPO["verb"]) or (pal[0][1] in TIPO["adj"]):
+        if (pal in TIPO["verb"]) or (pal in TIPO["adj"]):
             return True
     return False
 
@@ -64,8 +64,11 @@ def confirmar_Palabra(pal, DIFICULTAD):
     palabra = [p[0][0]]
     if es_Palabra(p[0][0][0]):
         if tipo_Palabra(
-            p[0], DIFICULTAD
+            p[0][0][1], DIFICULTAD
         ):  # Si la palabra existe y cumple con su condicion dependiendo su dificultad sigue el juego
             return True
     else:
         return False
+        
+
+

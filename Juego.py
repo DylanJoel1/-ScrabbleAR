@@ -587,23 +587,26 @@ class Computadora:
             palabras.update((map("".join, it.permutations(self.let, i))))
             # permutations me devuelve todas las permutaciones posibles con esas letras
 
-        conj_aux = (
-            palabras.copy()
-        )  
-
-        for elem in conj_aux:  
+        lista_aux=[]
+        for elem in palabras:  
             # itero con los valores del conjuto secundario asi voy borrando los elementos que no sean palabras válidas
-            if (confirmar_Palabra(elem, DIFICULTAD)) == False:
-                palabras.remove(elem)
-        
-        if len(palabras)==0:
+            if (confirmar_Palabra(elem, DIFICULTAD)):
+                lista_aux.append(elem)
+    
+        if len(lista_aux)==0:
             return ""
-            
+        
         palabra_larga = max(
-            palabras, key=len
+            lista_aux, key=len
         )  # de todas las palabras validas me quedo con la más larga dado que es la que da mayor cantidad de puntos y es más seguro que sea una palabra segura
-
+    
+        if (confirmar_Palabra(palabra_larga,DIFICULTAD)):
+            print("La palabra que generó la pc = " + palabra_larga + "Era válida")
+        else:
+            print("La palabra que generó la pc = " + palabra_larga + "Era INCORRECTA")
+    
         return palabra_larga
+
     def pedir_fichas_nuevas(self):
         self.let=""
         for i in range(len(self.estante.estante)):
