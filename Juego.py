@@ -189,7 +189,8 @@ def guardar_partida(
     pos_fichas_estante,
     puede_cambiar_letras,
     contador_clickeadas,
-    tiempo
+    tiempo,
+    maquina
 ):
     # guarda la partida
     atrilStr = atril.atril
@@ -204,6 +205,12 @@ def guardar_partida(
     for x in estantej:
         estante1.append(x.letra)
         estante2.append(x.valor)
+    estantec = maquina.estante.estante
+    estantec1 = []
+    estantec2 = []
+    for y in estantec:
+        estantec1.append(y.letra)
+        estantec2.append(y.valor)
     datos = {
         "w": w,
         "h": h,
@@ -218,6 +225,11 @@ def guardar_partida(
             "estante1": estante1,
             "estante2": estante2,
             "puntaje": jugador_estante.puntaje,
+        },
+        "maquina": {
+            "estante1": estantec1,
+            "estante2": estantec2,
+            "puntaje": maquina.puntaje,
         },
         "tablero": tablero.tablero,
         "sigue": sigue,
@@ -512,10 +524,16 @@ class Computadora:
     """ Por ahora este objeto solo posee la funcion de generar una palabra, la cual dependiendo las letras que posee la computadora genera un conjunto de las combinaciones
         posibles. En la misma funcion se llama a una funcion de un archivo que importo para devolver la palabra de las combinaciones que cumple con las condiciones del juego
      """
-    def __init__(self,atril,puntaje=0,letras=""):
-        self.puntaje = puntaje
-        self.let = letras
-        self.estante = Estante(atril)
+    def __init__(self,atril,puntaje=0,letras="", datos=None):
+        if datos != None:
+            datosA = datos["maquina"]
+            self.puntaje = datosA["puntaje"]
+            self.estante = Estante(atril, datosA)
+            self.let = letras
+        else:
+            self.puntaje = puntaje
+            self.let = letras
+            self.estante = Estante(atril)
     
     def set_letras(self,letras):
         self.let=letras
@@ -1160,6 +1178,40 @@ def tiempo_int():
     return int(round(time.time() * 100))
 
 
+def fin(jugador_estante, maquina, perder=False):
+    sg.Popup("Se acabó la partida")
+    if not perder:
+        if jugador_estante.puntaje > maquina.puntaje:
+            nombre = "null"
+            nombre=sg.popup_get_text("Ganaste, Ingresa tu nombre:")
+            while nombre == "null":
+                nombre=sg.popup_get_text("Ingresa un nombre valido:")
+            jugador_estante.set_nombre(nombre)
+            sg.Popup("Nombre:",jugador_estante.nombre,"Puntuacion:", jugador_estante.puntaje)
+            try:
+                with open("guardado/top10.json", "r") as jsonFile:
+                    top10 = json.load(jsonFile)
+            except Exception:
+                with open("guardado/top10vacio.json", "r") as jsonFile:
+                    top10 = json.load(jsonFile)
+            minimo = 9999
+            minimon = 1
+            for a in range(8):
+                if int(top10[list(top10.keys())[a]]) < int(minimo):
+                    minimo = top10[list(top10.keys())[a]]
+                    minimon = a
+            top10[jugador_estante.nombre] = top10.pop(list(top10.keys())[minimon])
+            top10[jugador_estante.nombre] = jugador_estante.puntaje
+            top10s = sorted(top10.items(), key=lambda kv: kv[1])
+            top10s.reverse()
+            top10or = collections.OrderedDict(top10s)
+            config.guardar("guardado/top10.json",top10or)
+        else:
+            sg.Popup("Perdiste")
+    else:
+        sg.Popup("Perdiste")
+
+
 def main(dificultad, datosC):
     # Se inicializan todas las variables a utilizar y se ejecuta el juego en si
     if datosC != None:
@@ -1189,6 +1241,7 @@ def main(dificultad, datosC):
         tiempo = datosC["tiempo"]
         tiempo_act = 0
         tiempo_ini = tiempo_int()
+        maquina= Computadora(atril,0,"",datosC)
     else:
         datosA = cargar()
         w, h, sw, sh = so()
@@ -1406,6 +1459,7 @@ def main(dificultad, datosC):
             else:
                 tablero_especial(window, "dificil")
             window.FindElement("-puntaje-").Update(jugador_estante.puntaje)
+            window.FindElement("-puntajepc-").Update(maquina.puntaje)
             window.FindElement("Terminar").Update(visible=True)
             primera = 0
 
@@ -1459,10 +1513,16 @@ def main(dificultad, datosC):
                 fichas_colocadas = 0
 
             #El tiempo representado
+            prim = 1
             if tiempoR > 0:
                 window.FindElement('-tiempo-').Update('{:02d}:{:02d}.{:02d}'.format((tiempoR // 100) // 60, (tiempoR // 100) % 60, tiempoR % 100))
             else:
                 window.FindElement('-tiempo-').Update('00:00.00')
+                if prim == 1:
+                    fin(jugador_estante,maquina)
+                    prim = 0
+                    break
+                    
 
                     
             
@@ -1890,36 +1950,13 @@ def main(dificultad, datosC):
                         pos_fichas_estante,
                         puede_cambiar_letras,
                         contador_clickeadas,
-                        tiempo
+                        tiempoR,
+                        maquina
                     )
                     guardar.main(datosg)
                 
                 if event == "Terminar":
-                    sg.Popup("Se acabó la partida")
-                    if jugador_estante.puntaje > maquina.puntaje:
-                        nombre=sg.popup_get_text("Ingresa tu nombre:")
-                        jugador_estante.set_nombre(nombre)
-                        sg.Popup("Nombre:",jugador_estante.nombre,"Puntuacion:", jugador_estante.puntaje)
-                        try:
-                            with open("guardado/top10.json", "r") as jsonFile:
-                                top10 = json.load(jsonFile)
-                        except Exception:
-                            with open("guardado/top10vacio.json", "r") as jsonFile:
-                                top10 = json.load(jsonFile)
-                        minimo = 9999
-                        minimon = 1
-                        for a in range(9):
-                            if int(top10[list(top10.keys())[a]]) < int(minimo):
-                                minimo = top10[list(top10.keys())[a]]
-                                minimon = a
-                        top10[jugador_estante.nombre] = top10.pop(list(top10.keys())[minimon])
-                        top10[jugador_estante.nombre] = jugador_estante.puntaje
-                        top10s = sorted(top10.items(), key=lambda kv: kv[1])
-                        top10s.reverse()
-                        top10or = collections.OrderedDict(top10s)
-                        config.guardar("guardado/top10.json",top10or)
-                    else:
-                        sg.Popup("Perdiste")
+                    fin(jugador_estante, maquina)
                     break
 
             elif turno_Act == 2:
