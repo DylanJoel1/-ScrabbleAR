@@ -1872,27 +1872,30 @@ def main(dificultad, datosC):
                 
                 if event == "Terminar":
                     sg.Popup("Se acabó la partida")
-                    nombre=sg.popup_get_text("Ingresa tu nombre:")
-                    jugador_estante.set_nombre(nombre)
-                    sg.Popup("Nombre:",jugador_estante.nombre,"Puntuacion:", jugador_estante.puntaje)
-                    try:
-                        with open("guardado/top10.json", "r") as jsonFile:
-                            top10 = json.load(jsonFile)
-                    except Exception:
-                        with open("guardado/top10vacio.json", "r") as jsonFile:
-                            top10 = json.load(jsonFile)
-                    minimo = 9999
-                    minimon = 1
-                    for a in range(9):
-                        if int(top10[list(top10.keys())[a]]) < int(minimo):
-                            minimo = top10[list(top10.keys())[a]]
-                            minimon = a
-                    top10[jugador_estante.nombre] = top10.pop(list(top10.keys())[minimon])
-                    top10[jugador_estante.nombre] = jugador_estante.puntaje
-                    top10s = sorted(top10.items(), key=lambda kv: kv[1])
-                    top10s.reverse()
-                    top10or = collections.OrderedDict(top10s)
-                    config.guardar("guardado/top10.json",top10or)
+                    if jugador_estante.puntaje > maquina.puntaje:
+                        nombre=sg.popup_get_text("Ingresa tu nombre:")
+                        jugador_estante.set_nombre(nombre)
+                        sg.Popup("Nombre:",jugador_estante.nombre,"Puntuacion:", jugador_estante.puntaje)
+                        try:
+                            with open("guardado/top10.json", "r") as jsonFile:
+                                top10 = json.load(jsonFile)
+                        except Exception:
+                            with open("guardado/top10vacio.json", "r") as jsonFile:
+                                top10 = json.load(jsonFile)
+                        minimo = 9999
+                        minimon = 1
+                        for a in range(9):
+                            if int(top10[list(top10.keys())[a]]) < int(minimo):
+                                minimo = top10[list(top10.keys())[a]]
+                                minimon = a
+                        top10[jugador_estante.nombre] = top10.pop(list(top10.keys())[minimon])
+                        top10[jugador_estante.nombre] = jugador_estante.puntaje
+                        top10s = sorted(top10.items(), key=lambda kv: kv[1])
+                        top10s.reverse()
+                        top10or = collections.OrderedDict(top10s)
+                        config.guardar("guardado/top10.json",top10or)
+                    else:
+                        sg.Popup("Perdiste")
                     break
 
             elif turno_Act == 2:
@@ -1972,15 +1975,16 @@ def main(dificultad, datosC):
                                         "-outpc-"
                                     )
                                 agregado = 0
-                                agregado = agregado + puntos.multilet(
-                                        (coor[0],coor[1]),
-                                        let,
-                                        dificultad,
-                                        fichas_punt,
-                                        POS_ESPECIALES,
-                                        window,
-                                        "-outpc-"
-                                    )
+                                for let in palabra:
+                                    agregado = agregado + puntos.multilet(
+                                            (coor[0],coor[1]),
+                                            let,
+                                            dificultad,
+                                            fichas_punt,
+                                            POS_ESPECIALES,
+                                            window,
+                                            "-outpc-"
+                                        )
                                 puntos_pc = puntos_pc + agregado
                                 pos_letra+=1
                                 tablero.tablero[coor[0]][coor[1]]=True
