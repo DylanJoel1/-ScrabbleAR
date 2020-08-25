@@ -1953,12 +1953,35 @@ def main(dificultad, datosC):
                         if (posiciones_disponibles != []):
                             #Si la funcion que me calcula las posiciones hacia las que puedo formar la palabra no me devuelve una lista vacía:
                             #Formo la palabra
+                            puntos_pc = puntos.puntaje_palabra(
+                            fichas_punt, palabra, window, "-outpc-"
+                            )
                             pos_letra=0
                             for coor in posiciones_disponibles:
                                 window.FindElement((coor[0],coor[1])).Update(
                                     text=palabra[pos_letra],
                                     image_filename=(("imagenes/" + palabra[pos_letra] + ".png")),
                                 )
+                                puntos_pc = puntos.multipal(
+                                        coor[0],
+                                        coor[1],
+                                        dificultad,
+                                        puntos_pc,
+                                        POS_ESPECIALES,
+                                        window,
+                                        "-outpc-"
+                                    )
+                                agregado = 0
+                                agregado = agregado + puntos.multilet(
+                                        (coor[0],coor[1]),
+                                        let,
+                                        dificultad,
+                                        fichas_punt,
+                                        POS_ESPECIALES,
+                                        window,
+                                        "-outpc-"
+                                    )
+                                puntos_pc = puntos_pc + agregado
                                 pos_letra+=1
                                 tablero.tablero[coor[0]][coor[1]]=True
                             palabras_en_tablero+=1
