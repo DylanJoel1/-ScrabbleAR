@@ -1245,8 +1245,9 @@ def main(dificultad, datosC):
         for i in range(15)
     ]
     layout2.append(
-        [sg.T("", font=("arial", 15), size=(18, 1)),
-        sg.T("", font=("arial", 15), key="-Turno-", size=(25, 1))]
+        [
+        sg.T("", font=("Arial ", 15), key="-Turno-", size=(18, 1),text_color="black"),
+        ]
     )
     layout2.append([sg.T("Estante Jugador", font=("arial", 15), size=(37, 1)), sg.T("Estante Computadora", font=("arial", 15))])
     layout2.append(
@@ -1441,9 +1442,9 @@ def main(dificultad, datosC):
 
             # Muestro en pantalla el turno actual
             if turno_Act == 1:
-                window.FindElement("-Turno-").Update(value="Turno de el jugador")
+                window.FindElement("-Turno-").Update(value="Turno de el jugador",background_color="green")
             else:
-                window.FindElement("-Turno-").Update(value="Turno de la maquina")
+                window.FindElement("-Turno-").Update(value="Turno de la maquina",background_color="#008B8B")
             #Inicio el tiempo
             tiempo_ini = tiempo_int()
 
@@ -1466,11 +1467,15 @@ def main(dificultad, datosC):
             
             # --------------------------------------------TURNO JUGADOR---------------------------------------------
             if (event == "-cambiar_todas_fichas-") and  turno_Act==1:
-                time.sleep(1)
+                
                 turno_Act = 2
                 no_termina_turno= False
                 jugador_estante.estante.cambiar_fichas(window)
-                
+                time.sleep(1)
+                window.FindElement("-Turno-").Update(
+                            value="Turno de la maquina",
+                            background_color="#008B8B"
+                        )
             if event == "-cambiar_fichas-" and  turno_Act==1:
                 sg.popup("Clikea las fichas que quiere cambiar, cuando termine aprete el boton 'confirmar' ")
                 window.FindElement("-confirmar_letras-").Update(disabled=False)
@@ -1505,7 +1510,7 @@ def main(dificultad, datosC):
                         ATRIL_JUGADOR[i]=""
                         
                 if event== "-confirmar_letras-":
-                    time.sleep(1)
+                    
                     turno_Act = 2
                     no_termina_turno=False
                     marcar_fichas=False
@@ -1516,6 +1521,11 @@ def main(dificultad, datosC):
                     
                         ATRIL_JUGADOR[i]=""
                     window.FindElement("-confirmar_letras-").Update(disabled=True)
+                    time.sleep(1)
+                    window.FindElement("-Turno-").Update(
+                            value="Turno de la maquina",
+                            background_color="#008B8B"
+                        )
                     
 
 
@@ -1778,7 +1788,8 @@ def main(dificultad, datosC):
                         no_termina_turno = False
                         window.FindElement("Confirmar Palabra").Update(disabled=True)
                         window.FindElement("-Turno-").Update(
-                            value="Turno de la maquina"
+                            value="Turno de la maquina",
+                            background_color="#008B8B"
                         )
                         for pos in range(len(ATRIL_JUGADOR)):
                             if ATRIL_JUGADOR[pos] != "":
@@ -2003,5 +2014,9 @@ def main(dificultad, datosC):
                 sigue = 1
                 pos_ficha_anterior = []
                 time.sleep(4)
-                window.FindElement("-Turno-").Update(value="Turno de el jugador")
+                window.FindElement("-Turno-").Update(
+                    value="Turno de el jugador",
+                    background_color="green",
+    
+                )
     window.Close()
