@@ -31,7 +31,6 @@ TIPO = {
 def es_Palabra(
     p,
 ):  # Funcion que pregunta si la palabra se encuentra en los diccionarios de pattern
-    
     if p in lexicon.keys() and p in spelling.keys():
         return True
     else:
@@ -46,10 +45,12 @@ def tipo_Palabra(
     elif (
         dif == "-medio-"
     ):  # En caso de ser la dificultad "medio", pregunto por solo 2 tipo de palabras en el diccionario
-        if (pal in TIPO["verb"]) or (pal in TIPO["adj"]):
+        
+        if (pal[0][1] in TIPO["verb"]) or (pal[0][1] in TIPO["adj"]):
             return True
+            
     else:  # En caso de ser dificil la palabra debe ser de un tipo generado aleatoriamente
-        if (pal in TIPO["verb"]) or (pal in TIPO["adj"]):
+        if (pal[0][1] in TIPO["verb"]) or (pal[0][1] in TIPO["adj"]):
             return True
     return False
 
@@ -62,7 +63,6 @@ def confirmar_Palabra(pal, DIFICULTAD):
     p = parse(pal).split()
     palabra = [p[0][0]]
     if es_Palabra(p[0][0][0]):
-
         if tipo_Palabra(
             p[0], DIFICULTAD
         ):  # Si la palabra existe y cumple con su condicion dependiendo su dificultad sigue el juego
