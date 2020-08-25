@@ -995,7 +995,7 @@ def calcular_lugares(pos,tablero,palabra):
     posiciones_disp=[]
     
     for let in palabra:
-        if indice_aux <15:
+        if indice_aux <14:
             if tablero[pos[0]][indice_aux] == False:
                 posiciones_disp.append((pos[0],indice_aux))
                 aux_contadora+=1
@@ -1024,7 +1024,7 @@ def calcular_lugares(pos,tablero,palabra):
         aux_contadora=0
         indice_aux=pos[0]
     for let in palabra:
-        if (indice_aux < 15):
+        if (indice_aux < 14):
             if (tablero[indice_aux][pos[1]]==False):
                 posiciones_disp.append((indice_aux,pos[1]))
                 aux_contadora = aux_contadora + 1
