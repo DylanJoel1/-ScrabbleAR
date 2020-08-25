@@ -491,8 +491,9 @@ class Estante:
             )
         else:
             window.FindElement(pos_estante).Update(
+                text=ATRIL_JUGADOR[pos_estante],
                 image_filename=(
-                    ("imagenes/" + ATRIL_JUGADOR[pos_estante].upper() + ".png")
+                    ("imagenes/" +ATRIL_JUGADOR[pos_estante].upper() + ".png")
                 ),
                 visible=True,
             )
@@ -1628,6 +1629,7 @@ def main(dificultad, datosC):
             if marcar_fichas:
                 if event in range(7):
                     
+                    
                     ficha = str(estante[event])
                     
                     ficha = ficha.split(
@@ -1697,6 +1699,7 @@ def main(dificultad, datosC):
 
                 if event in range(7) and puede_colocar==False:
                     # CLIKEA UNA FICHA:
+                    estante = jugador_estante.get_estante()
                     
                     window.FindElement("-cambiar_fichas-").Update(disabled=True)
                     window.FindElement("-cambiar_todas_fichas-").Update(disabled=True)
@@ -1808,10 +1811,14 @@ def main(dificultad, datosC):
                                 # Si no tenia espacio a la izquierda o a la derecha entra a el else
                                 sigue = 0
                                 puede_colocar = False
-                                sg.Popup("No hay más espacio en el tablero")
+                                sg.Popup(
+                                    "No hay más espacio en el tablero, confirme la"
+                                    " palabra o intente formar otra"
+                                )
                                 jugador_estante.estante.retornar_Ficha_Al_Estante(
                                     window, evento_ficha
                                 )
+                                ATRIL_JUGADOR[evento_ficha]=""
 
                         else:
                             # Si entra en este else es porque el valor de la columna de la primera ficha colocada y la ultima no cambió, por lo tanto la palabra se forma de manera vertical
@@ -1856,6 +1863,7 @@ def main(dificultad, datosC):
                                 jugador_estante.estante.retornar_Ficha_Al_Estante(
                                     window, evento_ficha
                                 )
+                                ATRIL_JUGADOR[evento_ficha]=""
 
                     if (
                         puede_colocar
@@ -1959,7 +1967,7 @@ def main(dificultad, datosC):
 
                         for pos in pos_fichas_estante:
                             jugador_estante.estante.retornar_Ficha_Al_Estante(
-                                window, pos
+                                window, pos 
                             )
                             ATRIL_JUGADOR[pos] = ""
                         for pos in pos_ficha_anterior:
