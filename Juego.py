@@ -1988,6 +1988,7 @@ def main(dificultad, datosC):
                                 puntos_pc = puntos_pc + agregado
                                 pos_letra+=1
                                 tablero.tablero[coor[0]][coor[1]]=True
+                            maquina.incrementar_puntaje(puntos_pc, window)
                             palabras_en_tablero+=1
                             puede_formar_palabra=False
                         
