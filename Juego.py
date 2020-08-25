@@ -1159,6 +1159,40 @@ def tiempo_int():
     return int(round(time.time() * 100))
 
 
+def fin(jugador_estante, maquina, perder=False):
+    sg.Popup("Se acabó la partida")
+    if not perder:
+        if jugador_estante.puntaje > maquina.puntaje:
+            nombre = "null"
+            nombre=sg.popup_get_text("Ganaste, Ingresa tu nombre:")
+            while nombre == "null":
+                nombre=sg.popup_get_text("Ingresa un nombre valido:")
+            jugador_estante.set_nombre(nombre)
+            sg.Popup("Nombre:",jugador_estante.nombre,"Puntuacion:", jugador_estante.puntaje)
+            try:
+                with open("guardado/top10.json", "r") as jsonFile:
+                    top10 = json.load(jsonFile)
+            except Exception:
+                with open("guardado/top10vacio.json", "r") as jsonFile:
+                    top10 = json.load(jsonFile)
+            minimo = 9999
+            minimon = 1
+            for a in range(8):
+                if int(top10[list(top10.keys())[a]]) < int(minimo):
+                    minimo = top10[list(top10.keys())[a]]
+                    minimon = a
+            top10[jugador_estante.nombre] = top10.pop(list(top10.keys())[minimon])
+            top10[jugador_estante.nombre] = jugador_estante.puntaje
+            top10s = sorted(top10.items(), key=lambda kv: kv[1])
+            top10s.reverse()
+            top10or = collections.OrderedDict(top10s)
+            config.guardar("guardado/top10.json",top10or)
+        else:
+            sg.Popup("Perdiste")
+    else:
+        sg.Popup("Perdiste")
+
+
 def main(dificultad, datosC):
     # Se inicializan todas las variables a utilizar y se ejecuta el juego en si
     if datosC != None:
@@ -1456,10 +1490,16 @@ def main(dificultad, datosC):
                 fichas_colocadas = 0
 
             #El tiempo representado
+            prim = 1
             if tiempoR > 0:
                 window.FindElement('-tiempo-').Update('{:02d}:{:02d}.{:02d}'.format((tiempoR // 100) // 60, (tiempoR // 100) % 60, tiempoR % 100))
             else:
                 window.FindElement('-tiempo-').Update('00:00.00')
+                if prim == 1:
+                    fin(jugador_estante,maquina)
+                    prim = 0
+                    break
+                    
 
                     
             
@@ -1871,31 +1911,7 @@ def main(dificultad, datosC):
                     guardar.main(datosg)
                 
                 if event == "Terminar":
-                    sg.Popup("Se acabó la partida")
-                    if jugador_estante.puntaje > maquina.puntaje:
-                        nombre=sg.popup_get_text("Ingresa tu nombre:")
-                        jugador_estante.set_nombre(nombre)
-                        sg.Popup("Nombre:",jugador_estante.nombre,"Puntuacion:", jugador_estante.puntaje)
-                        try:
-                            with open("guardado/top10.json", "r") as jsonFile:
-                                top10 = json.load(jsonFile)
-                        except Exception:
-                            with open("guardado/top10vacio.json", "r") as jsonFile:
-                                top10 = json.load(jsonFile)
-                        minimo = 9999
-                        minimon = 1
-                        for a in range(9):
-                            if int(top10[list(top10.keys())[a]]) < int(minimo):
-                                minimo = top10[list(top10.keys())[a]]
-                                minimon = a
-                        top10[jugador_estante.nombre] = top10.pop(list(top10.keys())[minimon])
-                        top10[jugador_estante.nombre] = jugador_estante.puntaje
-                        top10s = sorted(top10.items(), key=lambda kv: kv[1])
-                        top10s.reverse()
-                        top10or = collections.OrderedDict(top10s)
-                        config.guardar("guardado/top10.json",top10or)
-                    else:
-                        sg.Popup("Perdiste")
+                    fin(jugador_estante, maquina)
                     break
 
             elif turno_Act == 2:
