@@ -189,7 +189,8 @@ def guardar_partida(
     pos_fichas_estante,
     puede_cambiar_letras,
     contador_clickeadas,
-    tiempo
+    tiempo,
+    maquina
 ):
     # guarda la partida
     atrilStr = atril.atril
@@ -204,6 +205,12 @@ def guardar_partida(
     for x in estantej:
         estante1.append(x.letra)
         estante2.append(x.valor)
+    estantec = maquina.estante.estante
+    estantec1 = []
+    estantec2 = []
+    for y in estantec:
+        estantec1.append(y.letra)
+        estantec2.append(y.valor)
     datos = {
         "w": w,
         "h": h,
@@ -218,6 +225,11 @@ def guardar_partida(
             "estante1": estante1,
             "estante2": estante2,
             "puntaje": jugador_estante.puntaje,
+        },
+        "maquina": {
+            "estante1": estantec1,
+            "estante2": estantec2,
+            "puntaje": maquina.puntaje,
         },
         "tablero": tablero.tablero,
         "sigue": sigue,
@@ -512,10 +524,16 @@ class Computadora:
     """ Por ahora este objeto solo posee la funcion de generar una palabra, la cual dependiendo las letras que posee la computadora genera un conjunto de las combinaciones
         posibles. En la misma funcion se llama a una funcion de un archivo que importo para devolver la palabra de las combinaciones que cumple con las condiciones del juego
      """
-    def __init__(self,atril,puntaje=0,letras=""):
-        self.puntaje = puntaje
-        self.let = letras
-        self.estante = Estante(atril)
+    def __init__(self,atril,puntaje=0,letras="", datos=None):
+        if datos != None:
+            datosA = datos["maquina"]
+            self.puntaje = datosA["puntaje"]
+            self.estante = Estante(atril, datosA)
+            self.let = letras
+        else:
+            self.puntaje = puntaje
+            self.let = letras
+            self.estante = Estante(atril)
     
     def set_letras(self,letras):
         self.let=letras
@@ -1223,6 +1241,7 @@ def main(dificultad, datosC):
         tiempo = datosC["tiempo"]
         tiempo_act = 0
         tiempo_ini = tiempo_int()
+        maquina= Computadora(atril,0,"",datosC)
     else:
         datosA = cargar()
         w, h, sw, sh = so()
@@ -1439,6 +1458,7 @@ def main(dificultad, datosC):
             else:
                 tablero_especial(window, "dificil")
             window.FindElement("-puntaje-").Update(jugador_estante.puntaje)
+            window.FindElement("-puntajepc-").Update(maquina.puntaje)
             window.FindElement("Terminar").Update(visible=True)
             primera = 0
 
@@ -1908,7 +1928,8 @@ def main(dificultad, datosC):
                         pos_fichas_estante,
                         puede_cambiar_letras,
                         contador_clickeadas,
-                        tiempo
+                        tiempoR,
+                        maquina
                     )
                     guardar.main(datosg)
                 
