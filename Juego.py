@@ -204,14 +204,22 @@ def guardar_partida(
     estante1 = []
     estante2 = []
     for x in estantej:
-        estante1.append(x.letra)
-        estante2.append(x.valor)
+        try:
+            estante1.append(x.letra)
+            estante2.append(x.valor)
+        except AttributeError:
+            estante1.append(x)
+            estante2.append(fichas_punt[x])
     estantec = maquina.estante.estante
     estantec1 = []
     estantec2 = []
     for y in estantec:
-        estantec1.append(y.letra)
-        estantec2.append(y.valor)
+        try:
+            estantec1.append(y.letra)
+            estantec2.append(y.valor)
+        except AttributeError:
+            estantec1.append(y)
+            estantec2.append(fichas_punt[y])
     datos = {
         "w": w,
         "h": h,
@@ -339,7 +347,7 @@ class Atril:
         # Quita una letra del atril y se la da al usuario
         if self.atril == []:
             sg.Popup("Se acabaron las fichas")
-            fin(None,None,True)
+            fin(None,None)
         else:
             return self.atril.pop()
 
@@ -1186,36 +1194,79 @@ def tiempo_int():
     return int(round(time.time() * 100))
 
 
-def fin(jugador_estante=None, maquina=None, perder=False):
+def fin(jugador_estante=None, maquina=None):
     sg.Popup("Se acabó la partida")
-    if not perder:
-        if jugador_estante.puntaje > maquina.puntaje:
-            nombre = "null"
-            nombre=sg.popup_get_text("Ganaste, Ingresa tu nombre:")
-            while nombre == "null":
-                nombre=sg.popup_get_text("Ingresa un nombre valido:")
-            jugador_estante.set_nombre(nombre)
-            sg.Popup("Nombre:",jugador_estante.nombre,"Puntuacion:", jugador_estante.puntaje)
-            try:
-                with open("guardado/top10.json", "r") as jsonFile:
-                    top10 = json.load(jsonFile)
-            except Exception:
-                with open("guardado/top10vacio.json", "r") as jsonFile:
-                    top10 = json.load(jsonFile)
-            minimo = 9999
-            minimon = 1
-            for a in range(8):
-                if int(top10[list(top10.keys())[a]]) < int(minimo):
-                    minimo = top10[list(top10.keys())[a]]
-                    minimon = a
-            top10[jugador_estante.nombre] = top10.pop(list(top10.keys())[minimon])
-            top10[jugador_estante.nombre] = jugador_estante.puntaje
+    if (jugador_estante != None) and (maquina != None):
+        estantej = jugador_estante.estante.estante
+        estantec = maquina.estante.estante
+        puntospj = jugador_estante.puntaje
+        puntospc = maquina.puntaje
+    else:
+        estantej = puntos.estantejglobal.estante.estante
+        estantec = puntos.estantecglobal.estante.estante
+        puntospj = puntos.estantejglobal.puntaje
+        puntospc = puntos.estantecglobal.puntaje
+    estante1 = []
+    estante2 = []
+    for x in estantej:
+        try:
+            estante1.append(x.letra)
+            estante2.append(x.valor)
+        except AttributeError:
+            estante1.append(x)
+            estante2.append(puntos.fichas_punt_global[x])
+    estantec1 = []
+    estantec2 = []
+    for y in estantec:
+        try:
+            estantec1.append(y.letra)
+            estantec2.append(y.valor)
+        except AttributeError:
+            estantec1.append(y)
+            estantec2.append(puntos.fichas_punt_global[y])
+    restapj = 0
+    restapc = 0
+    for valor in estante2:
+        restapj = restapj + int(valor)
+    for valor in estantec2:
+        restapc = restapc + int(valor)
+    sg.Popup("Puntaje Jugador:", puntospj, " Puntaje Maquina:", puntospc)
+    sg.Popup("A tu puntaje se le resta:", restapj, " Al puntaje de la maquina se le resta:", restapc)
+    puntospj = puntospj - restapj
+    puntospc = puntospc - restapc
+    if puntospc < 0:
+        puntospc = 0
+    if puntospj < 0:
+        puntospj = 0
+    sg.Popup("Puntaje Jugador:", puntospj, " Puntaje Maquina:", puntospc)
+    
+    if puntospj > puntospc:
+        nombre = "null"
+        nombre=sg.popup_get_text("Ganaste, Ingresa tu nombre:")
+        while nombre == "":
+            nombre=sg.popup_get_text("Ingresa un nombre valido:")
+        sg.Popup("Nombre:",nombre,"Puntuacion:", puntospj)
+        try:
+            with open("guardado/top10.json", "r") as jsonFile:
+                top10 = json.load(jsonFile)
+        except Exception:
+            with open("guardado/top10vacio.json", "r") as jsonFile:
+                top10 = json.load(jsonFile)
+        minimo = 9999
+        minimon = 1
+        for a in range(10):
+            if int(top10[list(top10.keys())[a]]) < int(minimo):
+                minimo = top10[list(top10.keys())[a]]
+                minimon = a
+        if puntospj > minimo:
+            top10[nombre] = top10.pop(list(top10.keys())[minimon])
+            top10[nombre] = puntospj
             top10s = sorted(top10.items(), key=lambda kv: kv[1])
             top10s.reverse()
             top10or = collections.OrderedDict(top10s)
             config.guardar("guardado/top10.json",top10or)
         else:
-            sg.Popup("Perdiste")
+            sg.Popup("Tu puntaje no es suficiente para entrar al top 10")
     else:
         sg.Popup("Perdiste")
 
@@ -1251,10 +1302,12 @@ def main(dificultad, datosC):
         tiempo_ini = tiempo_int()
         maquina= Computadora(atril,0,"",datosC)
         cantidad_cambios = datosC["cantidad_cambios"]
+        puntos.fichas_punt_global = fichas_punt
     else:
         datosA = cargar()
         w, h, sw, sh = so()
         fichas_cant, fichas_punt = datos(dificultad)
+        puntos.fichas_punt_global = fichas_punt
         atril = Atril(fichas_cant, fichas_punt)
         jugador_estante = Jugador(atril)
         tablero = Tablero()
@@ -1540,10 +1593,14 @@ def main(dificultad, datosC):
                 window.FindElement("-cambiar_fichas-").Update(disabled=True)
                 window.FindElement("-cambiar_todas_fichas-").Update(disabled=True)
             if (event == "-cambiar_todas_fichas-") and  turno_Act==1:
-                
+                puntos.estantejglobal = jugador_estante
                 turno_Act = 2
                 no_termina_turno= False
-                jugador_estante.estante.cambiar_fichas(window)
+                try:
+                    jugador_estante.estante.cambiar_fichas(window)
+                except AttributeError:
+                    print("se acabaron las fichas")
+                    break
                 time.sleep(1)
                 window.FindElement("-Turno-").Update(
                             value="Turno de la maquina",
@@ -1565,7 +1622,7 @@ def main(dificultad, datosC):
                     ficha = ficha.split(
                         ","
                     )
-                    ATRIL_JUGADOR[event]=ficha[0] 
+                    ATRIL_JUGADOR[event]=ficha[0]
                     
                     window.FindElement(event).Update(button_color=("black","green"))
                     
@@ -1588,7 +1645,7 @@ def main(dificultad, datosC):
                         
                 if event== "-confirmar_letras-":
                     cantidad_cambios+=1
-                    
+                    puntos.estantejglobal = jugador_estante
                     turno_Act = 2
                     no_termina_turno=False
                     marcar_fichas=False
@@ -1859,6 +1916,7 @@ def main(dificultad, datosC):
                         jugador_estante.estante.eliminar_fichas_estante()
                         jugador_estante.estante.agregar_fichas( window)
                         sigue = 0
+                        puntos.estantejglobal = jugador_estante
                         turno_Act = 2
                         palabras_en_tablero += 1
                         fichas_colocadas = 0
@@ -2067,6 +2125,7 @@ def main(dificultad, datosC):
                 else:
                     maquina.pedir_fichas_nuevas()
                 
+                puntos.estantecglobal = maquina
                 turno_Act = 1
                 no_termina_turno = True
                 sigue = 0

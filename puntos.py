@@ -1,3 +1,8 @@
+#Variables globales para la perdida por falta de fichas en el atril
+estantejglobal = None
+estantecglobal = None
+fichas_punt_global = None
+
 def split(palabra):
     return [caracter for caracter in palabra]
 
