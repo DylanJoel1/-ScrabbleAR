@@ -49,7 +49,7 @@ def tipo_Palabra(
         if (pal in TIPO["verb"]) or (pal in TIPO["adj"]):
             return True
     else:  # En caso de ser dificil la palabra debe ser de un tipo generado aleatoriamente
-        if pal in TIPO["verb"]:
+        if (pal in TIPO["verb"]) or (pal in TIPO["adj"]):
             return True
     return False
 

@@ -1269,15 +1269,15 @@ def main(dificultad, datosC):
         primera = 0
         poder_guardar = True
         if dificultad == "-facil-":
-            aux = int(datosA["fhora"])*120
+            aux = (int(datosA["fhora"])*60)*60
             aux = aux + int(datosA["fmin"])*60
             tiempo = (aux*100)
         elif dificultad == "-medio-":
-            aux = int(datosA["mhora"])*120
+            aux = (int(datosA["mhora"])*60)*60
             aux = aux + int(datosA["mmin"])*60
             tiempo = (aux*100)
         else:
-            aux = int(datosA["dhora"])*120
+            aux = (int(datosA["dhora"])*60)*60
             aux = aux + int(datosA["dmin"])*60
             tiempo = (aux*100)
         tiempo_act = 0
