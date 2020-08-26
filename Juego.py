@@ -319,35 +319,8 @@ class Atril:
 
     def inicializa_atril(self, fichas_cant, fichas_punt):
         # agrega las fichas al atril y las mezcla (shuffle)
-        self.agregar(Ficha("A", fichas_punt["A"]), fichas_cant["A"])
-        self.agregar(Ficha("B", fichas_punt["B"]), fichas_cant["B"])
-        self.agregar(Ficha("C", fichas_punt["C"]), fichas_cant["C"])
-        self.agregar(Ficha("D", fichas_punt["D"]), fichas_cant["D"])
-        self.agregar(Ficha("E", fichas_punt["E"]), fichas_cant["E"])
-        self.agregar(Ficha("F", fichas_punt["F"]), fichas_cant["F"])
-        self.agregar(Ficha("G", fichas_punt["G"]), fichas_cant["G"])
-        self.agregar(Ficha("H", fichas_punt["H"]), fichas_cant["H"])
-        self.agregar(Ficha("I", fichas_punt["I"]), fichas_cant["I"])
-        self.agregar(Ficha("J", fichas_punt["J"]), fichas_cant["J"])
-        self.agregar(Ficha("K", fichas_punt["K"]), fichas_cant["K"])
-        self.agregar(Ficha("L", fichas_punt["L"]), fichas_cant["L"])
-        self.agregar(Ficha("LL", fichas_punt["LL"]), fichas_cant["LL"])
-        self.agregar(Ficha("M", fichas_punt["M"]), fichas_cant["M"])
-        self.agregar(Ficha("N", fichas_punt["N"]), fichas_cant["N"])
-        self.agregar(Ficha("Ñ", fichas_punt["Ñ"]), fichas_cant["Ñ"])
-        self.agregar(Ficha("O", fichas_punt["O"]), fichas_cant["O"])
-        self.agregar(Ficha("P", fichas_punt["P"]), fichas_cant["P"])
-        self.agregar(Ficha("Q", fichas_punt["Q"]), fichas_cant["Q"])
-        self.agregar(Ficha("R", fichas_punt["R"]), fichas_cant["R"])
-        self.agregar(Ficha("RR", fichas_punt["RR"]), fichas_cant["RR"])
-        self.agregar(Ficha("S", fichas_punt["S"]), fichas_cant["S"])
-        self.agregar(Ficha("T", fichas_punt["T"]), fichas_cant["T"])
-        self.agregar(Ficha("U", fichas_punt["U"]), fichas_cant["U"])
-        self.agregar(Ficha("V", fichas_punt["V"]), fichas_cant["V"])
-        self.agregar(Ficha("W", fichas_punt["W"]), fichas_cant["W"])
-        self.agregar(Ficha("X", fichas_punt["X"]), fichas_cant["X"])
-        self.agregar(Ficha("Y", fichas_punt["Y"]), fichas_cant["Y"])
-        self.agregar(Ficha("Z", fichas_punt["Z"]), fichas_cant["Z"])
+        for x in puntos.keys:
+            self.agregar(Ficha(str(x), fichas_punt[str(x)]), fichas_cant[str(x)])
         shuffle(self.atril)
 
     def quitar_ficha(self):
@@ -733,297 +706,36 @@ def datos(dificultad):
     # Devuelve la cantidad de fichas y los puntajes de cada una dependiendo de la dificultad y el archivo de configuracion
     if dificultad == "-facil-":
         valores = cargar()
-        keys = [
-            "A",
-            "B",
-            "C",
-            "D",
-            "E",
-            "F",
-            "G",
-            "H",
-            "I",
-            "J",
-            "K",
-            "L",
-            "LL",
-            "M",
-            "N",
-            "Ñ",
-            "O",
-            "P",
-            "Q",
-            "R",
-            "S",
-            "T",
-            "U",
-            "V",
-            "W",
-            "X",
-            "Y",
-            "Z",
-            "RR",
-        ]
-        keysp = [
-            "fpuntosa",
-            "fpuntosb",
-            "fpuntosc",
-            "fpuntosd",
-            "fpuntose",
-            "fpuntosf",
-            "fpuntosg",
-            "fpuntosh",
-            "fpuntosi",
-            "fpuntosj",
-            "fpuntosk",
-            "fpuntosl",
-            "fpuntosll",
-            "fpuntosm",
-            "fpuntosn",
-            "fpuntos\u00f1",
-            "fpuntoso",
-            "fpuntosp",
-            "fpuntosq",
-            "fpuntosr",
-            "fpuntoss",
-            "fpuntost",
-            "fpuntosu",
-            "fpuntosv",
-            "fpuntosw",
-            "fpuntosx",
-            "fpuntosy",
-            "fpuntosz",
-            "fpuntosrr",
-        ]
-        keysc = [
-            "fcantidada",
-            "fcantidadb",
-            "fcantidadc",
-            "fcantidadd",
-            "fcantidade",
-            "fcantidadf",
-            "fcantidadg",
-            "fcantidadh",
-            "fcantidadi",
-            "fcantidadj",
-            "fcantidadk",
-            "fcantidadl",
-            "fcantidadll",
-            "fcantidadm",
-            "fcantidadn",
-            "fcantidad\u00f1",
-            "fcantidado",
-            "fcantidadp",
-            "fcantidadq",
-            "fcantidadr",
-            "fcantidads",
-            "fcantidadt",
-            "fcantidadu",
-            "fcantidadv",
-            "fcantidadw",
-            "fcantidadx",
-            "fcantidady",
-            "fcantidadz",
-            "fcantidadrr",
-        ]
-        fichas_cant = {y: valores[x] for x, y in zip(keysc, keys)}
-        fichas_punt = {y: valores[x] for x, y in zip(keysp, keys)}
+        keysp = []
+        for x in puntos.keys:
+            keysp.append("fpuntos"+((str(x))).lower())
+        keysc = []
+        for x in puntos.keys:
+            keysc.append("fcantidad"+((str(x))).lower())
+        fichas_cant = {y: valores[x] for x, y in zip(keysc, puntos.keys)}
+        fichas_punt = {y: valores[x] for x, y in zip(keysp, puntos.keys)}
         return fichas_cant, fichas_punt
     elif dificultad == "-medio-":
         valores = cargar()
-        keys = [
-            "A",
-            "B",
-            "C",
-            "D",
-            "E",
-            "F",
-            "G",
-            "H",
-            "I",
-            "J",
-            "K",
-            "L",
-            "LL",
-            "M",
-            "N",
-            "Ñ",
-            "O",
-            "P",
-            "Q",
-            "R",
-            "S",
-            "T",
-            "U",
-            "V",
-            "W",
-            "X",
-            "Y",
-            "Z",
-            "RR",
-        ]
-        keysp = [
-            "mpuntosa",
-            "mpuntosb",
-            "mpuntosc",
-            "mpuntosd",
-            "mpuntose",
-            "mpuntosf",
-            "mpuntosg",
-            "mpuntosh",
-            "mpuntosi",
-            "mpuntosj",
-            "mpuntosk",
-            "mpuntosl",
-            "mpuntosll",
-            "mpuntosm",
-            "mpuntosn",
-            "mpuntos\u00f1",
-            "mpuntoso",
-            "mpuntosp",
-            "mpuntosq",
-            "mpuntosr",
-            "mpuntoss",
-            "mpuntost",
-            "mpuntosu",
-            "mpuntosv",
-            "mpuntosw",
-            "mpuntosx",
-            "mpuntosy",
-            "mpuntosz",
-            "mpuntosrr",
-        ]
-        keysc = [
-            "mcantidada",
-            "mcantidadb",
-            "mcantidadc",
-            "mcantidadd",
-            "mcantidade",
-            "mcantidadf",
-            "mcantidadg",
-            "mcantidadh",
-            "mcantidadi",
-            "mcantidadj",
-            "mcantidadk",
-            "mcantidadl",
-            "mcantidadll",
-            "mcantidadm",
-            "mcantidadn",
-            "mcantidad\u00f1",
-            "mcantidado",
-            "mcantidadp",
-            "mcantidadq",
-            "mcantidadr",
-            "mcantidads",
-            "mcantidadt",
-            "mcantidadu",
-            "mcantidadv",
-            "mcantidadw",
-            "mcantidadx",
-            "mcantidady",
-            "mcantidadz",
-            "mcantidadrr",
-        ]
-        fichas_cant = {y: valores[x] for x, y in zip(keysc, keys)}
-        fichas_punt = {y: valores[x] for x, y in zip(keysp, keys)}
+        keysp = []
+        for x in puntos.keys:
+            keysp.append("mpuntos"+((str(x))).lower())
+        keysc = []
+        for x in puntos.keys:
+            keysc.append("mcantidad"+((str(x))).lower())
+        fichas_cant = {y: valores[x] for x, y in zip(keysc, puntos.keys)}
+        fichas_punt = {y: valores[x] for x, y in zip(keysp, puntos.keys)}
         return fichas_cant, fichas_punt
     elif dificultad == "-dificil-":
         valores = cargar()
-        keys = [
-            "A",
-            "B",
-            "C",
-            "D",
-            "E",
-            "F",
-            "G",
-            "H",
-            "I",
-            "J",
-            "K",
-            "L",
-            "LL",
-            "M",
-            "N",
-            "Ñ",
-            "O",
-            "P",
-            "Q",
-            "R",
-            "S",
-            "T",
-            "U",
-            "V",
-            "W",
-            "X",
-            "Y",
-            "Z",
-            "RR",
-        ]
-        keysp = [
-            "dpuntosa",
-            "dpuntosb",
-            "dpuntosc",
-            "dpuntosd",
-            "dpuntose",
-            "dpuntosf",
-            "dpuntosg",
-            "dpuntosh",
-            "dpuntosi",
-            "dpuntosj",
-            "dpuntosk",
-            "dpuntosl",
-            "dpuntosll",
-            "dpuntosm",
-            "dpuntosn",
-            "dpuntos\u00f1",
-            "dpuntoso",
-            "dpuntosp",
-            "dpuntosq",
-            "dpuntosr",
-            "dpuntoss",
-            "dpuntost",
-            "dpuntosu",
-            "dpuntosv",
-            "dpuntosw",
-            "dpuntosx",
-            "dpuntosy",
-            "dpuntosz",
-            "dpuntosrr",
-        ]
-        keysc = [
-            "dcantidada",
-            "dcantidadb",
-            "dcantidadc",
-            "dcantidadd",
-            "dcantidade",
-            "dcantidadf",
-            "dcantidadg",
-            "dcantidadh",
-            "dcantidadi",
-            "dcantidadj",
-            "dcantidadk",
-            "dcantidadl",
-            "dcantidadll",
-            "dcantidadm",
-            "dcantidadn",
-            "dcantidad\u00f1",
-            "dcantidado",
-            "dcantidadp",
-            "dcantidadq",
-            "dcantidadr",
-            "dcantidads",
-            "dcantidadt",
-            "dcantidadu",
-            "dcantidadv",
-            "dcantidadw",
-            "dcantidadx",
-            "dcantidady",
-            "dcantidadz",
-            "dcantidadrr",
-        ]
-        fichas_cant = {y: valores[x] for x, y in zip(keysc, keys)}
-        fichas_punt = {y: valores[x] for x, y in zip(keysp, keys)}
+        keysp = []
+        for x in puntos.keys:
+            keysp.append("dpuntos"+((str(x))).lower())
+        keysc = []
+        for x in puntos.keys:
+            keysc.append("dcantidad"+((str(x))).lower())
+        fichas_cant = {y: valores[x] for x, y in zip(keysc, puntos.keys)}
+        fichas_punt = {y: valores[x] for x, y in zip(keysp, puntos.keys)}
         return fichas_cant, fichas_punt
 
 
