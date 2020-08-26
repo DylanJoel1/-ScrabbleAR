@@ -267,7 +267,6 @@ def guardar_partida(
         "cantidad_cambios":cantidad_cambios,
         "ficha_pos_fija":ficha_pos_fija
     }
-    print(datos)
     return datos
 
 
@@ -1290,8 +1289,7 @@ def fin(jugador_estante=None, maquina=None):
 
 def cargar_fichas(ficha_pos_fija,window):
     for key in ficha_pos_fija:
-        k = list(key)
-        k2 = tuple((int(k[1]),int(k[4])))
+        k2 = eval(key)
         window.FindElement(k2).Update(image_filename="imagenes/"+ficha_pos_fija[key]+".png")
 
 
@@ -1329,6 +1327,7 @@ def main(dificultad, datosC):
         cantidad_cambios = datosC["cantidad_cambios"]
         puntos.fichas_punt_global = fichas_punt
         ficha_pos_fija = datosC["ficha_pos_fija"]
+        puede_retornar_ficha=False
         
     else:
         datosA = cargar()
@@ -1358,6 +1357,7 @@ def main(dificultad, datosC):
 
         primera = 0
         poder_guardar = True
+        puede_retornar_ficha = False
         if dificultad == "-facil-":
             aux = (int(datosA["fhora"])*60)*60
             aux = aux + int(datosA["fmin"])*60
@@ -1940,7 +1940,6 @@ def main(dificultad, datosC):
                             )
                             tablero.tablero[pos[0]][pos[1]] = True
                         agregado = 0
-                        print("Ficha pos: ", ficha_pos)
                         for key in ficha_pos:
                             agregado = agregado + puntos.multilet(
                                 key,

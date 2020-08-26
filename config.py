@@ -971,10 +971,8 @@ def Config():
         if event is None or event == "-volver-":
             break
         if event == "fhora":
-            print("event fhora")
             val_hora(values, event, window)
         if event == "fmin":
-            print("event fmin")
             val_min(values, event, window)
         if (
             event == "fpuntosa"
@@ -1152,7 +1150,6 @@ def Config():
             or event == "dcantidady"
             or event == "dcantidadz"
         ):
-            print("event pc")
             val_pc(values, event, window)
         if event == "-guardar-":
             if (values["fhora"] == "0") and (values["fmin"] == "0"):

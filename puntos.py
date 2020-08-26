@@ -15,14 +15,12 @@ def multilet(pos, key, dificultad, fichas_punt, POS_ESPECIALES, window, quien):
             for p in POS_ESPECIALES["facil"]["x2letra"]:                
                 if p == (pos[0], pos[1]):
                     agregado = agregado + int(fichas_punt[key])
-                    print("x2letra: ",p)
                     window[quien].print(
                         "Multiplicador de letra x2: "+key, text_color="black"
                     )
             for p in POS_ESPECIALES["facil"]["x3letra"]:
                 if p == (pos[0], pos[1]):
                     agregado = agregado + (int(fichas_punt[key])*2)
-                    print("x3letra: ",p)
                     window[quien].print(
                         "Multiplicador de letra x3: " +key, text_color="black"
                     )
