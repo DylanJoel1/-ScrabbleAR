@@ -1540,7 +1540,6 @@ def main(dificultad, datosC):
             window.Finalize()
             arregloEstante = jugador_estante.get_estante()
             estante_ps(arregloEstante, window)
-            tablero.bloquear_tablero(window)
             window.FindElement("Jugar").Update(visible=False)
             juega = datosC["juega"]
             palabras_en_tablero = datosC["palabras_en_tablero"]
@@ -1567,7 +1566,6 @@ def main(dificultad, datosC):
             # Si toca jugar carga el estante del jugador con las fichas aleatorias, bloquea el tablero y guarda en una variable que ya inicio el juego
             arregloEstante = jugador_estante.get_estante()
             estante_ps(arregloEstante, window)
-            tablero.bloquear_tablero(window)
             
             estante = jugador_estante.get_estante()
             window.FindElement("Terminar").Update(visible=True)
@@ -1773,23 +1771,30 @@ def main(dificultad, datosC):
                 # COLOCA LA FICHA EN EL TABLERO
 
                 if sigue == 1:
+                    
+                    pos_libres_para_colocar=[]
+                    
                     if palabras_en_tablero == 0 and fichas_colocadas == 0:
                         # si no hay palabras en el tablero y tampoco hay fichas colocadas solo desbloqueo el centro del tablero
-                        tablero.desbloquear_Pos(window, 7, 7)
+                        
+                        #tablero.desbloquear_Pos(window, 7, 7)
+                        pos_libres_para_colocar.append((7,7))
 
                     if fichas_colocadas == 0 and palabras_en_tablero > 0:
                         # Si ya hay palabras formadas en el tablero y no coloqué fichas, desbloqueo todas las pos adyacentes a las palabras formadas
                         
                         pos_adyacentes = tablero.Pos_Libres_Tablero()
                         for pos in pos_adyacentes:
-                            tablero.desbloquear_Pos(window, pos[0], pos[1])
-
+                            #tablero.desbloquear_Pos(window, pos[0], pos[1])
+                            pos_libres_para_colocar.append((pos[0],pos[1]))
+                    
                     if fichas_colocadas == 1:
                         # Si ya colocó una ficha desbloqueo los lugares disponibles que esten adyacentes a la primera ficha colocada
                         pos_disponibles = hay_espacio(window, pos_ficha_anterior[0], tablero)
                         for pos in pos_disponibles:
-                            tablero.desbloquear_Pos(window, pos[0], pos[1])
-
+                            #tablero.desbloquear_Pos(window, pos[0], pos[1])
+                            pos_libres_para_colocar.append((pos[0],pos[1]))
+                   
                     if fichas_colocadas > 1:
                         # Si ya colocó más de una ficha me fijo la direccion a la cual forma la palabra y controlo que no se le termine el tablero
 
@@ -1805,13 +1810,9 @@ def main(dificultad, datosC):
                                 tablero,
                                 "derecha",
                             ):
-                                # si el valor de la columna de la primera letra colocada es menor al de la ultima letra colocada, la palabra se está formando hacia la derecha
-                                tablero.desbloquear_Pos(
-                                    window,
-                                    pos_ficha_anterior[len(pos_ficha_anterior) - 1][0],
-                                    pos_ficha_anterior[len(pos_ficha_anterior) - 1][1]
-                                    + 1,
-                                )
+
+                                pos_libres_para_colocar.append((pos_ficha_anterior[len(pos_ficha_anterior) - 1][0],
+                                                                pos_ficha_anterior[len(pos_ficha_anterior) - 1][1]+1))
 
                             elif pos_ficha_anterior[0][1] > pos_ficha_anterior[
                                 len(pos_ficha_anterior) - 1
@@ -1821,14 +1822,10 @@ def main(dificultad, datosC):
                                 tablero,
                                 "izquierda",
                             ):
-                                # Si la columna de la ultima ficha colocada tiene un valor menor a la primera ficha colocada entonces la palabra se está formando hacia la izquierda
-                                tablero.desbloquear_Pos(
-                                    window,
-                                    pos_ficha_anterior[0][0],
-                                    pos_ficha_anterior[len(pos_ficha_anterior) - 1][1]
-                                    - 1,
-                                )
 
+                                pos_libres_para_colocar.append((pos_ficha_anterior[0][0],
+                                                                pos_ficha_anterior[len(pos_ficha_anterior) - 1][1]- 1
+                                                                ))
                             else:
                                 # Si no tenia espacio a la izquierda o a la derecha entra a el else
                                 sigue = 0
@@ -1853,26 +1850,19 @@ def main(dificultad, datosC):
                                 tablero,
                                 "abajo",
                             ):
-                                # pregunto si se forma hacia abajo y si se puede formar
-                                tablero.desbloquear_Pos(
-                                    window,
-                                    pos_ficha_anterior[len(pos_ficha_anterior) - 1][0]
-                                    + 1,
-                                    pos_ficha_anterior[len(pos_ficha_anterior) - 1][1],
-                                )
+
+                                pos_libres_para_colocar.append((pos_ficha_anterior[len(pos_ficha_anterior) - 1][0]+ 1,
+                                                                pos_ficha_anterior[len(pos_ficha_anterior) - 1][1])
+                                                                )
+                                
 
                             elif pos_ficha_anterior[0][0] > pos_ficha_anterior[
                                 len(pos_ficha_anterior) - 1
                             ][0] and hay_espacio(
-                                window, pos_ficha_anterior[0], tablero, "arriba"
-                            ):
-                                # pregunto si se forma hacia arriba y si se puede formar
-                                tablero.desbloquear_Pos(
-                                    window,
-                                    pos_ficha_anterior[len(pos_ficha_anterior) - 1][0]
-                                    - 1,
-                                    pos_ficha_anterior[0][1],
-                                )
+                                window, pos_ficha_anterior[0], tablero, "arriba"):
+
+                                pos_libres_para_colocar.append((pos_ficha_anterior[len(pos_ficha_anterior) - 1][0]-1,
+                                                                pos_ficha_anterior[0][1]))
 
                             else:
                                 # qué pasa si no se puede formar más la palabra
@@ -1885,19 +1875,21 @@ def main(dificultad, datosC):
                                 jugador_estante.estante.retornar_Ficha_Al_Estante(
                                     window, evento_ficha
                                 )
+                        
                                 ATRIL_JUGADOR[evento_ficha]=""
-
+                        
+                    for pos in pos_libres_para_colocar:
+                        window.FindElement(pos).Update(button_color=("black", "green"))
                     if (
                         puede_colocar
                         and not (event in range(7))
-                        and isinstance(event, tuple)
+                        and isinstance(event, tuple) and event in pos_libres_para_colocar
                     ):
                         # si la variable puede colocar está en true, el evento no es el atril y el evento es una tupla, coloco la ficha
                         window.FindElement(event).Update(
                             text=ficha[0],
                             image_filename=(("imagenes/" + ficha[0] + ".png")),
                         )
-                        tablero.bloquear_tablero(window)
                         ATRIL_JUGADOR[evento_ficha] = ficha[0]
                         # vuelvo a desbloquear el atril para que puedan seguir tomando fichas
                         jugador_estante.estante.desbloquear_pos_Estante(window)
@@ -1914,6 +1906,9 @@ def main(dificultad, datosC):
                         puede_cambiar_letras=0
                         window.FindElement("-cambiar_fichas-").Update(disabled=True)
                         window.FindElement("-cambiar_todas_fichas-").Update(disabled=True)
+                        
+                        for pos in pos_libres_para_colocar:
+                            window.FindElement(pos).Update(button_color=("black", "white"))
 
 
                 if fichas_colocadas == 2:
