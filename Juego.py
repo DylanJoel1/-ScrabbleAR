@@ -600,10 +600,6 @@ class Computadora:
             lista_aux, key=len
         )  # de todas las palabras validas me quedo con la más larga dado que es la que da mayor cantidad de puntos y es más seguro que sea una palabra segura
     
-        if (confirmar_Palabra(palabra_larga,DIFICULTAD)):
-            print("La palabra que generó la pc = " + palabra_larga + "Era válida")
-        else:
-            print("La palabra que generó la pc = " + palabra_larga + "Era INCORRECTA")
     
         return palabra_larga
 
@@ -1709,7 +1705,7 @@ def main(dificultad, datosC):
                 
                 
                 
-                if fichas_colocadas > 0:
+                if fichas_colocadas > 0 and puede_retornar_ficha:
                     # Si ya colocó una ficha aparece el boton para recuperarla
                     window.FindElement("-devolver_ficha-").Update(disabled=False)
                 else:
@@ -1720,10 +1716,14 @@ def main(dificultad, datosC):
                     
                     estante = jugador_estante.get_estante()
                     
+                    puede_retornar_ficha=False
+                    
                     window.FindElement("-cambiar_fichas-").Update(disabled=True)
                     window.FindElement("-cambiar_todas_fichas-").Update(disabled=True)
                         
                     window.FindElement("-devolver_ficha-").Update(disabled=True)
+                    window.Finalize()
+                    
                     window.FindElement("Guardar").Update(visible=False)
                     evento_ficha = event
                     ficha = str(estante[event])
@@ -1743,6 +1743,8 @@ def main(dificultad, datosC):
                         window, pos_fichas_estante[len(pos_fichas_estante) - 1]
                     )
                     pos = pos_ficha_anterior[len(pos_ficha_anterior) - 1]
+                    #Reviso si la ficha que saqué del tablero tenia una casilla especial
+                    #Para retornar la imagen a su lugar correspondiente
                     if pos in POS_ESPECIALES[dificultad.replace("-", "")]["x2"]:
                         tablero.quitar_elemento(window, pos, "x2")
                     elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["x2letra"]:
@@ -1906,6 +1908,7 @@ def main(dificultad, datosC):
                         puede_cambiar_letras=0
                         window.FindElement("-cambiar_fichas-").Update(disabled=True)
                         window.FindElement("-cambiar_todas_fichas-").Update(disabled=True)
+                        puede_retornar_ficha=True
                         
                         for pos in pos_libres_para_colocar:
                             window.FindElement(pos).Update(button_color=("black", "white"))
