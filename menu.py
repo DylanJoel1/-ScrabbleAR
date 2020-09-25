@@ -1,12 +1,10 @@
 import PySimpleGUI as sg
-import Juego
-import comoJugar
-import config
-import dificultad
-import top10
+import Juego 
+import comoJugar 
+import config 
+import dificultad 
+import top10 
 import os
-
-
 def so():
     try:
         if os.name != "nt" or os.name != "posix":

@@ -1,18 +1,40 @@
 """Trabajo Final"""
 import PySimpleGUI as sg
+
 from random import shuffle
+
 import json
+
 import random
+
 import puntos
+
 import guardar
+
 import config
+
+from ClaseFicha import Ficha
+
+from ClaseAtril import Atril
+
+from ClaseEstante import Estante
+
 from funcionAutenticar import confirmar_Palabra
+
 import itertools as it
+
 import datetime, time
+
 import os
+
 from os import path
+
 import collections
+
 import sys
+
+
+#from Objetos.ClaseAtril import Atril
 sys.path.insert(1, "/imagenes")
 
 
@@ -270,213 +292,6 @@ def guardar_partida(
     return datos
 
 
-class Ficha:
-    """
-    Clase que crea una ficha. La inicializa con la letra y su valor
-    """
-
-    def __init__(self, letra, fichas_punt):
-        # Inicializa una ficha, con la letra (string) y el diccionario con los valores
-        self.letra = letra.upper()
-        self.valor = fichas_punt
-
-    def get_valor(self):
-        # Devuelve el valor de la ficha
-        return self.valor
-
-    def get_letra(self):
-        # Devuelve la letra de la ficha.
-        return self.letra
-
-    def __repr__(self):
-        return self.letra + "," + str(self.valor)
-
-    def __str__(self):
-        aux = self.letra + "," + str(self.valor)
-        return aux
-
-
-class Atril:
-    """
-    Clase que crea el atril con 100 fichas por defecto
-    """
-
-    def __init__(self, fichas_cant=None, fichas_punt=None, datos=None):
-        # Crea el atril y lo inicializa con 100 fichas por defecto
-        # el if es por si se esta cargando una partida
-        if fichas_cant == None and fichas_punt == None and datos != None:
-            self.atril = []
-            for x, y in zip(datos["atril1"], datos["atril2"]):
-                self.atril.append(Ficha(x, y))
-        else:
-            self.atril = []
-            self.inicializa_atril(fichas_cant, fichas_punt)
-
-    def agregar(self, letra, cantidad):
-        # agrega una letra, la cantidad de veces que se indique, al atril
-        for a in range(int(cantidad)):
-            self.atril.append(letra)
-
-    def inicializa_atril(self, fichas_cant, fichas_punt):
-        # agrega las fichas al atril y las mezcla (shuffle)
-        for x in puntos.keys:
-            self.agregar(Ficha(str(x), fichas_punt[str(x)]), fichas_cant[str(x)])
-        shuffle(self.atril)
-
-    def quitar_ficha(self):
-        # Quita una letra del atril y se la da al usuario
-        if self.atril == []:
-            sg.Popup("Se acabaron las fichas")
-            fin(None,None)
-        else:
-            return self.atril.pop()
-
-    def cant_letras(self):
-        # Devuelve la cantidad de letras que quedan en el atril
-        return len(self.atril)
-
-
-class Estante:
-    """
-    Clase que crea el estante del jugador. Agrega fichas del atril al estante.
-    """
-
-    def __init__(self, atril, datos=None):
-        # Inicializa el estante del jugador.
-        if datos != None:
-            self.estante = []
-            self.atril = atril
-            for x, y in zip(datos["estante1"], datos["estante2"]):
-                self.estante.append(Ficha(x, y))
-        else:
-            self.estante = []
-            self.atril = atril
-            self.inicializar()
-
-    def agregar_estante(self):
-        # Agrega una ficha al estante quitando esa misma del atril
-        self.estante.append(self.atril.quitar_ficha())
-    
-    def cambiar_fichas(self, window,cant="todas"):
-        if cant=="todas":
-            for i in range(len(ATRIL_JUGADOR)):
-                self.estante[i] = self.atril.quitar_ficha()
-                window.FindElement(i).Update(
-                    text=self.estante[i].get_letra(),
-                    image_filename=("imagenes/" + self.estante[i].get_letra()+ ".png"),
-                
-                )
-        elif cant=="marcadas":
-            for i in range(len(ATRIL_JUGADOR)):
-                if ATRIL_JUGADOR[i]!="":
-                    self.estante[i] = self.atril.quitar_ficha()
-                    window.FindElement(i).Update(
-                        text=self.estante[i].get_letra(),
-                        image_filename=("imagenes/" + self.estante[i].get_letra()+ ".png"),
-                
-                    )   
-        
-
-    def agregar_fichas(self, window,turno="jugador"):
-        
-        if turno=="jugador":  
-            # agrega la cantidad de fichas que se le envían por parametro al estante del jugador.
-            aux = []
-            for i in range(len(ATRIL_JUGADOR)):
-                if ATRIL_JUGADOR[i] != "":
-                    aux += [i]
-            for pos in aux:
-                self.estante[pos] = self.atril.quitar_ficha()
-                window.FindElement(pos).Update(
-                    text=self.estante[pos].get_letra(),
-                    image_filename=("imagenes/" + self.estante[pos].get_letra() + ".png"),
-                )
-        elif turno=="maquina":
-
-            for i in range(len(self.estante)):
-                if self.estante[i]=="":
-                    self.estante[i]= self.atril.quitar_ficha()
-            
-    def eliminar_fichas_estante(self, pos=""):
-        # Elimina la ficha del estante, no solo de la interfaz
-        if pos=="":
-            for i in range(len(ATRIL_JUGADOR)):
-                if ATRIL_JUGADOR[i] != "":
-                    self.estante[i] = ""
-        else:
-            if ATRIL_JUGADOR[pos] !="":
-                self.estante[pos]=""
-    
-    def no_tiene_fichas(self):
-
-        elementos= self.estante.count("")
-        if elementos == 7:
-            return True
-        else:
-            return False
-        
-
-    def inicializar(self):
-        # Añade las primeras 7 fichas al estante
-        for i in range(7):
-            self.agregar_estante()
-
-    def quitar_estante(self, ficha):
-        # Quita una ficha del estante
-        self.estante.remove(ficha)
-
-    def cant_estante(self):
-        # Devuelve la cantidad de fichas que hay en el estante
-        return len(self.estante)
-
-    def get_estante(self):
-        # Devuelve un arreglo con los elementos del estante, para poder representarlo en pysimplegui
-        return self.estante
-
-    def bloquear_Estante(self, window):
-        # Bloquea el estante
-        for i in range(7):
-            window.FindElement(i).Update(disabled=True)
-
-    def desbloquear_Estante(self, window):
-        # desbloquea el estante
-        for i in range(7):
-            window.FindElement(i).Update(disabled=False)
-
-    def desbloquear_pos_Estante(self, window):
-        # desbloquea el estante
-        for i in range(7):
-            if ATRIL_JUGADOR[i] == "":
-                window.FindElement(i).Update(disabled=False)
-
-    def quitar_Ficha_De_Estante(self, bot, window):
-        # quita de la interfaz una ficha del estante
-        ATRIL_JUGADOR[bot] = window.FindElement(bot).get_text()
-        window.FindElement(bot).Update(
-            text="", image_size=(36, 38), image_filename="", disabled=True
-        )
-
-    def retornar_Ficha_Al_Estante(self, window, pos_estante):
-        # devuelve una ficha del tablero al estante
-        self.estante[pos_estante] = ATRIL_JUGADOR[pos_estante]
-
-        if ATRIL_JUGADOR[pos_estante] == "":
-            window.FindElement(pos_estante).Update(
-                image_filename="", visible=True, image_size=(36, 38),
-                disabled=True
-            )
-        else:
-            window.FindElement(pos_estante).Update(
-                text=ATRIL_JUGADOR[pos_estante],
-                image_filename=(
-                    ("imagenes/" +ATRIL_JUGADOR[pos_estante].upper() + ".png")
-                ),
-                visible=True,
-                disabled=False
-            )
-        ATRIL_JUGADOR[pos_estante]==""
-
-
 class Jugador:
     """
     Clase que crea una instancia de Jugador. Crea su estante y agrega su nombre.
@@ -579,7 +394,8 @@ class Computadora:
         self.let=""
         for i in range(len(self.estante.estante)):
             self.estante.estante[i]=""
-        self.estante.agregar_fichas(None,"maquina")
+        if self.estante.agregar_fichas(None,ATRIL_JUGADOR,"maquina") == False:
+            return False
     
     def cambiar_letras(self,palabra):
         for letra in palabra:
@@ -590,7 +406,8 @@ class Computadora:
                 if letra in str(self.estante.estante[i]):
                     self.estante.estante[i]=""
                     break
-        self.estante.agregar_fichas(None,"maquina")
+        if self.estante.agregar_fichas(None,ATRIL_JUGADOR,"maquina") == False:
+            return False
                     
             
                 
@@ -693,7 +510,7 @@ class Tablero:
 def estante_ps(estante, window):
     # actualiza el estante con las letras que le toco al jugador
     i = 0
-    for x in estante:
+    for _ in estante:
         # print(estante[i].get_letra())
         window.FindElement(i).Update(
             text=estante[i].get_letra(),
@@ -751,7 +568,7 @@ def calcular_lugares(pos,tablero,palabra):
     aux_contadora=0
     posiciones_disp=[]
     
-    for let in palabra:
+    for _ in palabra:
         if indice_aux <14:
             if tablero[pos[0]][indice_aux] == False:
                 posiciones_disp.append((pos[0],indice_aux))
@@ -766,7 +583,7 @@ def calcular_lugares(pos,tablero,palabra):
         aux_contadora=0
         indice_aux=pos[1]
     
-    for let in palabra:
+    for _ in palabra:
         if indice_aux > 0:
             if tablero[pos[0]][indice_aux]==False:
                 posiciones_disp.append((pos[0],indice_aux))
@@ -780,7 +597,7 @@ def calcular_lugares(pos,tablero,palabra):
         posiciones_disp=[]
         aux_contadora=0
         indice_aux=pos[0]
-    for let in palabra:
+    for _ in palabra:
         if (indice_aux < 14):
             if (tablero[indice_aux][pos[1]]==False):
                 posiciones_disp.append((indice_aux,pos[1]))
@@ -795,7 +612,7 @@ def calcular_lugares(pos,tablero,palabra):
         aux_contadora=0
         indice_aux=pos[0]
     
-    for let in palabra:
+    for _ in palabra:
         if (indice_aux >0):
             if tablero[indice_aux][pos[1]]==False:
                 posiciones_disp.append((indice_aux,pos[1]))
@@ -1264,7 +1081,7 @@ def main(dificultad, datosC):
             window.FindElement("Terminar").Update(visible=True)
             primera = 0
 
-        event, values = window.Read(timeout=10)
+        event, _ = window.Read(timeout=10)
         tiempo_act = tiempo_int() - tiempo_ini
         tiempoR = tiempo - tiempo_act
         #window.Maximize()
@@ -1335,7 +1152,8 @@ def main(dificultad, datosC):
                 turno_Act = 2
                 no_termina_turno= False
                 try:
-                    jugador_estante.estante.cambiar_fichas(window)
+                    if jugador_estante.estante.cambiar_fichas(window, ATRIL_JUGADOR) == False:
+                        fin(None, None)
                 except AttributeError:
                     print("se acabaron las fichas")
                     break
@@ -1372,7 +1190,8 @@ def main(dificultad, datosC):
                     time.sleep(1)
                     turno_Act = 2
                     no_termina_turno= False
-                    jugador_estante.estante.cambiar_fichas(window)
+                    if jugador_estante.estante.cambiar_fichas(window) == False:
+                        fin(None,None)
                     marcar_fichas=False
                     contador_clickeadas=-1
                     for i in range(7):
@@ -1388,7 +1207,8 @@ def main(dificultad, datosC):
                     turno_Act = 2
                     no_termina_turno=False
                     marcar_fichas=False
-                    jugador_estante.estante.cambiar_fichas(window,"marcadas")
+                    if jugador_estante.estante.cambiar_fichas(window,"marcadas") == False:
+                        fin(None,None)
                     for i in range(7):
                     
                         window.FindElement(i).Update(button_color=("black", "white"))
@@ -1443,16 +1263,15 @@ def main(dificultad, datosC):
                         ","
                     )  # Tengo la ficha separada como (letra,valor)
                     jugador_estante.estante.quitar_Ficha_De_Estante(
-                        evento_ficha, window
+                        evento_ficha, window, ATRIL_JUGADOR
                     )
                     sigue = 1
                     puede_colocar = True
-                    puede_cambias_letras=0
                 if event == "-devolver_ficha-" and fichas_colocadas > 0:
                     puede_colocar = False
                     sigue = 0
                     jugador_estante.estante.retornar_Ficha_Al_Estante(
-                        window, pos_fichas_estante[len(pos_fichas_estante) - 1]
+                        window, pos_fichas_estante[len(pos_fichas_estante) - 1], ATRIL_JUGADOR
                     )
                     pos = pos_ficha_anterior[len(pos_ficha_anterior) - 1]
                     #Reviso si la ficha que saqué del tablero tenia una casilla especial
@@ -1549,7 +1368,7 @@ def main(dificultad, datosC):
                                     " palabra o intente formar otra"
                                 )
                                 jugador_estante.estante.retornar_Ficha_Al_Estante(
-                                    window, evento_ficha
+                                    window, evento_ficha, ATRIL_JUGADOR
                                 )
                                 ATRIL_JUGADOR[evento_ficha]=""
 
@@ -1587,7 +1406,7 @@ def main(dificultad, datosC):
                                     " palabra o intente formar otra"
                                 )
                                 jugador_estante.estante.retornar_Ficha_Al_Estante(
-                                    window, evento_ficha
+                                    window, evento_ficha, ATRIL_JUGADOR
                                 )
                         
                                 ATRIL_JUGADOR[evento_ficha]=""
@@ -1606,7 +1425,7 @@ def main(dificultad, datosC):
                         )
                         ATRIL_JUGADOR[evento_ficha] = ficha[0]
                         # vuelvo a desbloquear el atril para que puedan seguir tomando fichas
-                        jugador_estante.estante.desbloquear_pos_Estante(window)
+                        jugador_estante.estante.desbloquear_pos_Estante(window, ATRIL_JUGADOR)
                         # Me guardo las posiciones en las cuales colocó una ficha
                         pos_ficha_anterior.append(event)
                         # agrego la ficha junto a su posicion para luego ver si hay un multiplicador
@@ -1634,7 +1453,6 @@ def main(dificultad, datosC):
 
                     if confirmar_Palabra(palabra_formada, dificultad):
                         
-                        no_agarro_letra=1
                         puede_cambiar_letras=1
                         
                         puntos_provisional = puntos.puntaje_palabra(
@@ -1665,8 +1483,9 @@ def main(dificultad, datosC):
                         puntos_provisional += agregado
                         jugador_estante.incrementar_puntaje(puntos_provisional, window)
                         poder_guardar = True
-                        jugador_estante.estante.eliminar_fichas_estante()
-                        jugador_estante.estante.agregar_fichas( window)
+                        jugador_estante.estante.eliminar_fichas_estante(ATRIL_JUGADOR)
+                        if jugador_estante.estante.agregar_fichas( window, ATRIL_JUGADOR) == False:
+                            fin(None, None)
                         sigue = 0
                         puntos.estantejglobal = jugador_estante
                         turno_Act = 2
@@ -1686,11 +1505,9 @@ def main(dificultad, datosC):
                         palabra_formada = ""
                         ficha_pos = {}
                         # Vuelvo a desbloquear el estante para que siga jugando con las nuevas fichas
-                        jugador_estante.estante.desbloquear_pos_Estante(window)
+                        jugador_estante.estante.desbloquear_pos_Estante(window,ATRIL_JUGADOR)
                     else:
                         
-                        puede_cambiar_letras=1
-                        no_agarro_letra=1
                         sg.Popup("No era una palabra")
                         puede_colocar = False
                         poder_guardar = True
@@ -1699,7 +1516,7 @@ def main(dificultad, datosC):
 
                         for pos in pos_fichas_estante:
                             jugador_estante.estante.retornar_Ficha_Al_Estante(
-                                window, pos 
+                                window, pos,ATRIL_JUGADOR 
                             )
                             ATRIL_JUGADOR[pos] = ""
                         for pos in pos_ficha_anterior:
@@ -1877,9 +1694,11 @@ def main(dificultad, datosC):
                                 palabras_en_tablero+=1
                 
                                 puede_formar_palabra=False
-                    maquina.cambiar_letras(palabra)
+                    if maquina.cambiar_letras(palabra) == False:
+                        fin(None,None)
                 else:
-                    maquina.pedir_fichas_nuevas()
+                    if maquina.pedir_fichas_nuevas() == False:
+                        fin(None,None)
                 
                 puntos.estantecglobal = maquina
                 turno_Act = 1
