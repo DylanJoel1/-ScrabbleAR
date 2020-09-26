@@ -61,7 +61,6 @@ def tipo_Palabra(
 def confirmar_Palabra(pal, DIFICULTAD):
     pal = pal.lower()
     p = parse(pal).split()
-    palabra = [p[0][0]]
     if es_Palabra(p[0][0][0]):
         if tipo_Palabra(
             p[0][0][1], DIFICULTAD

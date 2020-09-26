@@ -11,7 +11,7 @@ import puntos
 
 import guardar
 
-import config
+import config 
 
 from ClaseFicha import Ficha
 
@@ -19,9 +19,13 @@ from ClaseAtril import Atril
 
 from ClaseEstante import Estante
 
-from funcionAutenticar import confirmar_Palabra
+from ClaseTablero import Tablero
 
-import itertools as it
+from ClaseJugador import Jugador
+
+from ClaseMaquina import Computadora
+
+from funcionAutenticar import confirmar_Palabra
 
 import datetime, time
 
@@ -42,126 +46,72 @@ sys.path.insert(1, "/imagenes")
 POS_ESPECIALES = {
     "facil": {
         "x2": [
-            (1, 1),
-            (2, 2),
-            (4, 4),
-            (6, 6),
-            (13, 13),
-            (12, 12),
-            (10, 10),
-            (8, 8),
-            (1, 13),
-            (2, 12),
-            (4, 10),
-            (6, 8),
-            (13, 1),
-            (12, 2),
-            (10, 4),
-            (8, 6),
+            (1, 1),(2, 2),(4, 4),(6, 6),(13, 13),(12, 12),
+            (10, 10),(8, 8),(1, 13),(2, 12),(4, 10),(6, 8),
+            (13, 1),(12, 2),(10, 4),(8, 6),
         ],
         "x2letra": [
-            (5, 5),
-            (9, 9),
-            (5, 9),
-            (9, 5),
-            (5, 1),
-            (9, 1),
-            (6, 2),
-            (8, 2),
-            (1, 5),
-            (1, 9),
-            (2, 6),
-            (2, 8),
-            (5, 13),
-            (9, 13),
-            (6, 12),
-            (8, 12),
-            (13, 5),
-            (13, 9),
-            (12, 6),
-            (12, 8),
+            (5, 5),(9, 9),(5, 9),(9, 5),(5, 1),(9, 1),
+            (6, 2),(8, 2),(1, 5),(1, 9),(2, 6),(2, 8),
+            (5, 13),(9, 13),(6, 12),(8, 12),(13, 5),
+            (13, 9),(12, 6),(12, 8),
         ],
-        "x3": [(0, 0), (14, 14), (0, 14), (14, 0), (7, 0), (0, 7), (7, 14), (14, 7)],
+        "x3": [
+            (0, 0), (14, 14), (0, 14), (14, 0), (7, 0), (0, 7), (7, 14), (14, 7)
+            ],
         "x3letra": [
-            (3, 0),
-            (11, 0),
-            (0, 3),
-            (0, 11),
-            (3, 14),
-            (11, 14),
-            (14, 3),
-            (14, 11),
+            (3, 0),(11, 0),(0, 3),(0, 11),(3, 14),(11, 14),(14, 3),(14, 11),
         ],
-        "-2": [(7, 3), (3, 7), (7, 11), (11, 7)],
-        "-3": [(3, 3), (11, 11), (3, 11), (11, 3)],
+        "-2": [
+            (7, 3), (3, 7), (7, 11), (11, 7)
+            ],
+        "-3": [
+            (3, 3), (11, 11), (3, 11), (11, 3)
+            ],
     },
     "medio": {
         "x2": [
-            (1, 1),
-            (2, 2),
-            (4, 4),
-            (6, 6),
-            (13, 13),
-            (12, 12),
-            (10, 10),
-            (8, 8),
-            (1, 13),
-            (2, 12),
-            (4, 10),
-            (6, 8),
-            (13, 1),
-            (12, 2),
-            (10, 4),
-            (8, 6),
+            (1, 1),(2, 2),(4, 4),(6, 6),(13, 13), (12, 12),
+            (10, 10),(8, 8),(1, 13), (2, 12),(4, 10),(6, 8),
+            (13, 1), (12, 2),(10, 4),(8, 6),
         ],
         "x2letra": [
-            (5, 1),
-            (9, 1),
-            (6, 2),
-            (8, 2),
-            (1, 5),
-            (1, 9),
-            (2, 6),
-            (2, 8),
-            (5, 13),
-            (9, 13),
-            (6, 12),
-            (8, 12),
-            (13, 5),
-            (13, 9),
-            (12, 6),
-            (12, 8),
+            (5, 1),(9, 1),(6, 2), (8, 2),(1, 5),(1, 9),(2, 6),
+            (2, 8),(5, 13),(9, 13),(6, 12),(8, 12),(13, 5),
+            (13, 9),(12, 6),(12, 8),
         ],
-        "x3": [(0, 0), (14, 14), (0, 14), (14, 0), (7, 0), (0, 7), (7, 14), (14, 7)],
+        "x3": [
+            (0, 0), (14, 14), (0, 14), (14, 0), (7, 0), (0, 7), (7, 14), (14, 7)
+            ],
         "x3letra": [
-            (3, 0),
-            (11, 0),
-            (0, 3),
-            (0, 11),
-            (3, 14),
-            (11, 14),
-            (14, 3),
-            (14, 11),
+            (3, 0),(11, 0),(0, 3),(0, 11),(3, 14),(11, 14),(14, 3),(14, 11),
         ],
-        "-2": [(5, 5), (9, 9), (5, 9), (9, 5), (7, 3), (3, 7), (7, 11), (11, 7)],
-        "-3": [(3, 3), (11, 11), (3, 11), (11, 3)],
+        "-2": [
+            (5, 5), (9, 9), (5, 9), (9, 5), (7, 3), (3, 7), (7, 11), (11, 7)
+            ],
+        "-3": [
+            (3, 3), (11, 11), (3, 11), (11, 3)
+            ],
     },
     "dificil": {
-        "x2": [(2, 2), (4, 4), (12, 12), (10, 10), (2, 12), (4, 10), (12, 2), (10, 4)],
-        "x2letra": [(5, 1), (9, 1), (1, 5), (1, 9), (5, 13), (9, 13), (13, 5), (13, 9)],
-        "x3": [(0, 0), (14, 14), (0, 14), (14, 0), (7, 0), (0, 7), (7, 14), (14, 7)],
+        "x2": [
+            (2, 2), (4, 4), (12, 12), (10, 10), (2, 12), (4, 10), (12, 2), (10, 4)
+            ],
+        "x2letra": [
+            (5, 1), (9, 1), (1, 5), (1, 9), (5, 13), (9, 13), (13, 5), (13, 9)
+            ],
+        "x3": [
+            (0, 0), (14, 14), (0, 14), (14, 0), (7, 0), (0, 7), (7, 14), (14, 7)
+            ],
         "x3letra": [
-            (3, 0),
-            (11, 0),
-            (0, 3),
-            (0, 11),
-            (3, 14),
-            (11, 14),
-            (14, 3),
-            (14, 11),
+            (3, 0),(11, 0),(0, 3),(0, 11),(3, 14),(11, 14),(14, 3),(14, 11),
         ],
-        "-2": [(5, 5), (9, 9), (5, 9), (9, 5)],
-        "-3": [(3, 3), (11, 11), (3, 11), (11, 3), (7, 3), (3, 7), (7, 11), (11, 7)],
+        "-2": [
+            (5, 5), (9, 9), (5, 9), (9, 5)
+            ],
+        "-3": [
+            (3, 3), (11, 11), (3, 11), (11, 3), (7, 3), (3, 7), (7, 11), (11, 7)
+            ],
     },
 }
 
@@ -290,221 +240,6 @@ def guardar_partida(
         "ficha_pos_fija":ficha_pos_fija
     }
     return datos
-
-
-class Jugador:
-    """
-    Clase que crea una instancia de Jugador. Crea su estante y agrega su nombre.
-    """
-
-    def __init__(self, atril, datos=None):
-        # Inicializa un Jugador con su estante.
-        if datos != None:
-            datosA = datos["jugador_estante"]
-            self.nombre = datosA["nombre"]
-            self.puntaje = datosA["puntaje"]
-            self.estante = Estante(atril, datosA)
-        else:
-            self.nombre = ""
-            self.estante = Estante(atril)
-            self.puntaje = 0
-
-    def incrementar_puntaje(self, agregado, window):
-        # Incrementa el puntaje del jugador
-        self.puntaje += agregado
-        window["-puntaje-"].update(self.puntaje)
-
-    def get_puntaje(self):
-        # Devuelve el puntaje del jugador
-        return self.puntaje
-
-    def set_nombre(self, nombre):
-        # Setea el nombre del jugador
-        self.nombre = nombre
-
-    def get_nombre(self):
-        # Devuelve el nombre del jugador
-        return self.nombre
-
-    def get_estante(self):
-        # Devuelve un arreglo con los elementos del estante, para poder representarlo en pysimplegui
-        return self.estante.get_estante()
-
-class Computadora:
-    """ Por ahora este objeto solo posee la funcion de generar una palabra, la cual dependiendo las letras que posee la computadora genera un conjunto de las combinaciones
-        posibles. En la misma funcion se llama a una funcion de un archivo que importo para devolver la palabra de las combinaciones que cumple con las condiciones del juego
-     """
-    def __init__(self,atril,puntaje=0,letras="", datos=None):
-        if datos != None:
-            datosA = datos["maquina"]
-            self.puntaje = datosA["puntaje"]
-            self.estante = Estante(atril, datosA)
-            self.let = letras
-        else:
-            self.puntaje = puntaje
-            self.let = letras
-            self.estante = Estante(atril)
-    
-    def set_letras(self,letras):
-        self.let=letras
-    
-    def incrementar_puntaje(self, agregado, window):
-        # Incrementa el puntaje del jugador
-        self.puntaje += agregado
-        window["-puntajepc-"].update(self.puntaje)
-    
-    def get_puntaje(self):
-        # Devuelve el puntaje de la maquina
-        return self.puntaje
-    
-    # 	def pedirFichas:
-    
-    def get_estante(self):
-        # Devuelve un arreglo con los elementos del estante, para poder representarlo en pysimplegui
-        return self.estante.get_estante()
-    
-    def get_letras(self):
-        return self.let    
-
-    def crearPalabra(self, DIFICULTAD):
-        palabras = set()
-        # uso un conjunto para no guardar palabras repetidas
-
-        for i in range(2, len(self.let) + 1):
-            palabras.update((map("".join, it.permutations(self.let, i))))
-            # permutations me devuelve todas las permutaciones posibles con esas letras
-
-        lista_aux=[]
-        for elem in palabras:  
-            # itero con los valores del conjuto secundario asi voy borrando los elementos que no sean palabras válidas
-            if (confirmar_Palabra(elem, DIFICULTAD)):
-                lista_aux.append(elem)
-    
-        if len(lista_aux)==0:
-            return ""
-        
-        palabra_larga = max(
-            lista_aux, key=len
-        )  # de todas las palabras validas me quedo con la más larga dado que es la que da mayor cantidad de puntos y es más seguro que sea una palabra segura
-    
-    
-        return palabra_larga
-
-    def pedir_fichas_nuevas(self):
-        self.let=""
-        for i in range(len(self.estante.estante)):
-            self.estante.estante[i]=""
-        if self.estante.agregar_fichas(None,ATRIL_JUGADOR,"maquina") == False:
-            return False
-    
-    def cambiar_letras(self,palabra):
-        for letra in palabra:
-            #elimino las letras utilizadas de la variable con las letras disponibles
-            if letra in self.let:
-                self.let=self.let.replace(letra,"",1)
-            for i in range(len(self.estante.estante)):
-                if letra in str(self.estante.estante[i]):
-                    self.estante.estante[i]=""
-                    break
-        if self.estante.agregar_fichas(None,ATRIL_JUGADOR,"maquina") == False:
-            return False
-                    
-            
-                
-
-class Tablero:
-    """
-    Clase que representa al tablero para poder modificarlo
-    """
-
-    def __init__(self, datos=None):
-        # Se inicializa el tablero
-        if datos != None:
-            self.tablero = datos["tablero"]
-        else:
-            self.tablero = [[False for j in range(15)] for i in range(15)]
-
-    def mostrar_estado(self):
-        # Imprime lo que contiene la variable que representa el tablero
-        aux = ""
-        for m in range(15):
-            for n in range(15):
-                aux += "|" + (str(self.tablero[m][n])) + "|"
-            aux += "\n"
-        print(aux)
-
-    def agregar_elemento(self, element, window, img="", *pos):
-        # Actualiza un boton del tablero con el texto que se le envíe
-        self.tablero[pos[0]][pos[1]] = True
-        window.FindElement((pos[0], pos[1])).Update(text=element)
-
-    def quitar_elemento(self, window, pos, img=""):
-        self.tablero[pos[0]][pos[1]] = False
-        if img != "":
-            window.FindElement(pos).Update(
-                text="", image_filename=("imagenes/" + img + ".png")
-            )
-        else:
-            window.FindElement(pos).Update(
-                text="", image_filename="", image_size=(36, 38)
-            )
-
-    def bloquear_tablero(self, window):
-        # Bloquea todas las pos del tablero
-        for m in range(15):
-            for n in range(15):
-                window.FindElement((m, n)).Update(
-                    disabled=True,
-                    button_color=("black", "white"),
-                    disabled_button_color=("black", "white"),
-                )
-
-    def desbloquear_tablero(self, window):
-        # Desbloquea todas las pos del tablero
-        for m in range(15):
-            for n in range(15):
-                window.FindElement((m, n)).Update(
-                    disabled=False, button_color=("green", "green")
-                )
-
-    def desbloquear_Pos(self, window, x, y):
-        # Desbloquea una pos en particular del tablero
-        window.FindElement((x, y)).Update(
-            disabled=False, button_color=("green", "green")
-        )
-
-    def bloquear_Pos(self, window, x, y):
-        # Bloquea una pos en particular del tablero
-        window.FindElement((x, y)).Update(
-            disabled=True,
-            button_color=("black", "white"),
-            disabled_button_color=("black", "white"),
-        )
-
-    def Pos_Libres_Tablero(self):
-        # Funcion que retorna una lista con las coordenadas de las pos disponibles adyacentes a las palabras formadas en el tablero
-        
-        coords = []
-        for m in range(15):
-            for n in range(15):
-                if self.tablero[m][n] == True:
-                    if m > 0:
-                        # si no es la primera fila
-                        if self.tablero[m - 1][n] == False:
-                            coords.append((m - 1, n))
-                    if m < 14:
-                        # si no estoy en la ultima fila
-                        if self.tablero[m + 1][n] == False:
-                            coords.append((m + 1, n))
-                    if n > 0:
-                        # si no es la primera columna:
-                        if self.tablero[m][n - 1] == False:
-                            coords.append((m, n - 1))
-                    if n < 14:
-                        # Si no estoy en la ultima columna:
-                        if self.tablero[m][n + 1] == False:
-                            coords.append((m, n + 1))
-        return coords
 
 
 def estante_ps(estante, window):
@@ -1694,10 +1429,10 @@ def main(dificultad, datosC):
                                 palabras_en_tablero+=1
                 
                                 puede_formar_palabra=False
-                    if maquina.cambiar_letras(palabra) == False:
+                    if maquina.cambiar_letras(palabra, ATRIL_JUGADOR) == False:
                         fin(None,None)
                 else:
-                    if maquina.pedir_fichas_nuevas() == False:
+                    if maquina.pedir_fichas_nuevas(ATRIL_JUGADOR) == False:
                         fin(None,None)
                 
                 puntos.estantecglobal = maquina

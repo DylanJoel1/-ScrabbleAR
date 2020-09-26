@@ -37,7 +37,6 @@ class Atril:
         if self.atril == []:
             sg.Popup("Se acabaron las fichas")
             return None
-            #fin(None, None)
         else:
             return self.atril.pop()
 
