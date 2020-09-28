@@ -796,6 +796,9 @@ def main(dificultad, datosC):
         "ScrabbleAR", size=(sw, sh), element_justification="c", resizable=True
     ).Layout(layout)
     while True:
+       
+           # La variable "primera" se utiliza para preparar la interfaz cuando se clikea el boton "jugar"
+      
         if primera == 1:
             window.Finalize()
             arregloEstante = jugador_estante.get_estante()
@@ -819,7 +822,7 @@ def main(dificultad, datosC):
         event, _ = window.Read(timeout=10)
         tiempo_act = tiempo_int() - tiempo_ini
         tiempoR = tiempo - tiempo_act
-        #window.Maximize()
+
         if salir_juego(event):
             break
         if event == "Jugar":
@@ -886,12 +889,9 @@ def main(dificultad, datosC):
                 puntos.estantejglobal = jugador_estante
                 turno_Act = 2
                 no_termina_turno= False
-                try:
-                    if jugador_estante.estante.cambiar_fichas(window, ATRIL_JUGADOR) == False:
-                        fin(None, None)
-                except AttributeError:
-                    print("se acabaron las fichas")
-                    break
+                if jugador_estante.estante.cambiar_fichas(window, ATRIL_JUGADOR) == False:
+                    fin(None, None)
+                    sg.popup("Se terminaron Las fichas")
                 time.sleep(1)
                 window.FindElement("-Turno-").Update(
                             value="Turno de la maquina",

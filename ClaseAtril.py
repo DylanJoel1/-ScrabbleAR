@@ -34,11 +34,13 @@ class Atril:
             Quita una ficha del atril y la retorna.
             En caso de que no queden fichas, retorna None
         """
-        if self.atril == []:
+        if len(self.atril) == 0:
+            print(self.atril)
             sg.Popup("Se acabaron las fichas")
             return None
         else:
-            return self.atril.pop()
+            aux = self.atril.pop()
+            return aux
 
     def cant_letras(self):
         # Devuelve la cantidad de letras que quedan en el atril

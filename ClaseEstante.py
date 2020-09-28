@@ -27,20 +27,19 @@ class Estante:
     def cambiar_fichas(self, window, ATRIL_JUGADOR="", cant="todas"):
         if cant == "todas":
             for i in range(TAMAÑO_ESTANTE):
-                aux = self.atril.quitar_ficha
+                aux = self.atril.quitar_ficha()
                 if aux == None:
                     return False
                 self.estante[i] = aux
                 window.FindElement(i).Update(
-                    text=self.estante[i].get_letra(),
+                     text=self.estante[i].get_letra(),
                     image_filename=(
                         "imagenes/" + self.estante[i].get_letra() + ".png"),
-
-                )
+                        )
         elif cant == "marcadas":
             for i in range(TAMAÑO_ESTANTE):
                 if ATRIL_JUGADOR[i] != "":
-                    aux = self.atril.quitar_ficha
+                    aux = self.atril.quitar_ficha()
                     if aux == None:
                         return False
                     self.estante[i] = aux
