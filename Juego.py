@@ -42,6 +42,16 @@ import sys
 sys.path.insert(1, "/imagenes")
 
 
+COLORES_POS_ESPECIALES = {
+    "x2":  "#ffff66",
+    "x3": "#ff0000",
+    "x2let": "#1a53ff",
+    "x3let": "#ff1a8c",
+    "-2": "#ffeecc",
+    "-3": "#ffccff",
+    "-1": "#99ffd6"
+}
+
 # constante que representa los multiplicadores y descuentos
 POS_ESPECIALES = {
     "facil": {
@@ -451,17 +461,17 @@ def so():
 def tablero_especial(window, dificultad):
     # Pone las fichas especiales en el tablero segun la dificultad
     for pos in POS_ESPECIALES[dificultad]["x2"]:
-        window.FindElement(pos).Update(image_filename="imagenes/x2.png")
+        window.FindElement(pos).Update(button_color=("black",COLORES_POS_ESPECIALES["x2"]))
     for pos in POS_ESPECIALES[dificultad]["x2letra"]:
-        window.FindElement(pos).Update(image_filename="imagenes/x2let.png")
+        window.FindElement(pos).Update(button_color=("black",COLORES_POS_ESPECIALES["x2let"]))
     for pos in POS_ESPECIALES[dificultad]["x3"]:
-        window.FindElement(pos).Update(image_filename="imagenes/x3.png")
+        window.FindElement(pos).Update(button_color=("black",COLORES_POS_ESPECIALES["x3"]))
     for pos in POS_ESPECIALES[dificultad]["x3letra"]:
-        window.FindElement(pos).Update(image_filename="imagenes/x3let.png")
+        window.FindElement(pos).Update(button_color=("black",COLORES_POS_ESPECIALES["x3let"]))
     for pos in POS_ESPECIALES[dificultad]["-2"]:
-        window.FindElement(pos).Update(image_filename="imagenes/menos2.png")
+        window.FindElement(pos).Update(button_color=("black",COLORES_POS_ESPECIALES["-2"]))
     for pos in POS_ESPECIALES[dificultad]["-3"]:
-        window.FindElement(pos).Update(image_filename="imagenes/menos3.png")
+        window.FindElement(pos).Update(button_color=("black",COLORES_POS_ESPECIALES["-3"]))
 
 
 def tiempo_int():
@@ -738,21 +748,21 @@ def main(dificultad, datosC):
         [sg.T("Casillas con premio o descuento:", font=("arial", 15))],
         [
             sg.T("Palabras x2:"),
-            sg.B("", image_filename="imagenes/x2.png"),
+            sg.B("", button_color=("black", COLORES_POS_ESPECIALES["x2"])),
             sg.T("Palabras x3:"),
-            sg.B("", image_filename="imagenes/x3.png"),
+            sg.B("", button_color=("black", COLORES_POS_ESPECIALES["x3"])),
             sg.T("Letras x2:"),
-            sg.B("", image_filename="imagenes/x2let.png"),
+            sg.B("", button_color=("black", COLORES_POS_ESPECIALES["x2let"])),
             sg.T("Letras x3:"),
-            sg.B("", image_filename="imagenes/x3let.png"),
+            sg.B("", button_color=("black", COLORES_POS_ESPECIALES["x3let"])),
         ],
         [
             sg.T("Descuento -1:"),
-            sg.B("", image_filename="imagenes/menos1.png"),
+            sg.B("", button_color=("black",COLORES_POS_ESPECIALES["-1"])),
             sg.T("Descuento -2:"),
-            sg.B("", image_filename="imagenes/menos2.png"),
+            sg.B("", button_color=("black",COLORES_POS_ESPECIALES["-2"])),
             sg.T("Descuento -3:"),
-            sg.B("", image_filename="imagenes/menos3.png"),
+            sg.B("", button_color=("black", COLORES_POS_ESPECIALES["-3"])),
         ],
     ]
     if dificultad == "-facil-":
@@ -1012,21 +1022,24 @@ def main(dificultad, datosC):
                     #Reviso si la ficha que saqué del tablero tenia una casilla especial
                     #Para retornar la imagen a su lugar correspondiente
                     if pos in POS_ESPECIALES[dificultad.replace("-", "")]["x2"]:
-                        tablero.quitar_elemento(window, pos, "x2")
+                        tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["x2"])
                     elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["x2letra"]:
-                        tablero.quitar_elemento(window, pos, "x2let")
+                        tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["x2let"])
                     elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["x3"]:
-                        tablero.quitar_elemento(window, pos, "x3")
+                        tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["x3"])
                     elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["x3letra"]:
-                        tablero.quitar_elemento(window, pos, "x3let")
+                        tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["x3let"])
                     elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["-2"]:
-                        tablero.quitar_elemento(window, pos, "menos2")
+                        tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["-2"])
                     elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["-3"]:
-                        tablero.quitar_elemento(window, pos, "menos3")
+                        tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["-3"])
                     else:
                         tablero.quitar_elemento(window, pos)
                     tablero.tablero[pos[0]][pos[1]] = False
                     fichas_colocadas -= 1
+                    if fichas_colocadas < 3:
+                        window.FindElement(
+                            "Confirmar Palabra").Update(disabled=True)
                     ATRIL_JUGADOR[pos_fichas_estante[len(pos_fichas_estante) - 1]] = ""
                     pos_fichas_estante.pop()
                     pos_ficha_anterior.pop()
@@ -1045,7 +1058,7 @@ def main(dificultad, datosC):
                     if palabras_en_tablero == 0 and fichas_colocadas == 0:
                         # si no hay palabras en el tablero y tampoco hay fichas colocadas solo desbloqueo el centro del tablero
                         
-                        #tablero.desbloquear_Pos(window, 7, 7)
+
                         pos_libres_para_colocar.append((7,7))
 
                     if fichas_colocadas == 0 and palabras_en_tablero > 0:
@@ -1053,14 +1066,13 @@ def main(dificultad, datosC):
                         
                         pos_adyacentes = tablero.Pos_Libres_Tablero()
                         for pos in pos_adyacentes:
-                            #tablero.desbloquear_Pos(window, pos[0], pos[1])
                             pos_libres_para_colocar.append((pos[0],pos[1]))
                     
                     if fichas_colocadas == 1:
                         # Si ya colocó una ficha desbloqueo los lugares disponibles que esten adyacentes a la primera ficha colocada
                         pos_disponibles = hay_espacio(window, pos_ficha_anterior[0], tablero)
                         for pos in pos_disponibles:
-                            #tablero.desbloquear_Pos(window, pos[0], pos[1])
+
                             pos_libres_para_colocar.append((pos[0],pos[1]))
                    
                     if fichas_colocadas > 1:
@@ -1257,33 +1269,33 @@ def main(dificultad, datosC):
                         for pos in pos_ficha_anterior:
                             # Si la pos de las fichas utilizadas eran una casilla especial, vuelvo a colocar la imagen de la ficha especial en su lugar
                             if pos in POS_ESPECIALES[dificultad.replace("-", "")]["x2"]:
-                                tablero.quitar_elemento(window, pos, "x2")
+                                tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["x2"])
                             elif (
                                 pos
                                 in POS_ESPECIALES[dificultad.replace("-", "")][
                                     "x2letra"
                                 ]
                             ):
-                                tablero.quitar_elemento(window, pos, "x2let")
+                                tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["x2let"])
                             elif (
                                 pos in POS_ESPECIALES[dificultad.replace("-", "")]["x3"]
                             ):
-                                tablero.quitar_elemento(window, pos, "x3")
+                                tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["x3"])
                             elif (
                                 pos
                                 in POS_ESPECIALES[dificultad.replace("-", "")][
                                     "x3letra"
                                 ]
                             ):
-                                tablero.quitar_elemento(window, pos, "x3let")
+                                tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["x3let"])
                             elif (
                                 pos in POS_ESPECIALES[dificultad.replace("-", "")]["-2"]
                             ):
-                                tablero.quitar_elemento(window, pos, "menos2")
+                                tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["-2"])
                             elif (
                                 pos in POS_ESPECIALES[dificultad.replace("-", "")]["-3"]
                             ):
-                                tablero.quitar_elemento(window, pos, "menos3")
+                                tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["-3"])
                             else:
                                 tablero.quitar_elemento(window, pos)
                             tablero.tablero[pos[0]][pos[1]] = False

@@ -25,11 +25,11 @@ class Tablero:
         self.tablero[pos[0]][pos[1]] = True
         window.FindElement((pos[0], pos[1])).Update(text=element)
 
-    def quitar_elemento(self, window, pos, img=""):
+    def quitar_elemento(self, window, pos, color=""):
         self.tablero[pos[0]][pos[1]] = False
-        if img != "":
+        if color != "":
             window.FindElement(pos).Update(
-                text="", image_filename=("imagenes/" + img + ".png")
+                text="", image_filename="", image_size=(36, 38), button_color=("white", color)
             )
         else:
             window.FindElement(pos).Update(
