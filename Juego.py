@@ -130,6 +130,25 @@ ATRIL_JUGADOR = ["" for i in range(7)]
 
 TIEMPO_LIMITE_PARTIDA = datetime.datetime.now() + datetime.timedelta(seconds=60)
 
+def retornar_pos_especiales(window, pos, tablero,dificultad):
+    if pos in POS_ESPECIALES[dificultad.replace("-", "")]["x2"]:
+        tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["x2"])
+    elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["x2letra"]:
+        tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["x2let"])
+    elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["x3"]:
+        tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["x3"])
+    elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["x3letra"]:
+        tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["x3let"])
+    elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["-2"]:
+        tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["-2"])
+    elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["-3"]:
+        tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["-3"])
+    else:
+        tablero.quitar_elemento(window, pos)
+
+    
+
+
 
 def cargar():
     # Carga el archivo de configuracion
@@ -1021,20 +1040,7 @@ def main(dificultad, datosC):
                     pos = pos_ficha_anterior[len(pos_ficha_anterior) - 1]
                     #Reviso si la ficha que saqué del tablero tenia una casilla especial
                     #Para retornar la imagen a su lugar correspondiente
-                    if pos in POS_ESPECIALES[dificultad.replace("-", "")]["x2"]:
-                        tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["x2"])
-                    elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["x2letra"]:
-                        tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["x2let"])
-                    elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["x3"]:
-                        tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["x3"])
-                    elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["x3letra"]:
-                        tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["x3let"])
-                    elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["-2"]:
-                        tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["-2"])
-                    elif pos in POS_ESPECIALES[dificultad.replace("-", "")]["-3"]:
-                        tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["-3"])
-                    else:
-                        tablero.quitar_elemento(window, pos)
+                    retornar_pos_especiales(window,pos,tablero,dificultad)
                     tablero.tablero[pos[0]][pos[1]] = False
                     fichas_colocadas -= 1
                     if fichas_colocadas < 3:
@@ -1166,6 +1172,13 @@ def main(dificultad, datosC):
                         and isinstance(event, tuple) and event in pos_libres_para_colocar
                     ):
                         # si la variable puede colocar está en true, el evento no es el atril y el evento es una tupla, coloco la ficha
+                        
+                        
+                        for pos_ant in pos_libres_para_colocar:
+                            window.FindElement(pos_ant).Update(button_color=("black", "white"))
+                            if pos_ant != event:
+                                retornar_pos_especiales(
+                                    window, pos_ant, tablero, dificultad)
                         window.FindElement(event).Update(
                             text=ficha[0],
                             image_filename=(("imagenes/" + ficha[0] + ".png")),
@@ -1187,9 +1200,6 @@ def main(dificultad, datosC):
                         window.FindElement("-cambiar_fichas-").Update(disabled=True)
                         window.FindElement("-cambiar_todas_fichas-").Update(disabled=True)
                         puede_retornar_ficha=True
-                        
-                        for pos in pos_libres_para_colocar:
-                            window.FindElement(pos).Update(button_color=("black", "white"))
 
 
                 if fichas_colocadas == 2:
@@ -1268,36 +1278,8 @@ def main(dificultad, datosC):
                             ATRIL_JUGADOR[pos] = ""
                         for pos in pos_ficha_anterior:
                             # Si la pos de las fichas utilizadas eran una casilla especial, vuelvo a colocar la imagen de la ficha especial en su lugar
-                            if pos in POS_ESPECIALES[dificultad.replace("-", "")]["x2"]:
-                                tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["x2"])
-                            elif (
-                                pos
-                                in POS_ESPECIALES[dificultad.replace("-", "")][
-                                    "x2letra"
-                                ]
-                            ):
-                                tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["x2let"])
-                            elif (
-                                pos in POS_ESPECIALES[dificultad.replace("-", "")]["x3"]
-                            ):
-                                tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["x3"])
-                            elif (
-                                pos
-                                in POS_ESPECIALES[dificultad.replace("-", "")][
-                                    "x3letra"
-                                ]
-                            ):
-                                tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["x3let"])
-                            elif (
-                                pos in POS_ESPECIALES[dificultad.replace("-", "")]["-2"]
-                            ):
-                                tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["-2"])
-                            elif (
-                                pos in POS_ESPECIALES[dificultad.replace("-", "")]["-3"]
-                            ):
-                                tablero.quitar_elemento(window, pos, COLORES_POS_ESPECIALES["-3"])
-                            else:
-                                tablero.quitar_elemento(window, pos)
+                            retornar_pos_especiales(
+                                window, pos, tablero, dificultad)
                             tablero.tablero[pos[0]][pos[1]] = False
 
                         pos_ficha_anterior = []
