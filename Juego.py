@@ -1281,6 +1281,8 @@ def main(dificultad, datosC):
                             retornar_pos_especiales(
                                 window, pos, tablero, dificultad)
                             tablero.tablero[pos[0]][pos[1]] = False
+                        #Se coloca en 1 para volver a habilitar los botones de cambiar fichas
+                        puede_cambiar_letras=1
 
                         pos_ficha_anterior = []
                         pos_fichas_estante = []
