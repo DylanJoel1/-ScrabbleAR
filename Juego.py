@@ -332,8 +332,14 @@ def salir_juego(evento):
             return False
 
 def calcular_lugares(pos,tablero,palabra):
-    #Funcion que retorna una lista con las posiciones disponibles hacia la cual puede formar la palabra completa
-    #En caso de que no pueda formar una palabra hacia ninguna direccion, retorna una lista vacía 
+    """
+        parametros
+            pos:int (posicion de la cual parte a calcular las posiciones)
+            tablero: Class
+            palabra: string (palabra que se quiere colocar)
+
+        return: Lista (lista con las pos disponibles)
+    """
     indice_aux=pos[1]
     aux_contadora=0
     posiciones_disp=[]
@@ -399,7 +405,19 @@ def calcular_lugares(pos,tablero,palabra):
 
 def hay_espacio(
     window, lista_pos, tablero, direc="disponibles"):  
-    # Funcion que retorna si es válido o no colocar una ficha en la posición de la direccion asignada. En caso de no dar una direccion retorna una lista con todas las posiciones válidas que rodeen a la ultima ficha colocada.
+    """
+        parametros:
+            window: sg.window
+            lista_pos: lista
+            tablero: Class
+            direc: String
+
+        return: si el parametro direc usa su valor por defecto retorna una lista
+        return: si el parametro direc referencia una direc retorna Boolean
+
+        La función retorna todas las posiciones disponibles del tablero ó si hay espacio disponible hacia una dirección particular
+
+    """
     if direc == "disponibles":
         aux = []
         if lista_pos[0] != 0:
@@ -484,7 +502,12 @@ def so():
 
 
 def tablero_especial(window, dificultad):
-    # Pone las fichas especiales en el tablero segun la dificultad
+    """
+        Pone las fichas especiales en el tablero segun la dificultad
+        parametros:
+            window:sg.window
+            dificultad:String
+    """
     for pos in POS_ESPECIALES[dificultad]["x2"]:
         window.FindElement(pos).Update(button_color=("black",COLORES_POS_ESPECIALES["x2"]))
     for pos in POS_ESPECIALES[dificultad]["x2letra"]:
@@ -762,8 +785,7 @@ def main(dificultad, datosC):
     )
 
     layout3 = [
-       # [sg.T("Tiempo restante:", font=("arial", 15)),
-       # sg.T("", font=("arial", 15), key="-tiempo-", size=(30,1))],
+
         [
             sg.T("Puntaje Jugador:", font=("arial", 15)),
             sg.T("0", font=("arial", 15,), size=(5, 1), key="-puntaje-"),
@@ -953,7 +975,7 @@ def main(dificultad, datosC):
                     )
                     ATRIL_JUGADOR[event]=ficha[0]
                     
-                    window.FindElement(event).Update(button_color=("black","green"))
+                    window.FindElement(event).Update(disabled=True)
                     
                     contador_clickeadas= ATRIL_JUGADOR.count("")
         
@@ -968,7 +990,7 @@ def main(dificultad, datosC):
                     contador_clickeadas=-1
                     for i in range(7):
                     
-                        window.FindElement(i).Update(button_color=("black", "white"))
+                        window.FindElement(i).Update(disabled=False)
                     
                         ATRIL_JUGADOR[i]=""
 
@@ -982,8 +1004,7 @@ def main(dificultad, datosC):
                     if jugador_estante.estante.cambiar_fichas(window,"marcadas") == False:
                         fin(None,None)
                     for i in range(7):
-                    
-                        window.FindElement(i).Update(button_color=("black", "white"))
+                        window.FindElement(i).Update(disabled=False)
                     
                         ATRIL_JUGADOR[i]=""
                     window.FindElement("-confirmar_letras-").Update(disabled=True)
@@ -1382,6 +1403,8 @@ def main(dificultad, datosC):
                             puntos_pc = puntos_pc + agregado
                         
                             aux+=1
+                            time.sleep(1)
+                            window.Finalize()
                             tablero.tablero[7][aux-1]=True
                         maquina.incrementar_puntaje(puntos_pc, window)
                         palabras_en_tablero+=1
@@ -1430,6 +1453,8 @@ def main(dificultad, datosC):
                                     puntos_pc = puntos_pc + agregado
                                     pos_letra+=1
                                     tablero.tablero[coor[0]][coor[1]]=True
+                                    time.sleep(1)
+                                    window.Finalize()
                                 maquina.incrementar_puntaje(puntos_pc, window)
                                 palabras_en_tablero+=1
                 
@@ -1445,7 +1470,7 @@ def main(dificultad, datosC):
                 no_termina_turno = True
                 sigue = 0
                 pos_ficha_anterior = []
-                time.sleep(4)
+                time.sleep(2)
                 window.FindElement("-Turno-").Update(
                     value="Turno de el jugador",
                     background_color="green",

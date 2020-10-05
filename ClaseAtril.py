@@ -19,6 +19,11 @@ class Atril:
 
     def agregar(self, letra, cantidad):
         # agrega una letra, la cantidad de veces que se indique, al atril
+        """
+            parametros:
+                letra:ObjLetra
+                cantidad:int
+        """
         for _ in range(int(cantidad)):
             self.atril.append(letra)
 
