@@ -62,7 +62,7 @@ def main():
     window.Finalize()
     window.FindElement("-salir-").Update(button_color=("black","#ff4d4d"))
     while True:
-        event, values = window.read()
+        event, _ = window.read()
         if event is None or event == "-salir-":
             break
         if event == "-comenzar-":

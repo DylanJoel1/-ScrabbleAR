@@ -322,8 +322,14 @@ def datos(dificultad):
 
 def salir_juego(evento):
     # Funcion que detecta si se salio del juego
-    if evento is None or evento == "Salir":
+    if evento is None:
+        #Si clikean la X superior derecha se cierra la ventana antes de que salga el popup, por lo que si o si cierra el juego
         return True
+    elif evento == "Salir":
+        if sg.popup_yes_no('Desea salir del juego?') == "Yes":
+            return True
+        else:
+            return False
 
 def calcular_lugares(pos,tablero,palabra):
     #Funcion que retorna una lista con las posiciones disponibles hacia la cual puede formar la palabra completa
@@ -1324,8 +1330,9 @@ def main(dificultad, datosC):
                     guardar.main(datosg)
                 
                 if event == "Terminar":
-                    fin(jugador_estante, maquina)
-                    break
+                    if sg.popup_yes_no('Desea finalizar la partida?') == "Yes":
+                        fin(jugador_estante, maquina)
+                        break
 
             elif turno_Act == 2:
 

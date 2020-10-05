@@ -1348,6 +1348,7 @@ def Config():
             }
             guardar(archivo_config, datos)
         if event == "-default-":
-            cargar_default(window, keys, default_config)
-            sg.popup("Configuracion por defecto cargada con exito")
+            if sg.popup_yes_no('Desea resetear los valores?') == "Yes":
+                cargar_default(window, keys, default_config)
+                sg.popup("Configuracion por defecto cargada con exito")
     window.close()
