@@ -688,7 +688,9 @@ def main(dificultad, datosC):
     ]
     layout2.append(
         [
-        sg.T("", font=("Arial ", 15), key="-Turno-", size=(18, 1),text_color="black"),
+            sg.T("", font=("Arial ", 15), key="-Turno-", size=(18, 1), text_color="black"), 
+            sg.T("Tiempo restante:", font=("arial", 15)),
+            sg.T("", font=("arial", 15), key="-tiempo-", size=(30, 1))
         ]
     )
     layout2.append([sg.T("Estante Jugador", font=("arial", 15), size=(37, 1)), sg.T("Estante Computadora", font=("arial", 15))])
@@ -760,8 +762,8 @@ def main(dificultad, datosC):
     )
 
     layout3 = [
-        [sg.T("Tiempo restante:", font=("arial", 15)),
-        sg.T("", font=("arial", 15), key="-tiempo-", size=(30,1))],
+       # [sg.T("Tiempo restante:", font=("arial", 15)),
+       # sg.T("", font=("arial", 15), key="-tiempo-", size=(30,1))],
         [
             sg.T("Puntaje Jugador:", font=("arial", 15)),
             sg.T("0", font=("arial", 15,), size=(5, 1), key="-puntaje-"),
