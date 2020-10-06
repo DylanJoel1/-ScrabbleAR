@@ -37,6 +37,8 @@ import collections
 
 import sys
 
+import comoJugar
+
 
 #from Objetos.ClaseAtril import Atril
 sys.path.insert(1, "/imagenes")
@@ -839,6 +841,8 @@ def main(dificultad, datosC):
         )
         layout3.append([sg.T("Solo se permiten verbos y adjetivos")])
 
+    layout3.append([sg.B("Como Jugar", size=(10, h), key="-comojugar-")])
+
     layout = [
         [
             sg.TabGroup(
@@ -884,6 +888,8 @@ def main(dificultad, datosC):
 
         if salir_juego(event):
             break
+        if event == "-comojugar-":
+                    comoJugar.Reglas()  
         if event == "Jugar":
             # Si toca jugar carga el estante del jugador con las fichas aleatorias, bloquea el tablero y guarda en una variable que ya inicio el juego
             arregloEstante = jugador_estante.get_estante()
@@ -936,9 +942,7 @@ def main(dificultad, datosC):
                     fin(jugador_estante,maquina)
                     prim = 0
                     break
-                    
-
-                    
+                  
             
             # --------------------------------------------TURNO JUGADOR---------------------------------------------
             if cantidad_cambios >0:
