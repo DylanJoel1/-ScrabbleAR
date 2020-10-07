@@ -2,35 +2,12 @@ import PySimpleGUI as sg
 import json
 from os import path
 import sys
-from config import guardar
+from config import guardar, cargar
 
 sys.path.insert(1, "/guardado")
 
 archivo_config = path.join(path.dirname(__file__), r"guardado/datos.json")
 default_config = path.join(path.dirname(__file__), r"guardado/datos_default.json")
-
-def cargar(window, keys, a, ad):
-    try:
-        with open(a, "r") as jsonFile:
-            datos = json.load(jsonFile)
-        for key in keys:
-            try:
-                window.FindElement(key).Update(value=datos[key])
-            except Exception:
-                print(f"Problema actualizando la ventana. Key = {key}")
-    except FileNotFoundError:
-        sg.popup(
-            "No se encontró el archivo de configuracion, se procedera a crear uno..."
-        )
-        with open(ad, "r") as jsonFile:
-            datos = json.load(jsonFile)
-        guardar(a, datos)
-        for key in keys:
-            try:
-                window.FindElement(key).Update(value=datos[key])
-            except Exception:
-                print(f"Problema actualizando la ventana. Key = {key}")
-
 
 def Ver(dif):
 
