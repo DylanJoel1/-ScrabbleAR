@@ -39,6 +39,8 @@ import sys
 
 import comoJugar
 
+import configVer
+
 
 #from Objetos.ClaseAtril import Atril
 sys.path.insert(1, "/imagenes")
@@ -842,6 +844,7 @@ def main(dificultad, datosC):
         layout3.append([sg.T("Solo se permiten verbos y adjetivos")])
 
     layout3.append([sg.B("Como Jugar", size=(10, h), key="-comojugar-")])
+    layout3.append([sg.B("Configuracion", size=(12, h), key="-verconfig-")])
 
     layout = [
         [
@@ -889,7 +892,9 @@ def main(dificultad, datosC):
         if salir_juego(event):
             break
         if event == "-comojugar-":
-                    comoJugar.Reglas()  
+            comoJugar.Reglas()
+        if event == "-verconfig-":
+            configVer.Ver(dificultad)
         if event == "Jugar":
             # Si toca jugar carga el estante del jugador con las fichas aleatorias, bloquea el tablero y guarda en una variable que ya inicio el juego
             arregloEstante = jugador_estante.get_estante()
